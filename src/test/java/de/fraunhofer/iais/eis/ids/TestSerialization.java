@@ -35,7 +35,7 @@ public class TestSerialization {
     }
 
     @Test
-    public void deserializeBrokerDataRequest() throws IOException {
+    public void serializeDeserialize() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
 
         String brokerDataRequest = mapper.writeValueAsString(this.request);
