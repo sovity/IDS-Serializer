@@ -18,9 +18,28 @@
     <dependencies>
 
         <dependency>
+            <groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
+            <artifactId>java</artifactId>
+            <version>0.23-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>de.fraunhofer.iais.eis</groupId>
-            <artifactId>ids-infomodel-java-full</artifactId>
-            <version>0.22-SNAPSHOT</version>
+            <artifactId>jrdfb-annotations</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.3</version>
         </dependency>
 
         <dependency>
