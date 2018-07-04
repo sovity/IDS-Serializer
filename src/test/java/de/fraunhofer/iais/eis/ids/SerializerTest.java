@@ -90,6 +90,8 @@ public class SerializerTest {
         String serializiedJsonLD = serializer.toJsonLD(basicInstance);
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
         Assert.assertEquals(model.size(), 4);
+
+        // todo Benedikt: add a test to make sure that objects of the enum property (datarequestaction and coveredentity) are resources
     }
 
     //todo: add tests for complex instance (deserialize, serialze, validRdf)
