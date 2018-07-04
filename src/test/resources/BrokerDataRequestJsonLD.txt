@@ -1,0 +1,15 @@
+{
+	"@context": {
+	    "ids" : "https://w3id.org/ids/core/",
+	    "dataRequestAction": "ids:dataRequestAction",
+	    "messageContent": "ids:messageContent",
+	    "coveredEntity": "ids:coveredEntity"
+	},
+	"@type": "ids:BrokerDataRequest",
+	"@id":"http://industrialdataspace.org/brokerDataRequest/8e5b8e67-e7a0-45a1-8910-9b75e00882ec",
+
+	"id":"http://industrialdataspace.org/brokerDataRequest/8e5b8e67-e7a0-45a1-8910-9b75e00882ec",
+	"dataRequestAction":"https://w3id.org/ids/core/BrokerDataRegisterAction",
+	"messageContent":"Hello world",
+	"coveredEntity":"https://w3id.org/ids/core/CoveredConnector"
+}
