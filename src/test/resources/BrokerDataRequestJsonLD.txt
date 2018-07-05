@@ -8,8 +8,9 @@
 	"@type": "ids:BrokerDataRequest",
 	"@id":"http://industrialdataspace.org/brokerDataRequest/8e5b8e67-e7a0-45a1-8910-9b75e00882ec",
 
-	"id":"http://industrialdataspace.org/brokerDataRequest/8e5b8e67-e7a0-45a1-8910-9b75e00882ec",
-	"dataRequestAction":"https://w3id.org/ids/core/BrokerDataRegisterAction",
-	"messageContent":"Hello world",
-	"coveredEntity":"https://w3id.org/ids/core/CoveredConnector"
+    "@class" : "de.fraunhofer.iais.eis.BrokerDataRequestImpl",
+    "id" : "http://industrialdataspace.org/brokerDataRequest/983c018c-9914-4008-8e1e-12b3a2d3feb4",
+    "dataRequestAction" : "https://w3id.org/ids/core/BrokerDataRegisterAction",
+    "messageContent": "Hello world",
+    "coveredEntity": "https://w3id.org/ids/core/CoveredConnector"
 }
