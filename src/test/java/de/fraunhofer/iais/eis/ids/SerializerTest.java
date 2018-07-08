@@ -6,6 +6,9 @@ import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.rdf4j.model.Model;
+import org.eclipse.rdf4j.model.Resource;
+import org.eclipse.rdf4j.model.ValueFactory;
+import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import org.json.JSONException;
@@ -109,9 +112,18 @@ public class SerializerTest {
     public void jsonLDisValidRDF_Basic() throws IOException {
         String serializiedJsonLD = serializer.toJsonLD(ObjectType.BASIC);
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
-        Assert.assertEquals(model.size(), 4);
+        Assert.assertEquals(4, model.size());
 
-        // todo Benedikt: add a test to make sure that objects of the enum property (datarequestaction and coveredentity) are resources
+        ValueFactory factory = SimpleValueFactory.getInstance();
+        Model subModel;
+
+        // todo Benedikt: add a test to make sure that objects of the enum property (datarequestaction and coveredentity) are resources (UPDATE: they seem to be literals in the BASIC example :( )
+
+        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/coveredEntity"),null);
+        subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));
+
+        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/dataRequestAction"),null);
+        subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));
     }
 
     //todo: add tests for complex instance (serialize, validRdf)
