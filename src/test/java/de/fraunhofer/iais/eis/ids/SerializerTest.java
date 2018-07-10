@@ -1,6 +1,7 @@
 package de.fraunhofer.iais.eis.ids;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
@@ -20,6 +21,8 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 
@@ -60,6 +63,9 @@ public class SerializerTest {
     @Test
     public void plainJsonSerialize_Basic() throws IOException {
         String brokerDataRequest = mapper.writeValueAsString(basicInstance);
+
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(basicInstance));
+
         BrokerDataRequestImpl deserializedDataRequest = mapper.readValue(brokerDataRequest, BrokerDataRequestImpl.class);
         Assert.assertNotNull(deserializedDataRequest);
     }
@@ -100,6 +106,9 @@ public class SerializerTest {
 
     @Test
     public void serializeToJsonLD_Basic() throws IOException, JSONException {
+
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(basicInstance));
+
         String serializiedJsonLD = serializer.toJsonLD(ObjectType.BASIC);
 
         InputStream brokerJsonLDstream = getClass().getClassLoader().getResourceAsStream("BrokerDataRequestJsonLD.txt");
@@ -112,12 +121,11 @@ public class SerializerTest {
     public void jsonLDisValidRDF_Basic() throws IOException {
         String serializiedJsonLD = serializer.toJsonLD(ObjectType.BASIC);
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
+
         Assert.assertEquals(4, model.size());
 
         ValueFactory factory = SimpleValueFactory.getInstance();
         Model subModel;
-
-        // todo Benedikt: add a test to make sure that objects of the enum property (datarequestaction and coveredentity) are resources (UPDATE: they seem to be literals in the BASIC example :( )
 
         subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/coveredEntity"),null);
         subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));

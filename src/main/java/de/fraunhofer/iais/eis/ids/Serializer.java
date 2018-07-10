@@ -6,11 +6,12 @@ public class Serializer {
     private String brokerDataRequest = "{\n"+
             "\t\"@context\": {\n"+
             "\t    \"ids\" : \"https://w3id.org/ids/core/\",\n"+
-            "\t    \"dataRequestAction\": \"ids:dataRequestAction\",\n"+
+            "\t    \"BrokerDataRequest\": \"ids:BrokerDataRequest\",\n"+
             "\t    \"messageContent\": \"ids:messageContent\",\n"+
-            "\t    \"coveredEntity\": \"ids:coveredEntity\"\n"+
+            "\t    \"dataRequestAction\": { \"@id\": \"ids:dataRequestAction\", \"@type\": \"@id\" },\n"+
+            "\t    \"coveredEntity\": { \"@id\": \"ids:coveredEntity\", \"@type\": \"@id\" }\n"+
             "\t},\n"+
-            "\t\"@type\": \"ids:BrokerDataRequest\",\n"+
+            "\t\"@type\": \"BrokerDataRequest\",\n"+
             "\t\"@id\":\"http://industrialdataspace.org/brokerDataRequest/8e5b8e67-e7a0-45a1-8910-9b75e00882ec\",\n"+
             "\n" +
             "    \"@class\" : \"de.fraunhofer.iais.eis.BrokerDataRequestImpl\",\n"+
