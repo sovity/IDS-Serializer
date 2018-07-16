@@ -1,7 +1,6 @@
 package de.fraunhofer.iais.eis.ids;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
@@ -23,8 +22,6 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Arrays;
@@ -34,7 +31,6 @@ import java.util.stream.Collectors;
 
 public class SerializerTest {
 
-    private static ObjectMapper mapper;
     private static BrokerDataRequest basicInstance;
     private static DataTransfer nestedInstance;
     private static Serializer serializer;
@@ -42,8 +38,6 @@ public class SerializerTest {
     @BeforeClass
     public static void setUp() throws ConstraintViolationException {
         serializer = new Serializer();
-        mapper = new ObjectMapper();
-        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
 
         // object with only basic types and enums
         basicInstance = new BrokerDataRequestBuilder()
@@ -68,22 +62,22 @@ public class SerializerTest {
 
     @Test
     public void plainJsonSerialize_Basic() throws IOException {
-        String brokerDataRequest = mapper.writeValueAsString(basicInstance);
-        BrokerDataRequestImpl deserializedDataRequest = mapper.readValue(brokerDataRequest, BrokerDataRequestImpl.class);
+        String brokerDataRequest = serializer.serialize(basicInstance);
+        BrokerDataRequestImpl deserializedDataRequest = serializer.deserialize(brokerDataRequest, BrokerDataRequestImpl.class);
         Assert.assertNotNull(deserializedDataRequest);
     }
 
     @Test
     public void plainJsonSerialize_Nested() throws IOException {
-        String dataTransfer = mapper.writeValueAsString(nestedInstance);
-        DataTransfer deserializedTransfer = mapper.readValue(dataTransfer, DataTransferImpl.class);
+        String dataTransfer = serializer.serialize(nestedInstance);
+        DataTransfer deserializedTransfer = serializer.deserialize(dataTransfer, DataTransferImpl.class);
         Assert.assertNotNull(deserializedTransfer);
     }
 
     @Test
     public void deserialzeFromJsonLD_Basic() throws IOException {
-        String serializiedJsonLD = serializer.toJsonLD(ObjectType.BASIC);
-        BrokerDataRequest deserialized = mapper.readValue(serializiedJsonLD, BrokerDataRequestImpl.class);
+        String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
+        BrokerDataRequest deserialized = serializer.deserialize(serializiedJsonLD, BrokerDataRequestImpl.class);
 
         Assert.assertEquals(basicInstance.getDataRequestAction(), deserialized.getDataRequestAction());
         Assert.assertEquals(basicInstance.getCoveredEntity(), deserialized.getCoveredEntity());
@@ -92,8 +86,8 @@ public class SerializerTest {
 
     @Test
     public void deserialzeFromJsonLD_Nested() throws IOException {
-        String serializiedJsonLD = serializer.toJsonLD(ObjectType.NESTED);
-        DataTransfer deserialized = mapper.readValue(serializiedJsonLD, DataTransfer.class);
+        String serializiedJsonLD = serializer.serialize(ObjectType.NESTED);
+        DataTransfer deserialized = serializer.deserialize(serializiedJsonLD, DataTransfer.class);
 
         Assert.assertNotNull(deserialized.getAuthToken());
         Assert.assertNotNull(deserialized.getCustomAttributes());
@@ -109,7 +103,7 @@ public class SerializerTest {
 
     @Test
     public void serializeToJsonLD_Basic() throws IOException, JSONException {
-        String serializiedJsonLD = serializer.toJsonLD(ObjectType.BASIC);
+        String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
 
         InputStream brokerJsonLDstream = getClass().getClassLoader().getResourceAsStream("BrokerDataRequestJsonLD.txt");
         String expectedJsonLD = IOUtils.toString(brokerJsonLDstream, Charset.defaultCharset());
@@ -119,7 +113,7 @@ public class SerializerTest {
 
     @Test
     public void jsonLDisValidRDF_Basic() throws IOException {
-        String serializiedJsonLD = serializer.toJsonLD(ObjectType.BASIC);
+        String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
 
         Assert.assertEquals(4, model.size());
@@ -143,11 +137,11 @@ public class SerializerTest {
                 .build();
 
         // in future this will work
-        //String serializiedJsonLD = serializer.toJsonLD(instant);
+        //String serializiedJsonLD = serializer.serialize(instant);
 
         // emulated behaviour
-        String serializiedJsonLD = serializer.toJsonLD(ObjectType.INT_LIT);
-        Instant deserInstant = mapper.readValue(serializiedJsonLD, InstantImpl.class);
+        String serializiedJsonLD = serializer.serialize(ObjectType.INT_LIT);
+        Instant deserInstant = serializer.deserialize(serializiedJsonLD, InstantImpl.class);
         Assert.assertNotNull(deserInstant);
 
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
@@ -171,9 +165,9 @@ public class SerializerTest {
         //System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(asset));
 
         // emulated behaviour
-        String serializiedJsonLD = serializer.toJsonLD(ObjectType.LANG_LIT);
+        String serializiedJsonLD = serializer.serialize(ObjectType.LANG_LIT);
 
-        DataAsset deserAsset = mapper.readValue(serializiedJsonLD, DataAssetImpl.class);
+        DataAsset deserAsset = serializer.deserialize(serializiedJsonLD, DataAssetImpl.class);
         Assert.assertNotNull(deserAsset);
 
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);

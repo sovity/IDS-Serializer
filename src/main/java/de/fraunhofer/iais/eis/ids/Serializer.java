@@ -1,5 +1,12 @@
 package de.fraunhofer.iais.eis.ids;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fraunhofer.iais.eis.BrokerDataRequestImpl;
+
+import java.io.IOException;
+
 public class Serializer {
 
     // simple object
@@ -88,13 +95,38 @@ public class Serializer {
             "  \"entityNames\" : [ \"java.util.ArrayList\", [ [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"literal no langtag\" ], [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"english literal@en\" ] ] ]\n" +
             "}\n";
 
-    public String toJsonLD(Object instance) {
-        // todo: implement me :)
-        return "";
+    private static ObjectMapper mapper;
+
+    public Serializer() {
+        mapper = new ObjectMapper();
+        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+    }
+
+    /**
+     * Serializes an object to JSON(-LD) representation. In order to support JSON-LD, the input instance must be
+     * annotated using IDS Infomodel annotations (todo CM: add link here)
+     * @param instance the instance to be serialized
+     * @return JSON string that is optionally interpretable as JSON-LD (and therefore a RDF serialization)
+     * @throws JsonProcessingException
+     */
+    public String serialize(Object instance) throws JsonProcessingException {
+        return mapper.writeValueAsString(instance);
+    }
+
+    /**
+     * Inverse method of "serialize"
+     * @param serialization JSON(-LD) string
+     * @param valueType class of top level type (todo CM: investigate if needed)
+     * @param <T> deserialized type
+     * @return an object representing the provided JSON(-LD) structure
+     * @throws IOException
+     */
+    public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
+        return mapper.readValue(serialization, valueType);
     }
 
     // for testing only
-    public String toJsonLD(ObjectType objectType) {
+    public String serialize(ObjectType objectType) {
         switch (objectType) {
             case BASIC:
                 return brokerDataRequest;
