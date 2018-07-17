@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -155,6 +156,7 @@ public class SerializerTest {
         subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/namedValue"),null);
         subModel.forEach(triple -> Assert.assertEquals(XMLSchema.INTEGER, ((Literal) triple.getObject()).getDatatype()));
     }
+
 
     @Test
     public void testMultiLangLiteralSerialization() throws ConstraintViolationException, IOException {
