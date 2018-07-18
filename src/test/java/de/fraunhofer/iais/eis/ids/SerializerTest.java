@@ -1,6 +1,7 @@
 package de.fraunhofer.iais.eis.ids;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
@@ -24,10 +25,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SerializerTest {
@@ -35,6 +33,7 @@ public class SerializerTest {
     private static BrokerDataRequest basicInstance;
     private static DataTransfer nestedInstance;
     private static Serializer serializer;
+    private static DataAsset polymorphic;
 
     @BeforeClass
     public static void setUp() throws ConstraintViolationException {
@@ -58,7 +57,8 @@ public class SerializerTest {
                 .customAttributes(Arrays.asList(transferAttribute))
                 .build();
 
-        // todo: object with plain, language and typed literals
+        Instant instant = new InstantBuilder().named(NamedInstant.TODAY).build();
+        polymorphic = new DataAssetBuilder().coversTemporal(Arrays.asList(instant)).build();
     }
 
     @Test
@@ -71,8 +71,38 @@ public class SerializerTest {
     @Test
     public void plainJsonSerialize_Nested() throws IOException {
         String dataTransfer = serializer.serialize(nestedInstance);
+
+        System.out.println(dataTransfer);
+
         DataTransfer deserializedTransfer = serializer.deserialize(dataTransfer, DataTransferImpl.class);
         Assert.assertNotNull(deserializedTransfer);
+    }
+
+    @Test
+    public void plainJsonSerialize_Polymorphic() throws IOException {
+        String dataAsset = serializer.serialize(polymorphic);
+
+        DataAsset deserializedDataAsset = serializer.deserialize(dataAsset, DataAssetImpl.class);
+        Assert.assertNotNull(deserializedDataAsset);
+        Assert.assertTrue(deserializedDataAsset.getCoversTemporal().iterator().next() instanceof Instant);
+    }
+
+    @Test
+    public void plainJsonSerialize_Literal() throws ConstraintViolationException, IOException {
+        DataAsset asset = new DataAssetBuilder()
+                .entityNames(Arrays.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
+                .build();
+
+        String serialized = serializer.serialize(asset);
+
+        System.out.println(serialized);
+
+        DataAsset deserializedDataAsset = serializer.deserialize(serialized, DataAssetImpl.class);
+
+        Assert.assertEquals(2, deserializedDataAsset.getEntityNames().size());
+        Iterator<? extends PlainLiteral> names = deserializedDataAsset.getEntityNames().iterator();
+        Assert.assertTrue(names.next().getLanguage().isEmpty());
+        Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
     @Test
@@ -157,24 +187,19 @@ public class SerializerTest {
         subModel.forEach(triple -> Assert.assertEquals(XMLSchema.INTEGER, ((Literal) triple.getObject()).getDatatype()));
     }
 
-
     @Test
     public void testMultiLangLiteralSerialization() throws ConstraintViolationException, IOException {
-        DataAsset asset = new DataAssetBuilder()
-                .entityNames(Arrays.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
-                .build();
-
-        //System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(asset));
-
-        // emulated behaviour
         String serializiedJsonLD = serializer.serialize(ObjectType.LANG_LIT);
 
         DataAsset deserAsset = serializer.deserialize(serializiedJsonLD, DataAssetImpl.class);
         Assert.assertNotNull(deserAsset);
 
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
+
+        System.out.println(model.toString());
+
         ValueFactory factory = SimpleValueFactory.getInstance();
-        Model subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/entityNames"),null);
+        Model subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/entityName"),null);
 
         List<Statement> list = subModel.stream().collect(Collectors.toList());
         Assert.assertEquals(2, list.size());

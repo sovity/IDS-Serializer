@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import de.fraunhofer.iais.eis.BrokerDataRequestImpl;
-import de.fraunhofer.iais.eis.ids.jacksonmodule.jsonld.PlainLiteralDeserializer;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 
 import java.io.IOException;
@@ -86,27 +85,25 @@ public class Serializer {
             "\t\"@context\": {\n"+
             "\t    \"ids\" : \"https://w3id.org/ids/core/\",\n"+
             "\t    \"DataAsset\": \"ids:DataAsset\",\n"+
-            "\t    \"entityNames\": \"ids:entityNames\"\n"+
+            "\t    \"entityNames\": \"ids:entityName\",\n"+
+            "\t    \"value\": \"ids:value\"\n"+
             "\t},\n"+
 
             "\t\"@type\": \"DataAsset\",\n"+
             "\t\"@id\":\"http://industrialdataspace.org/dataAsset/f7608b8b-d60a-4476-a45a-bd4ca204d61b\",\n"+
             "\n" +
-
             "  \"@class\" : \"de.fraunhofer.iais.eis.DataAssetImpl\",\n" +
             "  \"id\" : \"http://industrialdataspace.org/dataAsset/f7608b8b-d60a-4476-a45a-bd4ca204d61b\",\n" +
-            "  \"entityNames\" : [ \"java.util.ArrayList\", [ [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"literal no langtag\" ], [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", { \"@literal\": \"english literal\", \"@language\": \"en\" } ] ] ]\n" +
+            "   \"entityNames\" : [ \"java.util.ArrayList\", [ [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"literal no langtag\" ], [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"english literal@en\" ] ] ]"+
             "}\n";
+
+
 
     private static ObjectMapper mapper;
 
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
-
-        SimpleModule module = new SimpleModule();
-        module.addDeserializer(PlainLiteral.class, new PlainLiteralDeserializer());
-        mapper.registerModule(module);
     }
 
     /**
@@ -117,7 +114,7 @@ public class Serializer {
      * @throws JsonProcessingException
      */
     public String serialize(Object instance) throws JsonProcessingException {
-        return mapper.writeValueAsString(instance);
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
     }
 
     /**
