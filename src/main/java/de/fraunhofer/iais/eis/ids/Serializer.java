@@ -1,5 +1,6 @@
 package de.fraunhofer.iais.eis.ids;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -94,7 +95,12 @@ public class Serializer {
             "\n" +
             "  \"@class\" : \"de.fraunhofer.iais.eis.DataAssetImpl\",\n" +
             "  \"id\" : \"http://industrialdataspace.org/dataAsset/f7608b8b-d60a-4476-a45a-bd4ca204d61b\",\n" +
-            "   \"entityNames\" : [ \"java.util.ArrayList\", [ [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"literal no langtag\" ], [ \"de.fraunhofer.iais.eis.util.PlainLiteral\", \"english literal@en\" ] ] ]"+
+            "\"entityNames\" : [ {\n" +
+            "    \"@value\" : \"literal no langtag\"\n" +
+            "  }, {\n" +
+            "    \"@value\" : \"english literal\",\n" +
+            "    \"@language\" : \"en\"\n" +
+            "  } ]"+
             "}\n";
 
 
@@ -103,7 +109,8 @@ public class Serializer {
 
     public Serializer() {
         mapper = new ObjectMapper();
-        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
+//        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
     }
 
     /**

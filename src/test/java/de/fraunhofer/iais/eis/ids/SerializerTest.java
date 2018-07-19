@@ -26,6 +26,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class SerializerTest {
@@ -209,7 +210,7 @@ public class SerializerTest {
         Literal secondLiteral = (Literal) namesIt.next().getObject();
 
         Assert.assertTrue(!firstLiteral.getLabel().isEmpty() && !firstLiteral.getLanguage().isPresent());
-        Assert.assertTrue(!secondLiteral.getLabel().isEmpty() && firstLiteral.getLanguage().isPresent());
+        Assert.assertTrue(!secondLiteral.getLabel().isEmpty() && secondLiteral.getLanguage().isPresent());
     }
 
 
