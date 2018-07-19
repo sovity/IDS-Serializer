@@ -38,29 +38,17 @@ public class Serializer {
 
     // object with nested types
     private String dataTransfer = "{\n"+
-            "  \"@class\" : \"de.fraunhofer.iais.eis.DataTransferImpl\",\n"+
-            "  \"id\" : \"http://industrialdataspace.org/dataTransfer/214ac663-d60f-4b9b-b1d0-35ccd41e661c\",\n"+
-            "  \"customAttributes\" : [ \"java.util.ArrayList\", [ {\n"+
-            "    \"@class\" : \"de.fraunhofer.iais.eis.TransferAttributeImpl\",\n"+
-            "    \"id\" : \"http://industrialdataspace.org/transferAttribute/9847a645-8be7-4900-8e9b-7cd01074749a\",\n"+
-            "    \"transferAttributeKey\" : \"key\",\n"+
-            "    \"transferAttributeValue\" : \"value\"\n"+
-            "  } ] ],\n"+
-            "  \"sender\" : null,\n"+
-            "  \"receiver\" : null,\n"+
-            "  \"transferCreatedAt\" : null,\n"+
-            "  \"sendingParticipant\" : null,\n"+
-            "  \"receivingParticipant\" : null,\n"+
-            "  \"sourceOperation\" : null,\n"+
-            "  \"targetOperation\" : null,\n"+
-            "  \"authToken\" : {\n"+
-            "    \"@class\" : \"de.fraunhofer.iais.eis.AuthTokenImpl\",\n"+
-            "    \"id\" : \"http://industrialdataspace.org/authToken/aca629a3-9b47-42d9-ac39-5201cf10a52e\",\n"+
-            "    \"tokenValue\" : \"dummyToken\"\n"+
-            "  },\n"+
-            "  \"transferContract\" : null,\n"+
-            "  \"payloadDigest\" : null,\n"+
-            "  \"hashFunction\" : null\n"+
+            "\"@class\" : \"de.fraunhofer.iais.eis.DataTransferImpl\",\n"+
+            "\"id\" : \"http://industrialdataspace.org/dataTransfer/7719b39c-38ea-4f0b-99b1-f214c1abac5d\",\n" +
+            "  \"customAttributes\" : [ [ \"de.fraunhofer.iais.eis.TransferAttributeImpl\", {\n" +
+            "    \"id\" : \"http://industrialdataspace.org/transferAttribute/005c38fa-c15e-484d-aae6-a4cb9086d103\",\n" +
+            "    \"transferAttributeKey\" : \"key\",\n" +
+            "    \"transferAttributeValue\" : \"value\"\n" +
+            "  } ] ],\n" +
+            "  \"authToken\" : [ \"de.fraunhofer.iais.eis.AuthTokenImpl\", {\n" +
+            "    \"id\" : \"http://industrialdataspace.org/authToken/2ee4d630-ea5f-4425-9814-871bc0b0c159\",\n" +
+            "    \"tokenValue\" : \"dummyToken\"\n" +
+            "  } ]"+
             "}";
 
     // object with int literal
@@ -86,23 +74,24 @@ public class Serializer {
             "\t\"@context\": {\n"+
             "\t    \"ids\" : \"https://w3id.org/ids/core/\",\n"+
             "\t    \"DataAsset\": \"ids:DataAsset\",\n"+
-            "\t    \"entityNames\": \"ids:entityName\",\n"+
-            "\t    \"value\": \"ids:value\"\n"+
+            "\t    \"entityNames\": \"ids:entityName\"\n"+
             "\t},\n"+
 
             "\t\"@type\": \"DataAsset\",\n"+
-            "\t\"@id\":\"http://industrialdataspace.org/dataAsset/f7608b8b-d60a-4476-a45a-bd4ca204d61b\",\n"+
+            "\t\"@id\":\"http://industrialdataspace.org/dataAsset/80b79546-7b50-480e-b397-c7fd6e865b3f\",\n"+
             "\n" +
+
             "  \"@class\" : \"de.fraunhofer.iais.eis.DataAssetImpl\",\n" +
-            "  \"id\" : \"http://industrialdataspace.org/dataAsset/f7608b8b-d60a-4476-a45a-bd4ca204d61b\",\n" +
-            "\"entityNames\" : [ {\n" +
+            "  \"id\" : \"http://industrialdataspace.org/dataAsset/80b79546-7b50-480e-b397-c7fd6e865b3f\",\n" +
+            "  \"entityNames\" : [ {\n" +
+            "    \"@class\" : \"de.fraunhofer.iais.eis.util.PlainLiteral\",\n" +
             "    \"@value\" : \"literal no langtag\"\n" +
             "  }, {\n" +
+            "    \"@class\" : \"de.fraunhofer.iais.eis.util.PlainLiteral\",\n" +
             "    \"@value\" : \"english literal\",\n" +
             "    \"@language\" : \"en\"\n" +
-            "  } ]"+
-            "}\n";
-
+            "  } ]\n" +
+            "}";
 
 
     private static ObjectMapper mapper;
@@ -110,7 +99,7 @@ public class Serializer {
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
-//        mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+        mapper.enableDefaultTyping();
     }
 
     /**

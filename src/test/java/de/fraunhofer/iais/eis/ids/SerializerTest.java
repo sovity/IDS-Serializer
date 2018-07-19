@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.model.Resource;
@@ -55,11 +56,11 @@ public class SerializerTest {
 
         nestedInstance = new DataTransferBuilder()
                 .authToken(new AuthTokenBuilder().tokenValue("dummyToken").build())
-                .customAttributes(Arrays.asList(transferAttribute))
+                .customAttributes(Util.asList(transferAttribute))
                 .build();
 
         Instant instant = new InstantBuilder().named(NamedInstant.TODAY).build();
-        polymorphic = new DataAssetBuilder().coversTemporal(Arrays.asList(instant)).build();
+        polymorphic = new DataAssetBuilder().coversTemporal(Util.asList(instant)).build();
     }
 
     @Test
@@ -72,9 +73,6 @@ public class SerializerTest {
     @Test
     public void plainJsonSerialize_Nested() throws IOException {
         String dataTransfer = serializer.serialize(nestedInstance);
-
-        System.out.println(dataTransfer);
-
         DataTransfer deserializedTransfer = serializer.deserialize(dataTransfer, DataTransferImpl.class);
         Assert.assertNotNull(deserializedTransfer);
     }
@@ -82,7 +80,6 @@ public class SerializerTest {
     @Test
     public void plainJsonSerialize_Polymorphic() throws IOException {
         String dataAsset = serializer.serialize(polymorphic);
-
         DataAsset deserializedDataAsset = serializer.deserialize(dataAsset, DataAssetImpl.class);
         Assert.assertNotNull(deserializedDataAsset);
         Assert.assertTrue(deserializedDataAsset.getCoversTemporal().iterator().next() instanceof Instant);
@@ -91,12 +88,10 @@ public class SerializerTest {
     @Test
     public void plainJsonSerialize_Literal() throws ConstraintViolationException, IOException {
         DataAsset asset = new DataAssetBuilder()
-                .entityNames(Arrays.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
+                .entityNames(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
                 .build();
 
         String serialized = serializer.serialize(asset);
-
-        System.out.println(serialized);
 
         DataAsset deserializedDataAsset = serializer.deserialize(serialized, DataAssetImpl.class);
 
@@ -119,7 +114,7 @@ public class SerializerTest {
     @Test
     public void deserialzeFromJsonLD_Nested() throws IOException {
         String serializiedJsonLD = serializer.serialize(ObjectType.NESTED);
-        DataTransfer deserialized = serializer.deserialize(serializiedJsonLD, DataTransfer.class);
+        DataTransfer deserialized = serializer.deserialize(serializiedJsonLD, DataTransferImpl.class);
 
         Assert.assertNotNull(deserialized.getAuthToken());
         Assert.assertNotNull(deserialized.getCustomAttributes());
@@ -196,9 +191,6 @@ public class SerializerTest {
         Assert.assertNotNull(deserAsset);
 
         Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
-
-        System.out.println(model.toString());
-
         ValueFactory factory = SimpleValueFactory.getInstance();
         Model subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/entityName"),null);
 
