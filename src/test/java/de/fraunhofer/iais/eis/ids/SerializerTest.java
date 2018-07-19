@@ -92,7 +92,6 @@ public class SerializerTest {
                 .build();
 
         String serialized = serializer.serialize(asset);
-
         DataAsset deserializedDataAsset = serializer.deserialize(serialized, DataAssetImpl.class);
 
         Assert.assertEquals(2, deserializedDataAsset.getEntityNames().size());
@@ -184,7 +183,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testMultiLangLiteralSerialization() throws ConstraintViolationException, IOException {
+    public void testMultiLangLiteralSerialization() throws IOException {
         String serializiedJsonLD = serializer.serialize(ObjectType.LANG_LIT);
 
         DataAsset deserAsset = serializer.deserialize(serializiedJsonLD, DataAssetImpl.class);
