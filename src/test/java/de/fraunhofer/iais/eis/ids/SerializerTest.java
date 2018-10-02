@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.*;
+import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.rdf4j.model.*;
-import org.eclipse.rdf4j.model.Resource;
 import org.eclipse.rdf4j.model.impl.SimpleValueFactory;
 import org.eclipse.rdf4j.model.vocabulary.RDF;
 import org.eclipse.rdf4j.model.vocabulary.XMLSchema;
@@ -21,9 +21,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -32,52 +36,62 @@ import java.util.stream.Collectors;
 
 public class SerializerTest {
 
-    private static BrokerDataRequest basicInstance;
-    private static DataTransfer nestedInstance;
+    private static ConnectorAvailableMessage basicInstance;
+    private static Connector nestedInstance;
     private static Serializer serializer;
-    private static DataAsset polymorphic;
+//    private static DataAsset polymorphic;
 
     @BeforeClass
-    public static void setUp() throws ConstraintViolationException {
+    public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, MalformedURLException {
         serializer = new Serializer();
 
         // object with only basic types and enums
-        basicInstance = new BrokerDataRequestBuilder()
-                .dataRequestAction(BrokerDataRequestAction.REGISTER)
-                .coveredEntity(EntityCoveredByDataRequest.CONNECTOR)
-                .messageContent("Hello world")
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(new Date());
+        XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+
+        basicInstance = new ConnectorAvailableMessageBuilder()
+                ._issued_(now)
+                ._modelVersion_("1.0.0")
+                ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssues"))
                 .build();
 
+        ArrayList<Resource> resources = new ArrayList<>();
+        resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1")).build());
+        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2")).build());
+
+        // connector -> nested
         // object with nested types
-        TransferAttribute transferAttribute = new TransferAttributeBuilder()
-                .transferAttributeKey("key")
-                .transferAttributeValue("value")
+        Catalog catalog = new CatalogBuilder()
+                ._offers_(resources)
                 .build();
 
-        nestedInstance = new DataTransferBuilder()
-                .authToken(new AuthTokenBuilder().tokenValue("dummyToken").build())
-                .customAttributes(Util.asList(transferAttribute))
+        nestedInstance = new BaseConnectorBuilder()
+                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer"))
+                ._version_("1.0.0")
+                ._catalog_(catalog)
                 .build();
 
-        Instant instant = new InstantBuilder().named(NamedInstant.TODAY).build();
-        polymorphic = new DataAssetBuilder().coversTemporal(Util.asList(instant)).build();
+/*        Instant instant = new InstantBuilder().named(NamedInstant.TODAY).build();
+        polymorphic = new DataAssetBuilder().coversTemporal(Util.asList(instant)).build();*/
     }
 
     @Test
     public void plainJsonSerialize_Basic() throws IOException {
-        String brokerDataRequest = serializer.serialize(basicInstance);
-        BrokerDataRequestImpl deserializedDataRequest = serializer.deserialize(brokerDataRequest, BrokerDataRequestImpl.class);
+        String connectorAvailableMessage = serializer.serialize(basicInstance);
+        ConnectorAvailableMessage deserializedDataRequest = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
         Assert.assertNotNull(deserializedDataRequest);
     }
 
     @Test
     public void plainJsonSerialize_Nested() throws IOException {
-        String dataTransfer = serializer.serialize(nestedInstance);
-        DataTransfer deserializedTransfer = serializer.deserialize(dataTransfer, DataTransferImpl.class);
+        String connector = serializer.serialize(nestedInstance);
+        System.out.println(connector);
+        Connector deserializedTransfer = serializer.deserialize(connector, BaseConnectorImpl.class);
         Assert.assertNotNull(deserializedTransfer);
     }
 
-    @Test
+/*    @Test
     public void plainJsonSerialize_Polymorphic() throws IOException {
         String dataAsset = serializer.serialize(polymorphic);
         DataAsset deserializedDataAsset = serializer.deserialize(dataAsset, DataAssetImpl.class);
@@ -92,6 +106,7 @@ public class SerializerTest {
                 .build();
 
         String serialized = serializer.serialize(asset);
+        System.out.println(serialized);
         DataAsset deserializedDataAsset = serializer.deserialize(serialized, DataAssetImpl.class);
 
         Assert.assertEquals(2, deserializedDataAsset.getEntityNames().size());
@@ -125,7 +140,7 @@ public class SerializerTest {
 
         Assert.assertEquals(expectedTransferAttribute.getTransferAttributeKey(), actualTransferAttribute.getTransferAttributeKey());
         Assert.assertEquals(expectedTransferAttribute.getTransferAttributeValue(), actualTransferAttribute.getTransferAttributeValue());
-    }
+    }*/
 
     @Test
     public void serializeToJsonLD_Basic() throws IOException, JSONException {
@@ -155,7 +170,7 @@ public class SerializerTest {
     }
 
 
-    @Test
+/*    @Test
     public void testIntSerialization() throws ConstraintViolationException, IOException {
         URL instantId = new URL("http://industrialdataspace.org/instant/8d43422f-30a2-401e-bcf3-bc2bae97b73c");
         Instant instant = new InstantBuilder(instantId)
@@ -204,7 +219,7 @@ public class SerializerTest {
         Assert.assertTrue(!secondLiteral.getLabel().isEmpty() && secondLiteral.getLanguage().isPresent());
     }
 
-
+*/
 
 
 }
