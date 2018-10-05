@@ -106,9 +106,7 @@ public class Serializer {
       //  mapper.enableDefaultTyping();
        // mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
 
-        SimpleModule mod = new SimpleModule();
-        mod.setSerializerModifier(new JsonLDSerializerModifier());
-        mapper.registerModule(mod);
+        mapper.registerModule(new JsonLDModule());
     }
 
     /**
