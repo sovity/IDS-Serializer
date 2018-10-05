@@ -1,12 +1,10 @@
 package de.fraunhofer.iais.eis.ids;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import de.fraunhofer.iais.eis.BrokerDataRequestImpl;
-import de.fraunhofer.iais.eis.util.PlainLiteral;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFWriter;
@@ -104,7 +102,13 @@ public class Serializer {
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.enableDefaultTyping();
+        mapper.setDateFormat(new ISO8601DateFormat());
+      //  mapper.enableDefaultTyping();
+       // mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
+
+        SimpleModule mod = new SimpleModule();
+        mod.setSerializerModifier(new JsonLDSerializerModifier());
+        mapper.registerModule(mod);
     }
 
     /**
@@ -132,6 +136,8 @@ public class Serializer {
         in the form "<property>" : "<value provided in the parenthesis of the @RdfProperty(...) annotation of each member method>"
          */
         String jsonLD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
+        jsonLD = "{" + JsonLDContext.getInstance().toString() + jsonLD.substring(1); // insert @context at the beginning (after "{")
+        JsonLDContext.getInstance().clear();
 
         if (format == RDFFormat.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
