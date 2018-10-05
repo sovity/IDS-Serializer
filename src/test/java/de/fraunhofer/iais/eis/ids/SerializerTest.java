@@ -79,14 +79,23 @@ public class SerializerTest {
     @Test
     public void plainJsonSerialize_Basic() throws IOException {
         String connectorAvailableMessage = serializer.serialize(basicInstance);
+        System.out.println(connectorAvailableMessage);
         ConnectorAvailableMessage deserializedDataRequest = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
         Assert.assertNotNull(deserializedDataRequest);
     }
 
     @Test
     public void plainJsonSerialize_Nested() throws IOException {
-        String connector = serializer.serialize(nestedInstance);
+        String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
         System.out.println(connector);
+        Model model;
+        try {
+            model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
         Connector deserializedTransfer = serializer.deserialize(connector, BaseConnectorImpl.class);
         Assert.assertNotNull(deserializedTransfer);
     }
@@ -97,25 +106,25 @@ public class SerializerTest {
         DataAsset deserializedDataAsset = serializer.deserialize(dataAsset, DataAssetImpl.class);
         Assert.assertNotNull(deserializedDataAsset);
         Assert.assertTrue(deserializedDataAsset.getCoversTemporal().iterator().next() instanceof Instant);
-    }
+    }*/
 
     @Test
     public void plainJsonSerialize_Literal() throws ConstraintViolationException, IOException {
-        DataAsset asset = new DataAssetBuilder()
-                .entityNames(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
+        Resource resource = new ResourceBuilder()
+                ._descriptions_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
                 .build();
 
-        String serialized = serializer.serialize(asset);
+        String serialized = serializer.serialize(resource);
         System.out.println(serialized);
-        DataAsset deserializedDataAsset = serializer.deserialize(serialized, DataAssetImpl.class);
+        Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
 
-        Assert.assertEquals(2, deserializedDataAsset.getEntityNames().size());
-        Iterator<? extends PlainLiteral> names = deserializedDataAsset.getEntityNames().iterator();
+        Assert.assertEquals(2, deserializedResource.getDescriptions().size());
+        Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
         Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
-    @Test
+/*    @Test
     public void deserialzeFromJsonLD_Basic() throws IOException {
         String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
         BrokerDataRequest deserialized = serializer.deserialize(serializiedJsonLD, BrokerDataRequestImpl.class);
@@ -162,10 +171,10 @@ public class SerializerTest {
         ValueFactory factory = SimpleValueFactory.getInstance();
         Model subModel;
 
-        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/coveredEntity"),null);
+        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/coveredEntity"), null);
         subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));
 
-        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/dataRequestAction"),null);
+        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/dataRequestAction"), null);
         subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));
     }
 
