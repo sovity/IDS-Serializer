@@ -3,8 +3,10 @@ package de.fraunhofer.iais.eis.ids.jsonld;
 import annotation.RdfId;
 import annotation.RdfProperty;
 import annotation.RdfType;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.BeanSerializer;
 import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
 
@@ -18,9 +20,37 @@ import java.util.Objects;
 
 public class JsonLDSerializer extends BeanSerializer {
 
+    private Usage usage;
+    private static int currentRecursionDepth = 0;
 
-    protected JsonLDSerializer(BeanSerializerBase src) {
+
+    protected JsonLDSerializer(BeanSerializerBase src, Usage usage) {
         super(src);
+        this.usage = usage;
+    }
+
+    @Override
+    public void serializeWithType(Object bean, JsonGenerator gen, SerializerProvider provider, TypeSerializer typeSer) throws IOException {
+        if (usage.equals(Usage.STANDALONE)) {
+            super.serializeWithType(bean, gen, provider, typeSer);
+        }
+        else if (usage.equals(Usage.LIB)) {
+            gen.setCurrentValue(bean);
+
+            currentRecursionDepth++;
+            gen.writeStartObject();
+            if(currentRecursionDepth == 1) {
+                gen.writeStringField("@context", "ids-context-url"); // only add @context on top level
+            }
+            gen.writeStringField("@class", "." + bean.getClass().getSimpleName());
+            if (_propertyFilterId != null) {
+                serializeFieldsFiltered(bean, gen, provider);
+            } else {
+                serializeFields(bean, gen, provider);
+            }
+            gen.writeEndObject();
+            currentRecursionDepth--;
+        }
     }
 
     @Override
@@ -44,26 +74,29 @@ public class JsonLDSerializer extends BeanSerializer {
             }
         }
 
-        // add @RdfProperty's to context
-        JsonLDContext context = JsonLDContext.getInstance();
-        List<Method> methods = new ArrayList<>();
-        methods.addAll(Arrays.asList(bean.getClass().getMethods()));
-        for (Class iface : bean.getClass().getInterfaces()) {
-            methods.addAll(Arrays.asList(iface.getMethods()));
-        }
+        if (usage.equals(Usage.STANDALONE)) {
+            // add @RdfProperty's to context if context should be generated on-the-fly
+            JsonLDContext context = JsonLDContext.getInstance();
+            List<Method> methods = new ArrayList<>();
+            methods.addAll(Arrays.asList(bean.getClass().getMethods()));
+            for (Class iface : bean.getClass().getInterfaces()) {
+                methods.addAll(Arrays.asList(iface.getMethods()));
+            }
 
-        methods.stream()
-                .filter(method -> method.isAnnotationPresent(RdfProperty.class))
-                .forEach(method -> {
-                    String k = method.getName().replace("is", "").replace("get", ""); // remove getter part of method name
-                    k = Character.toLowerCase(k.charAt(0)) + k.substring(1); // decapitalize the first char
-                    String v = method.getAnnotation(RdfProperty.class).value();
-                    context.addProperty(k, v);
-                });
+            methods.stream()
+                    .filter(method -> method.isAnnotationPresent(RdfProperty.class))
+                    .forEach(method -> {
+                        String k = method.getName().replace("is", "").replace("get", ""); // remove getter part of method name
+                        k = Character.toLowerCase(k.charAt(0)) + k.substring(1); // decapitalize the first char
+                        String v = method.getAnnotation(RdfProperty.class).value();
+                        context.addProperty(k, v);
+                    });
+        }
 
         //do the normal serialization work
         super.serializeFields(bean, gen, provider);
     }
+
 
     private RdfType getRdfTypeAnnotation(Object bean) {
         RdfType rdfType = bean.getClass().getAnnotation(RdfType.class);
