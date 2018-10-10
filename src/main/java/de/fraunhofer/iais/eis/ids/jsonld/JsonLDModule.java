@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.ids;
+package de.fraunhofer.iais.eis.ids.jsonld;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
 

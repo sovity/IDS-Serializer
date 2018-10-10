@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.ids;
+package de.fraunhofer.iais.eis.ids.jsonld;
 
 public enum ObjectType {
 

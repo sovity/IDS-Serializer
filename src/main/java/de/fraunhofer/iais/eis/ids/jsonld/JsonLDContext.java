@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.ids;
+package de.fraunhofer.iais.eis.ids.jsonld;
 
 import java.util.HashMap;
 import java.util.Map;

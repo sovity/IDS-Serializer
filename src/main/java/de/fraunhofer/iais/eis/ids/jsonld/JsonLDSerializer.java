@@ -1,4 +1,4 @@
-package de.fraunhofer.iais.eis.ids;
+package de.fraunhofer.iais.eis.ids.jsonld;
 
 import annotation.RdfId;
 import annotation.RdfProperty;
