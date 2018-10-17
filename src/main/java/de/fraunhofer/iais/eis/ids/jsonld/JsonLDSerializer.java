@@ -1,14 +1,14 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
-import annotation.RdfId;
-import annotation.RdfProperty;
-import annotation.RdfType;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.BeanSerializer;
 import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
+import de.fraunhofer.iais.eis.annotation.RdfId;
+import de.fraunhofer.iais.eis.annotation.RdfProperty;
+import de.fraunhofer.iais.eis.annotation.RdfType;
 
 
 import java.io.IOException;
@@ -24,7 +24,7 @@ public class JsonLDSerializer extends BeanSerializer {
     private static int currentRecursionDepth = 0;
 
 
-    protected JsonLDSerializer(BeanSerializerBase src, Usage usage) {
+    JsonLDSerializer(BeanSerializerBase src, Usage usage) {
         super(src);
         this.usage = usage;
     }
