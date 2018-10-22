@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class JsonLDSerializer extends BeanSerializer {
 
@@ -40,7 +41,7 @@ public class JsonLDSerializer extends BeanSerializer {
             currentRecursionDepth++;
             gen.writeStartObject();
             if(currentRecursionDepth == 1) {
-                gen.writeStringField("@context", "ids-context-url"); // only add @context on top level
+                gen.writeStringField("@context", "http://industrialdataspace.org/jsonld/context"); // only add @context on top level
             }
             gen.writeStringField("@class", "." + bean.getClass().getSimpleName());
             if (_propertyFilterId != null) {
@@ -92,7 +93,6 @@ public class JsonLDSerializer extends BeanSerializer {
                         context.addProperty(k, v);
                     });
         }
-
         //do the normal serialization work
         super.serializeFields(bean, gen, provider);
     }
