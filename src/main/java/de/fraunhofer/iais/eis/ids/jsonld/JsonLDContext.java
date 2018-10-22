@@ -1,5 +1,7 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,7 +14,7 @@ public class JsonLDContext {
     private static final String idsNamespace = "https://w3id.org/idsa/core/";
 
     private static final String idsEnumPrefix = "idsEnums";
-    private static final String idsEnumNamespace = "https://w3id.org/idsa/core/";
+    private static final String idsEnumNamespace = "https://w3id.org/idsa/code/";
 
     private final Map<String, String> properties = new HashMap<>();
 
@@ -29,6 +31,7 @@ public class JsonLDContext {
 
     private JsonLDContext() {
         properties.put(idsPrefix, idsNamespace);
+        properties.put(idsEnumPrefix, idsEnumNamespace);
     }
 
     public void addProperty(String key, String value) {
@@ -59,7 +62,8 @@ public class JsonLDContext {
 
     public void clear() {
         properties.clear();
-        properties.put("ids", idsNamespace);
+        properties.put(idsPrefix, idsNamespace);
+        properties.put(idsEnumPrefix, idsEnumNamespace);
     }
 
 
