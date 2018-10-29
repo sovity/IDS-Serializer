@@ -29,25 +29,12 @@ public class Serializer {
      *
      * @param instance the instance to be serialized
      * @return RDF serialization of the provided object graph
-     * @throws JsonProcessingException
      */
     public String serialize(Object instance) throws IOException {
         return serialize(instance, RDFFormat.JSONLD);
     }
 
     public String serialize(Object instance, RDFFormat format) throws IOException {
-        /*
-        TODO: add the @context block to the JSON, containing:
-        1) the IDS namespace prefix, which is always constant: "ids" : "https://w3id.org/ids/core/"
-
-        TODO: configure jackson so that for each JSON object it adds 2 key value pairs:
-        1) "@type" : the value for this key is taken from the Object's @RdfType annotation
-        2) "@id" : the value for this key is taken from the Object's member value that is annotated by the @RdfId annotation
-
-        TODO: add property mappings to the @context block to the JSON, containing:
-        1) for each member the object instance has, collect the value of the @RdfProperty annotation and add it
-        in the form "<property>" : "<value provided in the parenthesis of the @RdfProperty(...) annotation of each member method>"
-         */
         String jsonLD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
         jsonLD = "{" + JsonLDContext.getInstance().toString() + jsonLD.substring(1); // insert @context at the beginning (after "{")
         JsonLDContext.getInstance().clear();
@@ -62,7 +49,7 @@ public class Serializer {
         StringWriter rdfOutput = new StringWriter();
         RDFWriter writer = Rio.createWriter(format, rdfOutput);
         writer.startRDF();
-        model.stream().forEach(statement -> writer.handleStatement(statement));
+        model.forEach(writer::handleStatement);
         writer.endRDF();
         return rdfOutput.toString();
     }
@@ -74,7 +61,6 @@ public class Serializer {
      * @param valueType     class of top level type
      * @param <T>           deserialized type
      * @return an object representing the provided JSON(-LD) structure
-     * @throws IOException
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
         return mapper.readValue(serialization, valueType);
