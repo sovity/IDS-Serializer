@@ -56,13 +56,6 @@ public class JsonLDSerializer extends BeanSerializer {
 
     @Override
     protected void serializeFields(Object bean, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        // add @type
-        RdfType rdfType = getRdfTypeAnnotation(bean);
-        if (rdfType != null) {
-            gen.writeFieldName("@type");
-            gen.writeString(JsonLDContext.getInstance().replaceIdsNamespace(rdfType.value()));
-        }
-
         // add @id
         Method rdfIdMethod = getRdfIdMethod(bean);
         if (rdfIdMethod != null) {

@@ -20,10 +20,6 @@ public class Serializer {
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.setDateFormat(new ISO8601DateFormat());
-        //  mapper.enableDefaultTyping();
-        // mapper.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL);
-
         mapper.registerModule(new JsonLDModule(Usage.STANDALONE));
     }
 
