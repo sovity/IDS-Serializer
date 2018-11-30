@@ -61,7 +61,7 @@ public class JsonLDSerializer extends BeanSerializer {
 
     @Override
     protected void serializeFields(Object bean, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        // add @id
+        /* //add @id -> this is not necessary anymore as we directly serialize ids as @id
         Method rdfIdMethod = getRdfIdMethod(bean);
         if (rdfIdMethod != null) {
             rdfIdMethod.setAccessible(true);
@@ -71,7 +71,7 @@ public class JsonLDSerializer extends BeanSerializer {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        } */
 
         if (usage.equals(Usage.STANDALONE)) {
             // add @RdfProperty's to context if context should be generated on-the-fly
@@ -107,7 +107,7 @@ public class JsonLDSerializer extends BeanSerializer {
         return rdfType;
     }
 
-    private Method getRdfIdMethod(Object bean) {
+  /*  private Method getRdfIdMethod(Object bean) {
         Method rdfIdMethod = Arrays.stream(bean.getClass().getMethods())
                 .filter(method -> method.isAnnotationPresent(RdfId.class))
                 .findFirst().orElse(null);
@@ -119,5 +119,5 @@ public class JsonLDSerializer extends BeanSerializer {
                     .findFirst().orElse(null);
         }
         return rdfIdMethod;
-    }
+    } */
 }
