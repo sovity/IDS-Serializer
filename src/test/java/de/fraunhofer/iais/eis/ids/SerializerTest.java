@@ -117,16 +117,6 @@ public class SerializerTest {
         //TODO equality check
     }
 
-   
-
-/*    @Test
-    public void plainJsonSerialize_Polymorphic() throws IOException {
-        String dataAsset = serializer.serialize(polymorphic);
-        DataAsset deserializedDataAsset = serializer.deserialize(dataAsset, DataAssetImpl.class);
-        Assert.assertNotNull(deserializedDataAsset);
-        Assert.assertTrue(deserializedDataAsset.getCoversTemporal().iterator().next() instanceof Instant);
-    }*/
-
     @Test
     public void plainJsonSerialize_Literal() throws ConstraintViolationException, IOException {
         Resource resource = new ResourceBuilder()
