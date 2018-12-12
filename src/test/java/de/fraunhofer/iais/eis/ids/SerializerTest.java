@@ -28,13 +28,12 @@ public class SerializerTest {
     private static Connector nestedInstance;
     private static RejectionMessage enumInstance;
     private static Serializer serializer;
-//    private static DataAsset polymorphic;
 
     @BeforeClass
     public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, MalformedURLException {
         serializer = new Serializer();
 
-        // object with only basic types and enums
+        // object with only basic types
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(new Date());
         XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
@@ -49,8 +48,7 @@ public class SerializerTest {
         resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1")).build());
         resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2")).build());
 
-        // connector -> nested
-        // object with nested types
+        // connector -> object with nested types
         Catalog catalog = new CatalogBuilder()
                 ._offers_(resources)
                 .build();
@@ -61,28 +59,34 @@ public class SerializerTest {
                 ._catalog_(catalog)
                 .build();
 
+        // object with enum
         enumInstance = new RejectionMessageBuilder()
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer"))
                 ._modelVersion_("1.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
                 .build();
-
-/*        Instant instant = new InstantBuilder().named(NamedInstant.TODAY).build();
-        polymorphic = new DataAssetBuilder().coversTemporal(Util.asList(instant)).build();*/
     }
 
     @Test
-    public void plainJsonSerialize_Basic() throws IOException {
+    public void jsonldSerialize_Basic() throws IOException {
         String connectorAvailableMessage = serializer.serialize(basicInstance);
-        System.out.println(connectorAvailableMessage);
-        ConnectorAvailableMessage deserializedDataRequest = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
-        Assert.assertNotNull(deserializedDataRequest);
+        Model model;
+        try {
+            model = Rio.parse(new StringReader(connectorAvailableMessage), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
+
+        ConnectorAvailableMessage deserializedConnectorAvailableMessage = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
+        Assert.assertNotNull(connectorAvailableMessage);
+        //TODO assert object equals
     }
 
     @Test
-    public void plainJsonSerialize_Nested() throws IOException {
+    public void jsonldSerialize_Nested() throws IOException {
         String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
-        System.out.println(connector);
         Model model;
         try {
             model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
@@ -91,18 +95,29 @@ public class SerializerTest {
             model = null;
         }
         Assert.assertNotNull(model);
+
         Connector deserializedTransfer = serializer.deserialize(connector, BaseConnectorImpl.class);
-        Assert.assertNotNull(deserializedTransfer);
+        //TODO assert object equals
     }
 
     @Test
-    public void plainJssonSerialize_Enum() throws IOException {
-        String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.TURTLE);
+    public void jsonldSerialize_Enum() throws IOException {
+        String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.JSONLD);
         System.out.println(rejectionMessage);
-        // Model model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
-        //  Assert.assertNotNull(model);
-        //RejectionMessage deserialized = serializer.deserialize(rejectionMessage, RejectionMessage.class);
+        Model model;
+        try {
+            model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
+
+        RejectionMessage deserialized = serializer.deserialize(rejectionMessage, RejectionMessage.class);
+        //TODO equality check
     }
+
+   
 
 /*    @Test
     public void plainJsonSerialize_Polymorphic() throws IOException {
