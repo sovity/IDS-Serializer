@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
@@ -70,6 +71,8 @@ public class SerializerTest {
     @Test
     public void jsonldSerialize_Basic() throws IOException {
         String connectorAvailableMessage = serializer.serialize(basicInstance);
+        Assert.assertNotNull(connectorAvailableMessage);
+
         Model model;
         try {
             model = Rio.parse(new StringReader(connectorAvailableMessage), null, RDFFormat.JSONLD);
@@ -80,13 +83,15 @@ public class SerializerTest {
         Assert.assertNotNull(model);
 
         ConnectorAvailableMessage deserializedConnectorAvailableMessage = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
-        Assert.assertNotNull(connectorAvailableMessage);
-        //TODO assert object equals
+        Assert.assertNotNull(deserializedConnectorAvailableMessage);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(basicInstance, deserializedConnectorAvailableMessage, true, Object.class, true));
     }
 
     @Test
     public void jsonldSerialize_Nested() throws IOException {
         String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
+        Assert.assertNotNull(connector);
+
         Model model;
         try {
             model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
@@ -96,14 +101,16 @@ public class SerializerTest {
         }
         Assert.assertNotNull(model);
 
-        Connector deserializedTransfer = serializer.deserialize(connector, BaseConnectorImpl.class);
-        //TODO assert object equals
+        Connector deserializedConnector = serializer.deserialize(connector, BaseConnectorImpl.class);
+        Assert.assertNotNull(deserializedConnector);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(nestedInstance, deserializedConnector, true, Object.class, true));
     }
 
     @Test
     public void jsonldSerialize_Enum() throws IOException {
         String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.JSONLD);
-        System.out.println(rejectionMessage);
+        Assert.assertNotNull(rejectionMessage);
+
         Model model;
         try {
             model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
@@ -113,8 +120,9 @@ public class SerializerTest {
         }
         Assert.assertNotNull(model);
 
-        RejectionMessage deserialized = serializer.deserialize(rejectionMessage, RejectionMessage.class);
-        //TODO equality check
+        RejectionMessage deserializedRejectionMessage = serializer.deserialize(rejectionMessage, RejectionMessage.class);
+        Assert.assertNotNull(deserializedRejectionMessage);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(enumInstance, deserializedRejectionMessage, true, Object.class, true));
     }
 
     @Test
