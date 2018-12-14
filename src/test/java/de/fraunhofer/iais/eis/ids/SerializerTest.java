@@ -28,6 +28,7 @@ public class SerializerTest {
     private static ConnectorAvailableMessage basicInstance;
     private static Connector nestedInstance;
     private static RejectionMessage enumInstance;
+    private static Connector securityProfileInstance;
     private static Serializer serializer;
 
     @BeforeClass
@@ -65,6 +66,13 @@ public class SerializerTest {
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer"))
                 ._modelVersion_("1.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
+                .build();
+
+        securityProfileInstance = new BaseConnectorBuilder()
+                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer"))
+                ._version_("1.0.0")
+                ._catalog_(catalog)
+                ._securityProfile_(PredefinedSecurityProfile.LEVEL0SECURITYPROFILE)
                 .build();
     }
 
@@ -123,6 +131,21 @@ public class SerializerTest {
         RejectionMessage deserializedRejectionMessage = serializer.deserialize(rejectionMessage, RejectionMessage.class);
         Assert.assertNotNull(deserializedRejectionMessage);
         Assert.assertTrue(EqualsBuilder.reflectionEquals(enumInstance, deserializedRejectionMessage, true, Object.class, true));
+    }
+
+    @Test
+    public void jsonldSerialize_SecurityProfile() throws IOException {
+        String connector = serializer.serialize(securityProfileInstance, RDFFormat.JSONLD);
+        Assert.assertNotNull(connector);
+
+        Model model;
+        try {
+            model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
     }
 
     @Test
