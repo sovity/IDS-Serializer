@@ -23,12 +23,11 @@ public class XMLGregorianCalendarDeserializer extends StdDeserializer<XMLGregori
 
     @Override
     public XMLGregorianCalendar deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        XMLGregorianCalendar xgc;
+        XMLGregorianCalendar xgc = null;
         try {
             xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(p.getValueAsString())));
         } catch (DatatypeConfigurationException e) {
             e.printStackTrace();
-            xgc = null;
         }
         return xgc;
     }

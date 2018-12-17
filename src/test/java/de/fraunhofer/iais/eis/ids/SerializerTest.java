@@ -83,12 +83,11 @@ public class SerializerTest {
     public void jsonldSerialize_Basic() throws IOException {
         String connectorAvailableMessage = serializer.serialize(basicInstance);
         Assert.assertNotNull(connectorAvailableMessage);
-        Model model;
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(connectorAvailableMessage), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
 
@@ -102,12 +101,11 @@ public class SerializerTest {
         String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
         Assert.assertNotNull(connector);
 
-        Model model;
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
 
@@ -121,12 +119,11 @@ public class SerializerTest {
         String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.JSONLD);
         Assert.assertNotNull(rejectionMessage);
 
-        Model model;
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
 
@@ -140,12 +137,11 @@ public class SerializerTest {
         String connector = serializer.serialize(securityProfileInstance, RDFFormat.JSONLD);
         Assert.assertNotNull(connector);
 
-        Model model;
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
     }
@@ -159,12 +155,11 @@ public class SerializerTest {
         String serialized = serializer.serialize(resource);
         Assert.assertNotNull(serialized);
 
-        Model model;
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
 
@@ -178,14 +173,13 @@ public class SerializerTest {
 
     @Test
     public void legacySerializationsJson_validate() throws IOException {
-        Connector connector;
-        Connector connector_update;
+        Connector connector = null;
+        Connector connector_update = null;
         try {
             connector = serializer.deserialize(readResourceToString("Connector1.json"), Connector.class);
             connector_update = serializer.deserialize(readResourceToString("Connector1_update.json"), Connector.class);
         } catch (IOException e) {
-            connector = null;
-            connector_update = null;
+            e.printStackTrace();
         }
         Assert.assertNotNull(connector);
         Assert.assertNotNull(connector_update);
@@ -193,33 +187,31 @@ public class SerializerTest {
 
     @Test
     public void legacySerializationsJsonld_validate() throws IOException {
-        Connector connector;
-        Connector connector2;
+        Connector connector = null;
+        Connector connector2 = null;
         try {
             connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
             connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
         } catch (IOException e) {
-            connector = null;
-            connector2 = null;
+            e.printStackTrace();
         }
         Assert.assertNotNull(connector);
         Assert.assertNotNull(connector2);
 
 
-        Model model;
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
 
+        model = null;
         try {
             model = Rio.parse(new StringReader(readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
     }
