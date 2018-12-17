@@ -80,7 +80,6 @@ public class SerializerTest {
     public void jsonldSerialize_Basic() throws IOException {
         String connectorAvailableMessage = serializer.serialize(basicInstance);
         Assert.assertNotNull(connectorAvailableMessage);
-
         Model model;
         try {
             model = Rio.parse(new StringReader(connectorAvailableMessage), null, RDFFormat.JSONLD);
@@ -149,15 +148,25 @@ public class SerializerTest {
     }
 
     @Test
-    public void plainJsonSerialize_Literal() throws ConstraintViolationException, IOException {
+    public void jsonldSerialize_Literal() throws ConstraintViolationException, IOException {
         Resource resource = new ResourceBuilder()
                 ._descriptions_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
                 .build();
 
         String serialized = serializer.serialize(resource);
-        System.out.println(serialized);
-        Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
+        Assert.assertNotNull(serialized);
 
+        Model model;
+        try {
+            model = Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
+
+        // do not use reflective equals here as ArrayList comparison fails due to different modCount
+        Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
         Assert.assertEquals(2, deserializedResource.getDescriptions().size());
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
         Assert.assertTrue(names.next().getLanguage().isEmpty());
