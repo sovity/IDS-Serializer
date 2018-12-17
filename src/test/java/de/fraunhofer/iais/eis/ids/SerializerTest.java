@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -18,7 +19,9 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -171,5 +174,62 @@ public class SerializerTest {
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
         Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
+    }
+
+    @Test
+    public void legacySerializationsJson_validate() throws IOException {
+        Connector connector;
+        Connector connector_update;
+        try {
+            connector = serializer.deserialize(readResourceToString("Connector1.json"), Connector.class);
+            connector_update = serializer.deserialize(readResourceToString("Connector1_update.json"), Connector.class);
+        } catch (IOException e) {
+            connector = null;
+            connector_update = null;
+        }
+        Assert.assertNotNull(connector);
+        Assert.assertNotNull(connector_update);
+    }
+
+    @Test
+    public void legacySerializationsJsonld_validate() throws IOException {
+        Connector connector;
+        Connector connector2;
+        try {
+            connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
+            connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
+        } catch (IOException e) {
+            connector = null;
+            connector2 = null;
+        }
+        Assert.assertNotNull(connector);
+        Assert.assertNotNull(connector2);
+
+
+        Model model;
+        try {
+            model = Rio.parse(new StringReader(readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
+
+        try {
+            model = Rio.parse(new StringReader(readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model = null;
+        }
+        Assert.assertNotNull(model);
+    }
+
+
+    private String readResourceToString(String resourceName) throws IOException {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream(resourceName);
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(is, writer, "UTF-8");
+        return writer.toString();
     }
 }
