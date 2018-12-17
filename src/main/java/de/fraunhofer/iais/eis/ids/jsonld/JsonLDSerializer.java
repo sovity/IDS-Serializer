@@ -2,6 +2,8 @@ package de.fraunhofer.iais.eis.ids.jsonld;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonToken;
+import com.fasterxml.jackson.core.type.WritableTypeId;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.BeanSerializer;
@@ -17,7 +19,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class JsonLDSerializer extends BeanSerializer {
 
@@ -41,9 +42,13 @@ public class JsonLDSerializer extends BeanSerializer {
             currentRecursionDepth++;
             gen.writeStartObject();
             if(currentRecursionDepth == 1) {
-                gen.writeStringField("@context", "http://industrialdataspace.org/jsonld/context"); // only add @context on top level
+                gen.writeStringField("@context", "https://w3id.org/idsa/contexts/context.jsonld"); // only add @context on top level
             }
-            gen.writeStringField("@class", "." + bean.getClass().getSimpleName());
+            WritableTypeId typeIdDef = _typeIdDef(typeSer, bean, JsonToken.START_OBJECT);
+            String resolvedTypeId  = typeIdDef.id != null ? typeIdDef.id.toString() : typeSer.getTypeIdResolver().idFromValue(bean);
+            if(resolvedTypeId != null) {
+                gen.writeStringField(typeIdDef.asProperty, resolvedTypeId);
+            }
             if (_propertyFilterId != null) {
                 serializeFieldsFiltered(bean, gen, provider);
             } else {
@@ -56,7 +61,7 @@ public class JsonLDSerializer extends BeanSerializer {
 
     @Override
     protected void serializeFields(Object bean, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        // add @id
+        /* //add @id -> this is not necessary anymore as we directly serialize ids as @id
         Method rdfIdMethod = getRdfIdMethod(bean);
         if (rdfIdMethod != null) {
             rdfIdMethod.setAccessible(true);
@@ -66,7 +71,7 @@ public class JsonLDSerializer extends BeanSerializer {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+        } */
 
         if (usage.equals(Usage.STANDALONE)) {
             // add @RdfProperty's to context if context should be generated on-the-fly
@@ -102,7 +107,7 @@ public class JsonLDSerializer extends BeanSerializer {
         return rdfType;
     }
 
-    private Method getRdfIdMethod(Object bean) {
+  /*  private Method getRdfIdMethod(Object bean) {
         Method rdfIdMethod = Arrays.stream(bean.getClass().getMethods())
                 .filter(method -> method.isAnnotationPresent(RdfId.class))
                 .findFirst().orElse(null);
@@ -114,5 +119,5 @@ public class JsonLDSerializer extends BeanSerializer {
                     .findFirst().orElse(null);
         }
         return rdfIdMethod;
-    }
+    } */
 }

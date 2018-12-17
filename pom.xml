@@ -18,7 +18,7 @@
         <dependency>
             <groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
             <artifactId>java</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
@@ -50,6 +50,13 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.8.1</version>
             <scope>test</scope>
         </dependency>
 

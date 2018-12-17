@@ -7,14 +7,13 @@ import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.eclipse.rdf4j.model.*;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
-import org.json.JSONException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.skyscreamer.jsonassert.JSONAssert;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -22,25 +21,24 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.*;
-import java.util.List;
 
 public class SerializerTest {
 
     private static ConnectorAvailableMessage basicInstance;
     private static Connector nestedInstance;
     private static RejectionMessage enumInstance;
+    private static Connector securityProfileInstance;
     private static Serializer serializer;
-//    private static DataAsset polymorphic;
 
     @BeforeClass
     public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, MalformedURLException {
         serializer = new Serializer();
 
-        // object with only basic types and enums
+        // object with only basic types
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(new Date());
         XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
@@ -55,8 +53,7 @@ public class SerializerTest {
         resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1")).build());
         resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2")).build());
 
-        // connector -> nested
-        // object with nested types
+        // connector -> object with nested types
         Catalog catalog = new CatalogBuilder()
                 ._offers_(resources)
                 .build();
@@ -67,178 +64,164 @@ public class SerializerTest {
                 ._catalog_(catalog)
                 .build();
 
+        // object with enum
         enumInstance = new RejectionMessageBuilder()
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer"))
                 ._modelVersion_("1.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
                 .build();
 
-/*        Instant instant = new InstantBuilder().named(NamedInstant.TODAY).build();
-        polymorphic = new DataAssetBuilder().coversTemporal(Util.asList(instant)).build();*/
+        securityProfileInstance = new BaseConnectorBuilder()
+                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer"))
+                ._version_("1.0.0")
+                ._catalog_(catalog)
+                ._securityProfile_(PredefinedSecurityProfile.LEVEL0SECURITYPROFILE)
+                .build();
     }
 
     @Test
-    public void plainJsonSerialize_Basic() throws IOException {
+    public void jsonldSerialize_Basic() throws IOException {
         String connectorAvailableMessage = serializer.serialize(basicInstance);
-        System.out.println(connectorAvailableMessage);
-        ConnectorAvailableMessage deserializedDataRequest = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
-        Assert.assertNotNull(deserializedDataRequest);
+        Assert.assertNotNull(connectorAvailableMessage);
+        Model model = null;
+        try {
+            model = Rio.parse(new StringReader(connectorAvailableMessage), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(model);
+
+        ConnectorAvailableMessage deserializedConnectorAvailableMessage = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
+        Assert.assertNotNull(deserializedConnectorAvailableMessage);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(basicInstance, deserializedConnectorAvailableMessage, true, Object.class, true));
     }
 
     @Test
-    public void plainJsonSerialize_Nested() throws IOException {
+    public void jsonldSerialize_Nested() throws IOException {
         String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
-        System.out.println(connector);
-        Model model;
+        Assert.assertNotNull(connector);
+
+        Model model = null;
         try {
             model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
-            model = null;
         }
         Assert.assertNotNull(model);
-        Connector deserializedTransfer = serializer.deserialize(connector, BaseConnectorImpl.class);
-        Assert.assertNotNull(deserializedTransfer);
+
+        Connector deserializedConnector = serializer.deserialize(connector, BaseConnectorImpl.class);
+        Assert.assertNotNull(deserializedConnector);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(nestedInstance, deserializedConnector, true, Object.class, true));
     }
 
     @Test
-    public void plainJssonSerialize_Enum() throws IOException {
-        String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.TURTLE);
-        System.out.println(rejectionMessage);
-        // Model model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
-        //  Assert.assertNotNull(model);
-        //RejectionMessage deserialized = serializer.deserialize(rejectionMessage, RejectionMessage.class);
+    public void jsonldSerialize_Enum() throws IOException {
+        String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.JSONLD);
+        Assert.assertNotNull(rejectionMessage);
+
+        Model model = null;
+        try {
+            model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(model);
+
+        RejectionMessage deserializedRejectionMessage = serializer.deserialize(rejectionMessage, RejectionMessage.class);
+        Assert.assertNotNull(deserializedRejectionMessage);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(enumInstance, deserializedRejectionMessage, true, Object.class, true));
     }
 
-/*    @Test
-    public void plainJsonSerialize_Polymorphic() throws IOException {
-        String dataAsset = serializer.serialize(polymorphic);
-        DataAsset deserializedDataAsset = serializer.deserialize(dataAsset, DataAssetImpl.class);
-        Assert.assertNotNull(deserializedDataAsset);
-        Assert.assertTrue(deserializedDataAsset.getCoversTemporal().iterator().next() instanceof Instant);
-    }*/
+    @Test
+    public void jsonldSerialize_SecurityProfile() throws IOException {
+        String connector = serializer.serialize(securityProfileInstance, RDFFormat.JSONLD);
+        Assert.assertNotNull(connector);
+
+        Model model = null;
+        try {
+            model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(model);
+    }
 
     @Test
-    public void plainJsonSerialize_Literal() throws ConstraintViolationException, IOException {
+    public void jsonldSerialize_Literal() throws ConstraintViolationException, IOException {
         Resource resource = new ResourceBuilder()
                 ._descriptions_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
                 .build();
 
         String serialized = serializer.serialize(resource);
-        System.out.println(serialized);
-        Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
+        Assert.assertNotNull(serialized);
 
+        Model model = null;
+        try {
+            model = Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(model);
+
+        // do not use reflective equals here as ArrayList comparison fails due to different modCount
+        Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
         Assert.assertEquals(2, deserializedResource.getDescriptions().size());
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
         Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
-/*    @Test
-    public void deserialzeFromJsonLD_Basic() throws IOException {
-        String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
-        BrokerDataRequest deserialized = serializer.deserialize(serializiedJsonLD, BrokerDataRequestImpl.class);
-
-        Assert.assertEquals(basicInstance.getDataRequestAction(), deserialized.getDataRequestAction());
-        Assert.assertEquals(basicInstance.getCoveredEntity(), deserialized.getCoveredEntity());
-        Assert.assertEquals(basicInstance.getMessageContent(), deserialized.getMessageContent());
+    @Test
+    public void legacySerializationsJson_validate() throws IOException {
+        Connector connector = null;
+        Connector connector_update = null;
+        try {
+            connector = serializer.deserialize(readResourceToString("Connector1.json"), Connector.class);
+            connector_update = serializer.deserialize(readResourceToString("Connector1_update.json"), Connector.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(connector);
+        Assert.assertNotNull(connector_update);
     }
 
     @Test
-    public void deserialzeFromJsonLD_Nested() throws IOException {
-        String serializiedJsonLD = serializer.serialize(ObjectType.NESTED);
-        DataTransfer deserialized = serializer.deserialize(serializiedJsonLD, DataTransferImpl.class);
-
-        Assert.assertNotNull(deserialized.getAuthToken());
-        Assert.assertNotNull(deserialized.getCustomAttributes());
-
-        Assert.assertEquals(nestedInstance.getAuthToken().getTokenValue(), deserialized.getAuthToken().getTokenValue());
-
-        TransferAttribute expectedTransferAttribute = nestedInstance.getCustomAttributes().iterator().next();
-        TransferAttribute actualTransferAttribute = deserialized.getCustomAttributes().iterator().next();
-
-        Assert.assertEquals(expectedTransferAttribute.getTransferAttributeKey(), actualTransferAttribute.getTransferAttributeKey());
-        Assert.assertEquals(expectedTransferAttribute.getTransferAttributeValue(), actualTransferAttribute.getTransferAttributeValue());
-    }*/
-
-   /* @Test
-    public void serializeToJsonLD_Basic() throws IOException, JSONException {
-        String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
-
-        InputStream brokerJsonLDstream = getClass().getClassLoader().getResourceAsStream("BrokerDataRequestJsonLD.txt");
-        String expectedJsonLD = IOUtils.toString(brokerJsonLDstream, Charset.defaultCharset());
-
-        JSONAssert.assertEquals(serializiedJsonLD, expectedJsonLD, true);
-    } */
-
-    /*@Test
-    public void jsonLDisValidRDF_Basic() throws IOException {
-        String serializiedJsonLD = serializer.serialize(ObjectType.BASIC);
-        Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
-
-        Assert.assertEquals(4, model.size());
-
-        ValueFactory factory = SimpleValueFactory.getInstance();
-        Model subModel;
-
-        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/coveredEntity"), null);
-        subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));
-
-        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/dataRequestAction"), null);
-        subModel.forEach(triple -> Assert.assertTrue(triple.getObject() instanceof Resource));
-    }*/
+    public void legacySerializationsJsonld_validate() throws IOException {
+        Connector connector = null;
+        Connector connector2 = null;
+        try {
+            connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
+            connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(connector);
+        Assert.assertNotNull(connector2);
 
 
-/*    @Test
-    public void testIntSerialization() throws ConstraintViolationException, IOException {
-        URL instantId = new URL("http://industrialdataspace.org/instant/8d43422f-30a2-401e-bcf3-bc2bae97b73c");
-        Instant instant = new InstantBuilder(instantId)
-                .namedValue(42)
-                .build();
+        Model model = null;
+        try {
+            model = Rio.parse(new StringReader(readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(model);
 
-        // in future this will work
-        //String serializiedJsonLD = serializer.serialize(instant);
-
-        // emulated behaviour
-        String serializiedJsonLD = serializer.serialize(ObjectType.INT_LIT);
-        Instant deserInstant = serializer.deserialize(serializiedJsonLD, InstantImpl.class);
-        Assert.assertNotNull(deserInstant);
-
-        Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
-
-        // instant URL match
-        Model subModel = model.filter(null, RDF.TYPE,null);
-        subModel.forEach(triple -> Assert.assertEquals(instant.getId().toString(), triple.getSubject().stringValue()));
-
-        // integer value ends up as integer-typed literal
-        ValueFactory factory = SimpleValueFactory.getInstance();
-        subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/namedValue"),null);
-        subModel.forEach(triple -> Assert.assertEquals(XMLSchema.INTEGER, ((Literal) triple.getObject()).getDatatype()));
+        model = null;
+        try {
+            model = Rio.parse(new StringReader(readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(model);
     }
 
-    @Test
-    public void testMultiLangLiteralSerialization() throws IOException {
-        String serializiedJsonLD = serializer.serialize(ObjectType.LANG_LIT);
 
-        DataAsset deserAsset = serializer.deserialize(serializiedJsonLD, DataAssetImpl.class);
-        Assert.assertNotNull(deserAsset);
-
-        Model model = Rio.parse(new StringReader(serializiedJsonLD), null, RDFFormat.JSONLD);
-        ValueFactory factory = SimpleValueFactory.getInstance();
-        Model subModel = model.filter(null, factory.createIRI("https://w3id.org/ids/core/entityName"),null);
-
-        List<Statement> list = subModel.stream().collect(Collectors.toList());
-        Assert.assertEquals(2, list.size());
-
-        Iterator<Statement> namesIt = list.iterator();
-        Literal firstLiteral = (Literal) namesIt.next().getObject();
-        Literal secondLiteral = (Literal) namesIt.next().getObject();
-
-        Assert.assertTrue(!firstLiteral.getLabel().isEmpty() && !firstLiteral.getLanguage().isPresent());
-        Assert.assertTrue(!secondLiteral.getLabel().isEmpty() && secondLiteral.getLanguage().isPresent());
+    private String readResourceToString(String resourceName) throws IOException {
+        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
+        InputStream is = classloader.getResourceAsStream(resourceName);
+        StringWriter writer = new StringWriter();
+        IOUtils.copy(is, writer, "UTF-8");
+        return writer.toString();
     }
-
-*/
-
-
 }
