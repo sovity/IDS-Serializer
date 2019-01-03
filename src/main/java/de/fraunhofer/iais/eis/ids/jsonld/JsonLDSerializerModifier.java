@@ -10,16 +10,14 @@ import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
 
 public class JsonLDSerializerModifier extends BeanSerializerModifier {
 
-    private Usage usage;
 
-    public JsonLDSerializerModifier(Usage usage) {
-        this.usage = usage;
+    public JsonLDSerializerModifier() {
     }
 
     @Override
     public JsonSerializer<?> modifySerializer(SerializationConfig config, BeanDescription beanDesc, JsonSerializer<?> serializer) {
-        if(serializer instanceof  BeanSerializerBase) {
-            return new JsonLDSerializer((BeanSerializerBase) serializer, usage);
+        if (serializer instanceof BeanSerializerBase) {
+            return new JsonLDSerializer((BeanSerializerBase) serializer);
         } else {
             return serializer;
         }

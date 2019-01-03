@@ -18,7 +18,7 @@ public class Serializer {
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.registerModule(new JsonLDModule(Usage.STANDALONE));
+        mapper.registerModule(new JsonLDModule());
     }
 
     /**
@@ -34,9 +34,6 @@ public class Serializer {
 
     public String serialize(Object instance, RDFFormat format) throws IOException {
         String jsonLD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
-        jsonLD = "{" + JsonLDContext.getInstance().toString() + jsonLD.substring(1); // insert @context at the beginning (after "{")
-        JsonLDContext.getInstance().clear();
-
         if (format == RDFFormat.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
     }
