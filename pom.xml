@@ -95,17 +95,22 @@
 
     <distributionManagement>
         <repository>
-            <id>isst-repo</id>
-            <name>Maven repository at ISST</name>
-            <url>https://mvn.isst.fraunhofer.de/nexus/repository/ids-local</url>
+            <id>eis-release-repo</id>
+            <name>maven-releases</name>
+            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-release</url>
         </repository>
+        <snapshotRepository>
+            <id>eis-snapshot-repo</id>
+            <name>maven-snapshots</name>
+            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-snapshot</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>isst-repo</id>
-            <name>Maven repository at ISST</name>
-            <url>https://mvn.isst.fraunhofer.de/nexus/repository/ids-local</url>
+            <id>eis-release-repo</id>
+            <name>maven-releases</name>
+            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-release</url>
         </repository>
     </repositories>
 
