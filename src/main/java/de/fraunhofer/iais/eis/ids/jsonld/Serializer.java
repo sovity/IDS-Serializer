@@ -1,6 +1,7 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
@@ -18,7 +19,6 @@ public class Serializer {
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
-        mapper.registerModule(new JsonLDModule());
     }
 
     /**
@@ -33,6 +33,7 @@ public class Serializer {
     }
 
     public String serialize(Object instance, RDFFormat format) throws IOException {
+        mapper.registerModule(new JsonLDModule());
         String jsonLD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
         if (format == RDFFormat.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
@@ -47,6 +48,10 @@ public class Serializer {
         model.forEach(writer::handleStatement);
         writer.endRDF();
         return rdfOutput.toString();
+    }
+
+    public String serializePlainJson(Object instance) throws JsonProcessingException {
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
     }
 
     /**
