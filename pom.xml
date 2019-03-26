@@ -35,7 +35,13 @@
 
         <dependency>
             <groupId>org.eclipse.rdf4j</groupId>
-            <artifactId>rdf4j-runtime</artifactId>
+            <artifactId>rdf4j-rio-api</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.rdf4j</groupId>
+            <artifactId>rdf4j-rio-jsonld</artifactId>
             <version>2.3.2</version>
         </dependency>
 
@@ -57,6 +63,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.6</version>
             <scope>test</scope>
         </dependency>
 
