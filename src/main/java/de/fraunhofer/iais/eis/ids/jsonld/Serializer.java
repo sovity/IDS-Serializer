@@ -18,7 +18,7 @@ public class Serializer {
 
     public Serializer() {
         mapper = new ObjectMapper();
-        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
+        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
     }
 
     /**
