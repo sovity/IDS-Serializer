@@ -168,12 +168,13 @@ public class SerializerTest {
         Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
         Assert.assertEquals(2, deserializedResource.getDescriptions().size());
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
-        Assert.assertNull(names.next().getLanguage());
+
+        Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
     @Test
-    public void legacySerializationsJson_validate() throws IOException {
+    public void legacySerializationsJson_validate() {
         Connector connector = null;
         Connector connector_update = null;
         try {
@@ -187,7 +188,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void legacySerializationsJsonld_validate() throws IOException {
+    public void legacySerializationsJsonld_validate() {
         Connector connector = null;
         Connector connector2 = null;
         try {
