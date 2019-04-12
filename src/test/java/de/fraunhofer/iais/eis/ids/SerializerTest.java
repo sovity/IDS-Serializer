@@ -3,7 +3,6 @@ package de.fraunhofer.iais.eis.ids;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.iais.eis.util.ConstraintViolationException;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
@@ -15,6 +14,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -92,6 +92,7 @@ public class SerializerTest {
         Assert.assertNotNull(model);
 
         ConnectorAvailableMessage deserializedConnectorAvailableMessage = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
+        Assert.assertEquals(basicInstance.getId(), deserializedConnectorAvailableMessage.getId());
         Assert.assertNotNull(deserializedConnectorAvailableMessage);
         Assert.assertTrue(EqualsBuilder.reflectionEquals(basicInstance, deserializedConnectorAvailableMessage, true, Object.class, true));
     }
@@ -167,7 +168,7 @@ public class SerializerTest {
         Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
         Assert.assertEquals(2, deserializedResource.getDescriptions().size());
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
-        Assert.assertTrue(names.next().getLanguage().isEmpty());
+        Assert.assertNull(names.next().getLanguage());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
