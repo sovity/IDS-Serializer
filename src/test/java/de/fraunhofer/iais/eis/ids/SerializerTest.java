@@ -169,7 +169,7 @@ public class SerializerTest {
         Assert.assertEquals(2, deserializedResource.getDescriptions().size());
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
 
-        Assert.assertTrue(names.next().getLanguage().isEmpty());
+        Assert.assertNull(names.next().getLanguage());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
