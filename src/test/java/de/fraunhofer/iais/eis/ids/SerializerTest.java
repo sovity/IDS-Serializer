@@ -218,6 +218,17 @@ public class SerializerTest {
         Assert.assertNotNull(model);
     }
 
+    @Test
+    public void deserializeSingleValueAsArray() {
+        ContractOffer contractOffer = null;
+        try {
+            contractOffer = serializer.deserialize(readResourceToString("ContractOfferValueForArray.jsonld"), ContractOffer.class);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull(contractOffer);
+    }
+
 
     private String readResourceToString(String resourceName) throws IOException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
