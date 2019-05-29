@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
@@ -35,7 +36,7 @@ public class SerializerTest {
     private static Serializer serializer;
 
     @BeforeClass
-    public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, MalformedURLException {
+    public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, URISyntaxException, MalformedURLException {
         serializer = new Serializer();
 
         // object with only basic types
@@ -46,12 +47,12 @@ public class SerializerTest {
         basicInstance = new ConnectorAvailableMessageBuilder()
                 ._issued_(now)
                 ._modelVersion_("1.0.0")
-                ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer"))
+                ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
                 .build();
 
         ArrayList<Resource> resources = new ArrayList<>();
-        resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1")).build());
-        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2")).build());
+        resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
+        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
 
         // connector -> object with nested types
         Catalog catalog = new CatalogBuilder()
@@ -59,20 +60,20 @@ public class SerializerTest {
                 .build();
 
         nestedInstance = new BaseConnectorBuilder()
-                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer"))
+                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
                 ._version_("1.0.0")
                 ._catalog_(catalog)
                 .build();
 
         // object with enum
         enumInstance = new RejectionMessageBuilder()
-                ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer"))
+                ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
                 ._modelVersion_("1.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
                 .build();
 
         securityProfileInstance = new BaseConnectorBuilder()
-                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer"))
+                ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
                 ._version_("1.0.0")
                 ._catalog_(catalog)
                 ._securityProfile_(PredefinedSecurityProfile.LEVEL0SECURITYPROFILE)
@@ -169,7 +170,7 @@ public class SerializerTest {
         Assert.assertEquals(2, deserializedResource.getDescriptions().size());
         Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
 
-        Assert.assertNull(names.next().getLanguage());
+        Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
     }
 
