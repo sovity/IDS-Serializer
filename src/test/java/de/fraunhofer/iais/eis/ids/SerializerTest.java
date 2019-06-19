@@ -3,6 +3,8 @@ package de.fraunhofer.iais.eis.ids;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
+import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
@@ -26,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.Map;
 
 public class SerializerTest {
 
@@ -228,6 +231,45 @@ public class SerializerTest {
             e.printStackTrace();
         }
         Assert.assertNotNull(contractOffer);
+    }
+
+    @Test
+    public void deserializeWithAndWithoutTypePrefix() {
+        String withIdsPrefix = "{\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/context.jsonld\",\n" +
+                "  \"@type\" : \"ids:TextResource\",\n" +
+                "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
+                "}";
+        String withAbsoluteURI = "{\n" +
+                "  \"@type\" : \"https://w3id.org/idsa/core/TextResource\",\n" +
+                "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
+                "}";
+
+        String withoutExplicitPrefix = "{\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/context.jsonld\",\n" +
+                "  \"@type\" : \"TextResource\",\n" +
+                "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
+                "}";
+
+        try {
+
+            Object defaultDeserialization = serializer.deserialize(withIdsPrefix, TextResource.class);
+
+            JsonPreprocessor preprocessor = new TypeNamePreprocessor();
+            serializer.addPreprocessor(preprocessor, true);
+
+            Object deserializedWithIdsPrefix = serializer.deserialize(withIdsPrefix, TextResource.class);
+            Object deserializedWithAbsoluteURI = serializer.deserialize(withAbsoluteURI, TextResource.class);
+            Object deserializedWithoutExplicitPrefix = serializer.deserialize(withoutExplicitPrefix, TextResource.class);
+
+            serializer.removePreprocessor(preprocessor);
+
+            Assert.assertTrue(EqualsBuilder.reflectionEquals(defaultDeserialization, deserializedWithIdsPrefix, true, Object.class, true));
+            Assert.assertTrue(EqualsBuilder.reflectionEquals(defaultDeserialization, deserializedWithAbsoluteURI, true, Object.class, true));
+            Assert.assertTrue(EqualsBuilder.reflectionEquals(defaultDeserialization, deserializedWithoutExplicitPrefix, true, Object.class, true));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
