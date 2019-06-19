@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFWriter;
@@ -12,15 +13,20 @@ import org.eclipse.rdf4j.rio.Rio;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Serializer {
 
     private static ObjectMapper mapper;
+    private final List<JsonPreprocessor> preprocessors;
 
     public Serializer() {
         mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+
+        preprocessors = new ArrayList<>();
     }
 
     /**
@@ -41,7 +47,7 @@ public class Serializer {
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
     }
 
-    private String convertJsonLdToOtherRdfFormat(String jsonLd, RDFFormat format) throws IOException {
+    public String convertJsonLdToOtherRdfFormat(String jsonLd, RDFFormat format) throws IOException {
         Model model = Rio.parse(new StringReader(jsonLd), null, RDFFormat.JSONLD);
 
         StringWriter rdfOutput = new StringWriter();
@@ -65,7 +71,41 @@ public class Serializer {
      * @return an object representing the provided JSON(-LD) structure
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
+        for(JsonPreprocessor preprocessor: preprocessors) {
+            serialization = preprocessor.preprocess(serialization);
+        }
         return mapper.readValue(serialization, valueType);
     }
 
+    /**
+     * Method to add a preprocessor for deserialization.
+     *
+     * Important note: The preprocessors are executed in the same order they were added.
+     *
+     * @param preprocessor the preprocessor to add
+     */
+    public void addPreprocessor(JsonPreprocessor preprocessor) {
+        preprocessors.add(preprocessor);
+    }
+
+    /**
+     * Method to add a preprocessor for deserialization.
+     *
+     * Important note: The preprocessors are executed in the same order they were added.
+     *
+     * @param preprocessor the preprocessor to add
+     * @param validate set wether the preprocessors output should be checked by RDF4j
+     */
+    public void addPreprocessor(JsonPreprocessor preprocessor, boolean validate) {
+        preprocessor.enableRDFValidation(validate);
+        addPreprocessor(preprocessor);
+    }
+
+    /**
+     * remove a preprocessor if no longer needed
+     * @param preprocessor the preprocessor to remove
+     */
+    public void removePreprocessor(JsonPreprocessor preprocessor) {
+        preprocessors.remove(preprocessor);
+    }
 }
