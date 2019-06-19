@@ -76,7 +76,7 @@ public class SerializerTest {
                 ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
                 ._version_("1.0.0")
                 ._catalog_(catalog)
-                ._securityProfile_(PredefinedSecurityProfile.LEVEL0SECURITYPROFILE)
+                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
                 .build();
     }
 
