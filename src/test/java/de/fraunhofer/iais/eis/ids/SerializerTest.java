@@ -28,7 +28,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.Map;
 
 public class SerializerTest {
 
@@ -236,7 +235,7 @@ public class SerializerTest {
     @Test
     public void deserializeWithAndWithoutTypePrefix() {
         String withIdsPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/1.0.3/context.jsonld\",\n" +
                 "  \"@type\" : \"ids:TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -246,7 +245,7 @@ public class SerializerTest {
                 "}";
 
         String withoutExplicitPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/1.0.3/context.jsonld\",\n" +
                 "  \"@type\" : \"TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
