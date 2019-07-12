@@ -271,6 +271,14 @@ public class SerializerTest {
         }
     }
 
+    @Test
+    public void deserializePluralForms() throws IOException {
+        String serializedCatalog = readResourceToString("InstanceWithPluralFields.jsonld");
+        Catalog deserialized = serializer.deserialize(serializedCatalog, Catalog.class);
+        Assert.assertNotNull(deserialized);
+        Assert.assertNotNull(deserialized.getOffers());
+        Assert.assertFalse(deserialized.getOffers().isEmpty());
+    }
 
     private String readResourceToString(String resourceName) throws IOException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();

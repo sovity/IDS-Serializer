@@ -1,0 +1,18 @@
+{
+  "@context" : "https://w3id.org/idsa/contexts/1.0.3/context.jsonld",
+  "@type" : "ids:Catalog",
+  "@id" : "http://industrialdataspace.org/catalog/85050e7c-1530-4980-93bc-87d94a831af9",
+
+  "offers" : [ {
+    "@type" : "ids:Resource",
+    "@id" : "http://industrialdataspace.org/resource/516eb953-c789-4bc4-a989-264e3755698a",
+    "descriptions" : [ {
+      "@value" : "Dataset without retrieval interface and further description.",
+      "@language" : "en"
+    } ],
+    "titles" : [ {
+    "@value" : "Quarterly Business Report",
+    "@language" : "en"
+    } ]
+  } ]
+}
