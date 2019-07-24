@@ -280,6 +280,14 @@ public class SerializerTest {
         Assert.assertFalse(deserialized.getOffers().isEmpty());
     }
 
+    @Test
+    public void stableCalendarFormat() throws IOException {
+        String serialized = "\"2019-07-24T17:29:18.908+02:00\"";
+        XMLGregorianCalendar xgc = serializer.deserialize(serialized, XMLGregorianCalendar.class);
+        String reserialized = serializer.serialize(xgc);
+        Assert.assertEquals(serialized, reserialized);
+    }
+
     private String readResourceToString(String resourceName) throws IOException {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream is = classloader.getResourceAsStream(resourceName);

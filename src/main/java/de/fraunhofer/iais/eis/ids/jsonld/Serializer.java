@@ -71,6 +71,7 @@ public class Serializer {
      * @return an object representing the provided JSON(-LD) structure
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
+        mapper.registerModule(new JsonLDModule());
         for(JsonPreprocessor preprocessor: preprocessors) {
             serialization = preprocessor.preprocess(serialization);
         }
