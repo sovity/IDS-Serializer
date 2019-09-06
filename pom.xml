@@ -121,9 +121,9 @@
 
     <repositories>
         <repository>
-            <id>eis-snapshot-repo</id>
+            <id>eis-public-repo</id>
             <name>maven-snapshots</name>
-            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-snapshot</url>
+            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
         </repository>
     </repositories>
 
