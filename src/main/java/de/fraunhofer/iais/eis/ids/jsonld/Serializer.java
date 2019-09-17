@@ -41,6 +41,9 @@ public class Serializer {
     }
 
     public String serialize(Object instance, RDFFormat format) throws IOException {
+        if(format != RDFFormat.JSONLD && format != RDFFormat.TURTLE && format != RDFFormat.RDFXML) {
+            throw new IOException("RDFFormat " + format + " is currently not supported by the serializer.");
+        }
         mapper.registerModule(new JsonLDModule());
         String jsonLD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
         if (format == RDFFormat.JSONLD) return jsonLD;
