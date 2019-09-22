@@ -46,12 +46,24 @@ public class Serializer {
             throw new IOException("RDFFormat " + format + " is currently not supported by the serializer.");
         }
         mapper.registerModule(new JsonLDModule());
+        String jsonLD = (instance instanceof Collection)
+                ? serializeCollection((Collection) instance)
+                : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
+        if (format == RDFFormat.JSONLD) return jsonLD;
+        else return convertJsonLdToOtherRdfFormat(jsonLD, format);
+    }
+
+    private String serializeCollection(Collection collection) throws IOException {
         String lineSep = System.lineSeparator();
         StringBuilder jsonLDBuilder = new StringBuilder();
-        if (instance instanceof Collection) {
+
+        if (collection.isEmpty()) {
+            jsonLDBuilder.append("[]");
+            jsonLDBuilder.append(lineSep);
+        } else {
             jsonLDBuilder.append("[");
             jsonLDBuilder.append(lineSep);
-            for (Object item : (Collection) instance) {
+            for (Object item : collection) {
                 jsonLDBuilder.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(item));
                 jsonLDBuilder.append(",");
                 jsonLDBuilder.append(lineSep);
@@ -60,12 +72,9 @@ public class Serializer {
             jsonLDBuilder.replace(lastComma, lastComma + 1, "");
             jsonLDBuilder.append("]");
             jsonLDBuilder.append(lineSep);
-        } else {
-            jsonLDBuilder.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance));
         }
-        String jsonLD = jsonLDBuilder.toString();
-        if (format == RDFFormat.JSONLD) return jsonLD;
-        else return convertJsonLdToOtherRdfFormat(jsonLD, format);
+
+        return jsonLDBuilder.toString();
     }
 
     public String convertJsonLdToOtherRdfFormat(String jsonLd, RDFFormat format) throws IOException {
