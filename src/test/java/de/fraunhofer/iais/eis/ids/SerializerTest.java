@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class SerializerTest {
 
@@ -58,7 +59,7 @@ public class SerializerTest {
 
         // connector -> object with nested types
         Catalog catalog = new CatalogBuilder()
-                ._offers_(resources)
+                ._offer_(resources)
                 .build();
 
         nestedInstance = new BaseConnectorBuilder()
@@ -153,7 +154,7 @@ public class SerializerTest {
     @Test
     public void jsonldSerialize_Literal() throws ConstraintViolationException, IOException {
         Resource resource = new ResourceBuilder()
-                ._descriptions_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
+                ._description_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
                 .build();
 
         String serialized = serializer.serialize(resource);
@@ -169,8 +170,8 @@ public class SerializerTest {
 
         // do not use reflective equals here as ArrayList comparison fails due to different modCount
         Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
-        Assert.assertEquals(2, deserializedResource.getDescriptions().size());
-        Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
+        Assert.assertEquals(2, deserializedResource.getDescription().size());
+        Iterator<? extends PlainLiteral> names = deserializedResource.getDescription().iterator();
 
         Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
@@ -269,15 +270,6 @@ public class SerializerTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Test
-    public void deserializePluralForms() throws IOException {
-        String serializedCatalog = readResourceToString("InstanceWithPluralFields.jsonld");
-        Catalog deserialized = serializer.deserialize(serializedCatalog, Catalog.class);
-        Assert.assertNotNull(deserialized);
-        Assert.assertNotNull(deserialized.getOffers());
-        Assert.assertFalse(deserialized.getOffers().isEmpty());
     }
 
     @Test
