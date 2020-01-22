@@ -13,6 +13,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 public class JsonLDModule extends SimpleModule {
 
     public JsonLDModule() {
+        super();
         setSerializerModifier(new JsonLDSerializerModifier());
         addSerializer(XMLGregorianCalendar.class, new XMLGregorianCalendarSerializer());
         addDeserializer(XMLGregorianCalendar.class, new XMLGregorianCalendarDeserializer());

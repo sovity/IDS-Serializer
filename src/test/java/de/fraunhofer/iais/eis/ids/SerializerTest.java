@@ -28,6 +28,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class SerializerTest { 
 
@@ -272,12 +273,30 @@ public class SerializerTest {
     }
 
     @Test
-    public void deserializePluralForms() throws IOException {
-        String serializedCatalog = readResourceToString("InstanceWithPluralFields.jsonld");
-        Catalog deserialized = serializer.deserialize(serializedCatalog, Catalog.class);
-        Assert.assertNotNull(deserialized);
-        Assert.assertNotNull(deserialized.getOffer());
-        Assert.assertFalse(deserialized.getOffer().isEmpty());
+
+    public void stableCalendarFormat() throws IOException {
+        String serialized = "\"2019-07-24T17:29:18.908+02:00\"";
+        XMLGregorianCalendar xgc = serializer.deserialize(serialized, XMLGregorianCalendar.class);
+        String reserialized = serializer.serialize(xgc);
+        Assert.assertEquals(serialized, reserialized);
+    }
+
+    /**
+     * lists have to be serialized with a @context element in each child
+     * otherwise, RDF4j does not correctly parse the data resulting in empty model and empty Turtle serialization
+     * @throws IOException
+     */
+    @Test
+    public void listWithContext() throws IOException {
+        ContractOffer contractOffer1 = new ContractOfferBuilder()._refersTo_(PolicyTemplate.ACCESSAGREEMENTTOSECURECONSUMERTEMPLATE).build();
+        ContractOffer contractOffer2 = new ContractOfferBuilder()._refersTo_(PolicyTemplate.ACCESSAGREEMENTTOSECURECONSUMERTEMPLATE).build();
+        String serializedList = serializer.serialize(Util.asList(contractOffer1, contractOffer2));
+
+        Model model = Rio.parse(new StringReader(serializedList), null, RDFFormat.JSONLD);
+        Assert.assertEquals(4, model.size());
+
+        String ttl = serializer.convertJsonLdToOtherRdfFormat(serializedList, RDFFormat.TURTLE);
+        Assert.assertTrue(!ttl.isEmpty());
     }
 
     private String readResourceToString(String resourceName) throws IOException {

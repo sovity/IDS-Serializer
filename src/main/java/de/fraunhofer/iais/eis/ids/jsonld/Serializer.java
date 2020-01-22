@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Serializer {
@@ -41,10 +42,39 @@ public class Serializer {
     }
 
     public String serialize(Object instance, RDFFormat format) throws IOException {
+        if (format != RDFFormat.JSONLD && format != RDFFormat.TURTLE && format != RDFFormat.RDFXML) {
+            throw new IOException("RDFFormat " + format + " is currently not supported by the serializer.");
+        }
         mapper.registerModule(new JsonLDModule());
-        String jsonLD = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
+        String jsonLD = (instance instanceof Collection)
+                ? serializeCollection((Collection) instance)
+                : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
         if (format == RDFFormat.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
+    }
+
+    private String serializeCollection(Collection collection) throws IOException {
+        String lineSep = System.lineSeparator();
+        StringBuilder jsonLDBuilder = new StringBuilder();
+
+        if (collection.isEmpty()) {
+            jsonLDBuilder.append("[]");
+            jsonLDBuilder.append(lineSep);
+        } else {
+            jsonLDBuilder.append("[");
+            jsonLDBuilder.append(lineSep);
+            for (Object item : collection) {
+                jsonLDBuilder.append(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(item));
+                jsonLDBuilder.append(",");
+                jsonLDBuilder.append(lineSep);
+            }
+            int lastComma = jsonLDBuilder.lastIndexOf(",");
+            jsonLDBuilder.replace(lastComma, lastComma + 1, "");
+            jsonLDBuilder.append("]");
+            jsonLDBuilder.append(lineSep);
+        }
+
+        return jsonLDBuilder.toString();
     }
 
     public String convertJsonLdToOtherRdfFormat(String jsonLd, RDFFormat format) throws IOException {
@@ -71,7 +101,8 @@ public class Serializer {
      * @return an object representing the provided JSON(-LD) structure
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
-        for(JsonPreprocessor preprocessor: preprocessors) {
+        mapper.registerModule(new JsonLDModule());
+        for (JsonPreprocessor preprocessor : preprocessors) {
             serialization = preprocessor.preprocess(serialization);
         }
         return mapper.readValue(serialization, valueType);
@@ -79,7 +110,7 @@ public class Serializer {
 
     /**
      * Method to add a preprocessor for deserialization.
-     *
+     * <p>
      * Important note: The preprocessors are executed in the same order they were added.
      *
      * @param preprocessor the preprocessor to add
@@ -90,11 +121,11 @@ public class Serializer {
 
     /**
      * Method to add a preprocessor for deserialization.
-     *
+     * <p>
      * Important note: The preprocessors are executed in the same order they were added.
      *
      * @param preprocessor the preprocessor to add
-     * @param validate set wether the preprocessors output should be checked by RDF4j
+     * @param validate     set wether the preprocessors output should be checked by RDF4j
      */
     public void addPreprocessor(JsonPreprocessor preprocessor, boolean validate) {
         preprocessor.enableRDFValidation(validate);
@@ -103,6 +134,7 @@ public class Serializer {
 
     /**
      * remove a preprocessor if no longer needed
+     *
      * @param preprocessor the preprocessor to remove
      */
     public void removePreprocessor(JsonPreprocessor preprocessor) {
