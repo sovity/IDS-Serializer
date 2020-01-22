@@ -29,7 +29,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
 
-public class SerializerTest {
+public class SerializerTest { 
 
     private static ConnectorAvailableMessage basicInstance;
     private static Connector nestedInstance;
@@ -48,29 +48,29 @@ public class SerializerTest {
 
         basicInstance = new ConnectorAvailableMessageBuilder()
                 ._issued_(now)
-                ._modelVersion_("1.0.0")
+                ._modelVersion_("2.0.0")
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
                 .build();
 
         ArrayList<Resource> resources = new ArrayList<>();
-        resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
+        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
         resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
 
         // connector -> object with nested types
         Catalog catalog = new CatalogBuilder()
-                ._offers_(resources)
+                ._offer_(resources)
                 .build();
 
         nestedInstance = new BaseConnectorBuilder()
                 ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-                ._version_("1.0.0")
+                ._version_("2.0.0")
                 ._catalog_(catalog)
                 .build();
 
         // object with enum
         enumInstance = new RejectionMessageBuilder()
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
-                ._modelVersion_("1.0.0")
+                ._modelVersion_("2.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
                 .build();
 
@@ -153,7 +153,7 @@ public class SerializerTest {
     @Test
     public void jsonldSerialize_Literal() throws ConstraintViolationException, IOException {
         Resource resource = new ResourceBuilder()
-                ._descriptions_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
+                ._description_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
                 .build();
 
         String serialized = serializer.serialize(resource);
@@ -169,8 +169,8 @@ public class SerializerTest {
 
         // do not use reflective equals here as ArrayList comparison fails due to different modCount
         Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
-        Assert.assertEquals(2, deserializedResource.getDescriptions().size());
-        Iterator<? extends PlainLiteral> names = deserializedResource.getDescriptions().iterator();
+        Assert.assertEquals(2, deserializedResource.getDescription().size());
+        Iterator<? extends PlainLiteral> names = deserializedResource.getDescription().iterator();
 
         Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
@@ -235,7 +235,7 @@ public class SerializerTest {
     @Test
     public void deserializeWithAndWithoutTypePrefix() {
         String withIdsPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/1.0.3/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"ids:TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -245,7 +245,7 @@ public class SerializerTest {
                 "}";
 
         String withoutExplicitPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/1.0.3/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -276,8 +276,8 @@ public class SerializerTest {
         String serializedCatalog = readResourceToString("InstanceWithPluralFields.jsonld");
         Catalog deserialized = serializer.deserialize(serializedCatalog, Catalog.class);
         Assert.assertNotNull(deserialized);
-        Assert.assertNotNull(deserialized.getOffers());
-        Assert.assertFalse(deserialized.getOffers().isEmpty());
+        Assert.assertNotNull(deserialized.getOffer());
+        Assert.assertFalse(deserialized.getOffer().isEmpty());
     }
 
     private String readResourceToString(String resourceName) throws IOException {
