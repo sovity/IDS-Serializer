@@ -9,11 +9,12 @@ import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.eclipse.rdf4j.model.*;
+import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
 import org.junit.Assert;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.validation.ConstraintViolationException;
@@ -28,7 +29,6 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 public class SerializerTest {
 
@@ -223,6 +223,24 @@ public class SerializerTest {
     }
 
     @Test
+    @Ignore
+    public void serializeForeignProperties() throws Exception {
+        serializer.addPreprocessor(new TypeNamePreprocessor());
+        String serialized = "{\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.1.0/context.jsonld\",\n" +
+                "  \"@type\" : \"ids:Broker\",\n" +
+                "  \"inboundModelVersion\" : [ \"2.0.1\" ],\n" +
+                "  \"@id\" : \"https://w3id.org/idsa/autogen/broker/5b9170a7-73fd-466e-89e4-83cedfe805aa\",\n" +
+                "  \"http://xmlns.com/foaf/0.1/name\" : \"https://iais.fraunhofer.de/eis/ids/broker1/frontend\",\n" +
+                "  \"http://xmlns.com/foaf/0.1/homepage\" : {\n  \"https://example.de/key\" : \"https://example.de/value\"\n}" +
+                "}";
+        Broker broker = serializer.deserialize(serialized, Broker.class);
+        String originalSimplified = stripWhitespaces(serialized);
+        String reserializedSimplified = stripWhitespaces(serializer.serialize(broker, RDFFormat.JSONLD));
+        Assert.assertEquals(originalSimplified, reserializedSimplified);
+    }
+
+    @Test
     public void deserializeSingleValueAsArray() {
         ContractOffer contractOffer = null;
         try {
@@ -231,6 +249,16 @@ public class SerializerTest {
             e.printStackTrace();
         }
         Assert.assertNotNull(contractOffer);
+    }
+
+    @Test
+    public void deserializeThroughInheritanceChain() throws IOException {
+        SelfDescriptionRequest sdr = new SelfDescriptionRequestBuilder()
+                ._contentVersion_("test")
+                .build();
+        String serialized = serializer.serialize(sdr);
+        Message m = serializer.deserialize(serialized, Message.class);
+        Assert.assertTrue(EqualsBuilder.reflectionEquals(sdr, m, true, Object.class, true));
     }
 
     @Test
@@ -304,5 +332,9 @@ public class SerializerTest {
         StringWriter writer = new StringWriter();
         IOUtils.copy(is, writer, "UTF-8");
         return writer.toString();
+    }
+
+    private String stripWhitespaces(String input) {
+        return input.replaceAll("\\s+", "");
     }
 }
