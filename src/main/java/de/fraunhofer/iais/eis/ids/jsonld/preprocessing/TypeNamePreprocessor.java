@@ -37,7 +37,7 @@ public class TypeNamePreprocessor extends BasePreprocessor {
                 if(! (modifiableValue.get().startsWith("ids:")
                         || modifiableValue.get().startsWith("info:")
                         || modifiableValue.get().startsWith("kdsf:"))) {
-                    modifiableValue.set("ids:".concat(modifiableValue.get()));
+                    modifiableValue.set("ids:".concat(modifiableValue.get())); // default to ids prefix for backwards compatibility
                 }
                 out.put(k, modifiableValue.get());
             } else if(v instanceof Map) {
