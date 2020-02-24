@@ -3,10 +3,21 @@ package de.fraunhofer.iais.eis.ids.jsonld.preprocessing;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class TypeNamePreprocessor extends BasePreprocessor {
+
+    private static final Map<String, String> prefixes;
+
+    static {
+        prefixes = new HashMap<>();
+        prefixes.put("ids:", "https://w3id.org/idsa/core/");
+        prefixes.put("info:", "http://www.fraunhofer.de/fraunhofer-digital/infomodell#");
+        prefixes.put("kdsf:", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
+    }
 
     @Override
     String preprocess_impl(String input) throws IOException {
@@ -21,9 +32,14 @@ public class TypeNamePreprocessor extends BasePreprocessor {
         Map<Object, Object> out = new LinkedHashMap<>();
         in.forEach((k,v) -> {
             if(v instanceof String && k instanceof String && k.equals("@type")) {
-                String newValue = ((String) v).replace("https://w3id.org/idsa/core/", "ids:");
-                if(!newValue.contains("ids:")) newValue = "ids:".concat(newValue);
-                out.put(k, newValue);
+                AtomicReference<String> modifiableValue = new AtomicReference<>((String) v);
+                prefixes.forEach((p, u) -> modifiableValue.set(modifiableValue.get().replace(u, p))); // replace full URI with prefix
+                if(! (modifiableValue.get().startsWith("ids:")
+                        || modifiableValue.get().startsWith("info:")
+                        || modifiableValue.get().startsWith("kdsf:"))) {
+                    modifiableValue.set("ids:".concat(modifiableValue.get()));
+                }
+                out.put(k, modifiableValue.get());
             } else if(v instanceof Map) {
                 out.put(k, unifyTypeURIPrefix((Map) v));
             }
