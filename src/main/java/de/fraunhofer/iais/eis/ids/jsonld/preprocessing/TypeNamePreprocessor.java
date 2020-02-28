@@ -15,6 +15,7 @@ public class TypeNamePreprocessor extends BasePreprocessor {
     static {
         prefixes = new HashMap<>();
         prefixes.put("ids:", "https://w3id.org/idsa/core/");
+        prefixes.put("idsc:", "https://w3id.org/idsa/code/");
         prefixes.put("info:", "http://www.fraunhofer.de/fraunhofer-digital/infomodell#");
         prefixes.put("kdsf:", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
     }

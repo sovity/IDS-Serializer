@@ -31,6 +31,7 @@ public class JsonLDSerializer extends BeanSerializer {
     static {
         contextItems = new HashMap<>();
         contextItems.put("ids", "https://w3id.org/idsa/core/");
+        contextItems.put("idsc", "https://w3id.org/idsa/code/");
         contextItems.put("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell#");
         contextItems.put("kdsf", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
     }
