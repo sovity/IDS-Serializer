@@ -23,14 +23,13 @@ import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class SerializerTest {
 
@@ -343,6 +342,18 @@ public class SerializerTest {
         Person deserialized = serializer.deserialize(serialized, Person.class);
 
         Assert.assertTrue(EqualsBuilder.reflectionEquals(person, deserialized, true, Object.class, true));
+    }
+
+    @Test
+    public void testJwtAttributesInContext() throws IOException {
+        DatPayload datPayload = new DatPayloadBuilder()
+                ._exp_(new BigInteger(String.valueOf(12)))
+                ._aud_("Test")
+                .build();
+
+        String serialized = serializer.serialize(datPayload);
+        Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD); // ensure that valid JSON-LD is serialized
+        Assert.assertTrue(serialized.contains("\"exp\" : \"ids:exp\"")); // ensure DatPayload fields are added to the context
     }
 
     private String readResourceToString(String resourceName) throws IOException {

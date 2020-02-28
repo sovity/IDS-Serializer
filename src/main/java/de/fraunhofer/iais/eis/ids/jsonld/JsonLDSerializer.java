@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -48,6 +49,7 @@ public class JsonLDSerializer extends BeanSerializer {
         if (currentRecursionDepth == 1) {
             Map<String, String> filteredContext = new HashMap<>();
             filterContextWrtBean(bean, filteredContext);
+            addJwtFieldsToContext(bean, filteredContext);
             gen.writeObjectField("@context", filteredContext);
         }
         WritableTypeId typeIdDef = _typeIdDef(typeSer, bean, JsonToken.START_OBJECT);
@@ -64,8 +66,34 @@ public class JsonLDSerializer extends BeanSerializer {
         currentRecursionDepth--;
     }
 
+    /**
+     * We need to add the fields of DatPayload to the context manually (if DatPayload present)
+     * as RFC 7519 requires the exact field names specified below without any prefix for JWTs.
+     * @param bean
+     * @param context
+     */
+    private void addJwtFieldsToContext(Object bean, Map<String, String> context) {
+        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class || bean.getClass() == BigInteger.class) return;
+        if(bean.getClass().getSimpleName().contains("DatPayload")) {
+            Stream.of("referringConnector", "aud", "iss", "sub", "nbf", "exp", "iat")
+                    .forEach(k -> context.put(k, "ids:".concat(k)));
+        } else {
+            Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
+                if(f.getType().isPrimitive() || f.getType().isEnum()) return;
+                boolean wasAccessible = f.isAccessible();
+                f.setAccessible(true);
+                try {
+                    addJwtFieldsToContext(f.get(bean), context);
+                } catch (IllegalAccessException e) {
+                    System.err.println("setting accessible failed");
+                }
+                f.setAccessible(wasAccessible);
+            });
+        }
+    }
+
     private void filterContextWrtBean(Object bean, Map<String, String> filteredContext) {
-        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class) return; // XMLGregorianCalendarImpl causes infinite recursion
+        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class || bean.getClass() == BigInteger.class) return; // XMLGregorianCalendarImpl causes infinite recursion
         contextItems.forEach((p, u) -> {
             JsonTypeName typeNameAnnotation = bean.getClass().getAnnotation(JsonTypeName.class);
             if(typeNameAnnotation != null && typeNameAnnotation.value().contains(p)) {
@@ -80,14 +108,15 @@ public class JsonLDSerializer extends BeanSerializer {
         });
         // run through fields recursively
         Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
+            if(f.getType().isPrimitive() || f.getType().isEnum()) return;
+            boolean wasAccessible = f.isAccessible();
             f.setAccessible(true);
-            if(! (f.getType().isPrimitive() || f.getType().isEnum())) {
-                try {
-                    filterContextWrtBean(f.get(bean), filteredContext);
-                } catch (IllegalAccessException e) {
-                    System.err.println("setting accessible failed");
-                }
+            try {
+                filterContextWrtBean(f.get(bean), filteredContext);
+            } catch (IllegalAccessException e) {
+                System.err.println("setting accessible failed");
             }
+            f.setAccessible(wasAccessible);
         });
     }
 }
