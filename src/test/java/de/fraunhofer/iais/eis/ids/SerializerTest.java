@@ -2,8 +2,6 @@ package de.fraunhofer.iais.eis.ids;
 
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.Resource;
-import de.fraunhofer.iais.eis.fhgdigital.infomodel.Person;
-import de.fraunhofer.iais.eis.fhgdigital.infomodel.PersonBuilder;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
@@ -14,6 +12,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
+import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -254,7 +253,7 @@ public class SerializerTest {
 
     @Test
     public void deserializeThroughInheritanceChain() throws IOException {
-        SelfDescriptionRequest sdr = new SelfDescriptionRequestBuilder()
+    	DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
                 ._contentVersion_("test")
                 .build();
         String serialized = serializer.serialize(sdr);
@@ -327,22 +326,6 @@ public class SerializerTest {
         Assert.assertTrue(!ttl.isEmpty());
     }
 
-    @Test
-    public void testFhGDigital() throws IOException {
-        Person person = new PersonBuilder()
-                ._ausOrt_("St. Augustin")
-                ._hatName_("Joseph von Fraunhofer")
-                ._Staatsangehoerigkeit_("deutsch")
-                .build();
-
-        String serialized = serializer.serialize(person);
-
-        Model m = Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD); // check if valid JSONLD
-        Assert.assertEquals(4, m.size());
-        Person deserialized = serializer.deserialize(serialized, Person.class);
-
-        Assert.assertTrue(EqualsBuilder.reflectionEquals(person, deserialized, true, Object.class, true));
-    }
 
     @Test
     public void testJwtAttributesInContext() throws IOException {
