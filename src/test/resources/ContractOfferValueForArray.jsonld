@@ -1,0 +1,52 @@
+{
+    "@context" : "https://w3id.org/idsa/contexts/1.0.2/context.jsonld",
+
+    "@type" : "ids:ContractOffer",
+    "@id" : "https://mdm-connector.ids.isst.fraunhofer.de/examplecontract/bab-bayern-sample/",
+
+    "permissions" : [ {
+      "@type" : "ids:Permission",
+
+      "actions" : {
+        "@id" : "https://w3id.org/idsa/code/action/USE"
+      },
+
+      "constraints" : [ {
+        "@type" : "ids:Constraint",
+
+        "operator" : {
+          "@id" : "https://w3id.org/idsa/core/gt"
+        },
+
+        "leftOperand" : {
+          "@id" : "https://w3id.org/idsa/core/DATE_TIME"
+        },
+
+        "rightOperand" : {
+          "@value" : "\"2019-01-01T00:00:00.000+00:00\"^^xsd:dateTime"
+        }
+      } , {
+        "@type" : "ids:Constraint",
+
+        "operator" : {
+          "@id" : "https://w3id.org/idsa/core/lt"
+        },
+
+        "leftOperand" : {
+          "@id" : "https://w3id.org/idsa/core/DATE_TIME"
+        },
+
+        "rightOperand" : {
+          "@value" : "\"2019-12-31T23:59:59.999+00:00\"^^xsd:dateTime"
+        }
+      } ]
+    } ],
+
+    "consumer" : "http://example.org/you",
+    "provider" : "http://iais.fraunhofer.de/IDS/Participants/fraunhofer_iais",
+
+    "contractDocument" : {
+      "@type" : "ids:TextResource",
+      "@id" : "https://creativecommons.org/licenses/by-nc/4.0/legalcode"
+    }
+}
