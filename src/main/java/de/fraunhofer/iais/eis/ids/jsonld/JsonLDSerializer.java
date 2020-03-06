@@ -1,5 +1,7 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.type.WritableTypeId;
@@ -7,13 +9,32 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.BeanSerializer;
 import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
 
 
 public class JsonLDSerializer extends BeanSerializer {
 
     private static int currentRecursionDepth = 0;
+
+    private static final Map<String, String> contextItems;
+
+    static {
+        contextItems = new HashMap<>();
+        contextItems.put("ids", "https://w3id.org/idsa/core/");
+        contextItems.put("idsc", "https://w3id.org/idsa/code/");
+        contextItems.put("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell#");
+        contextItems.put("kdsf", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
+    }
 
 
     JsonLDSerializer(BeanSerializerBase src) {
@@ -27,7 +48,10 @@ public class JsonLDSerializer extends BeanSerializer {
         currentRecursionDepth++;
         gen.writeStartObject();
         if (currentRecursionDepth == 1) {
-            gen.writeStringField("@context", "https://w3id.org/idsa/contexts/2.1.0/context.jsonld"); // only add @context on top level
+            Map<String, String> filteredContext = new HashMap<>();
+            filterContextWrtBean(bean, filteredContext);
+            addJwtFieldsToContext(bean, filteredContext);
+            gen.writeObjectField("@context", filteredContext);
         }
         WritableTypeId typeIdDef = _typeIdDef(typeSer, bean, JsonToken.START_OBJECT);
         String resolvedTypeId = typeIdDef.id != null ? typeIdDef.id.toString() : typeSer.getTypeIdResolver().idFromValue(bean);
@@ -41,5 +65,59 @@ public class JsonLDSerializer extends BeanSerializer {
         }
         gen.writeEndObject();
         currentRecursionDepth--;
+    }
+
+    /**
+     * We need to add the fields of DatPayload to the context manually (if DatPayload present)
+     * as RFC 7519 requires the exact field names specified below without any prefix for JWTs.
+     * @param bean
+     * @param context
+     */
+    private void addJwtFieldsToContext(Object bean, Map<String, String> context) {
+        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class || bean.getClass() == BigInteger.class) return;
+        if(bean.getClass().getSimpleName().contains("DatPayload")) {
+            Stream.of("referringConnector", "aud", "iss", "sub", "nbf", "exp", "iat")
+                    .forEach(k -> context.put(k, "ids:".concat(k)));
+        } else {
+            Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
+                if(f.getType().isPrimitive() || f.getType().isEnum()) return;
+                boolean wasAccessible = f.isAccessible();
+                f.setAccessible(true);
+                try {
+                    addJwtFieldsToContext(f.get(bean), context);
+                } catch (IllegalAccessException e) {
+                    System.err.println("setting accessible failed");
+                }
+                f.setAccessible(wasAccessible);
+            });
+        }
+    }
+
+    private void filterContextWrtBean(Object bean, Map<String, String> filteredContext) {
+        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class || bean.getClass() == BigInteger.class) return; // XMLGregorianCalendarImpl causes infinite recursion
+        contextItems.forEach((p, u) -> {
+            JsonTypeName typeNameAnnotation = bean.getClass().getAnnotation(JsonTypeName.class);
+            if(typeNameAnnotation != null && typeNameAnnotation.value().contains(p)) {
+                filteredContext.put(p, u);
+            }
+            Stream.of(bean.getClass().getMethods()).forEach(m -> {
+                JsonProperty propertyAnnotation = m.getAnnotation(JsonProperty.class);
+                if(propertyAnnotation != null && propertyAnnotation.value().contains(p)) {
+                    filteredContext.put(p, u);
+                }
+            });
+        });
+        // run through fields recursively
+        Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
+            if(f.getType().isPrimitive() || f.getType().isEnum()) return;
+            boolean wasAccessible = f.isAccessible();
+            f.setAccessible(true);
+            try {
+                filterContextWrtBean(f.get(bean), filteredContext);
+            } catch (IllegalAccessException e) {
+                System.err.println("setting accessible failed");
+            }
+            f.setAccessible(wasAccessible);
+        });
     }
 }

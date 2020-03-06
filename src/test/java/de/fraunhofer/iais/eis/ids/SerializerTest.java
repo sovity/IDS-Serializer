@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.Rio;
+import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -21,14 +22,13 @@ import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class SerializerTest { 
 
@@ -253,7 +253,7 @@ public class SerializerTest {
 
     @Test
     public void deserializeThroughInheritanceChain() throws IOException {
-        SelfDescriptionRequest sdr = new SelfDescriptionRequestBuilder()
+    	DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
                 ._contentVersion_("test")
                 .build();
         String serialized = serializer.serialize(sdr);
@@ -325,6 +325,19 @@ public class SerializerTest {
 
         String ttl = serializer.convertJsonLdToOtherRdfFormat(serializedList, RDFFormat.TURTLE);
         Assert.assertTrue(!ttl.isEmpty());
+    }
+
+
+    @Test
+    public void testJwtAttributesInContext() throws IOException {
+        DatPayload datPayload = new DatPayloadBuilder()
+                ._exp_(new BigInteger(String.valueOf(12)))
+                ._aud_("Test")
+                .build();
+
+        String serialized = serializer.serialize(datPayload);
+        Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD); // ensure that valid JSON-LD is serialized
+        Assert.assertTrue(serialized.contains("\"exp\" : \"ids:exp\"")); // ensure DatPayload fields are added to the context
     }
 
     private String readResourceToString(String resourceName) throws IOException {
