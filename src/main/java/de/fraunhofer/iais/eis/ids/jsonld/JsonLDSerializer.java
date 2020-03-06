@@ -47,11 +47,14 @@ public class JsonLDSerializer extends BeanSerializer {
 
         currentRecursionDepth++;
         gen.writeStartObject();
+
         if (currentRecursionDepth == 1) {
             Map<String, String> filteredContext = new HashMap<>();
             filterContextWrtBean(bean, filteredContext);
             addJwtFieldsToContext(bean, filteredContext);
             gen.writeObjectField("@context", filteredContext);
+            //gen.writeStringField("@context", "https://jira.iais.fraunhofer.de/stash/projects/ICTSL/repos/ids-infomodel-commons/raw/jsonld-context/3.0.0/context.jsonld"); // only add @context on top level
+
         }
         WritableTypeId typeIdDef = _typeIdDef(typeSer, bean, JsonToken.START_OBJECT);
         String resolvedTypeId = typeIdDef.id != null ? typeIdDef.id.toString() : typeSer.getTypeIdResolver().idFromValue(bean);
