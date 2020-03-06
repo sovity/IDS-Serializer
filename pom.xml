@@ -139,9 +139,9 @@
 
     <distributionManagement>
         <repository>
-            <id>eis-release-repo</id>
-            <name>maven-releases</name>
-            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-release</url>
+            <id>eis-public-repo</id>
+            <name>maven-public</name>
+            <url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
         </repository>
         <snapshotRepository>
             <id>eis-snapshot-repo</id>
