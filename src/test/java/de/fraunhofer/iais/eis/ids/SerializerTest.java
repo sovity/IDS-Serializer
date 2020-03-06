@@ -253,7 +253,7 @@ public class SerializerTest {
 
     @Test
     public void deserializeThroughInheritanceChain() throws IOException {
-        SelfDescriptionRequest sdr = new SelfDescriptionRequestBuilder()
+        DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
                 ._contentVersion_("test")
                 .build();
         String serialized = serializer.serialize(sdr);
