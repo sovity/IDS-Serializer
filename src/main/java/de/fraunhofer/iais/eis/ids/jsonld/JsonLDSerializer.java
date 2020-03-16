@@ -110,6 +110,12 @@ public class JsonLDSerializer extends BeanSerializer {
                 }
             });
         });
+        Stream.of(bean.getClass().getMethods()).forEach(m -> {
+            // once more run through all properties to check if to add IDSC to context
+            if(m.getReturnType().isEnum() && m.getReturnType().getCanonicalName().contains("fraunhofer")) {
+                filteredContext.put("idsc", contextItems.get("idsc"));
+            }
+        });
         // run through fields recursively
         Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
             if(f.getType().isPrimitive() || f.getType().isEnum()) return;
