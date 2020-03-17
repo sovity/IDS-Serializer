@@ -196,6 +196,7 @@ public class SerializerTest {
         Connector connector = null;
         Connector connector2 = null;
         try {
+        	serializer.addPreprocessor(new TypeNamePreprocessor());
             connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
             connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
         } catch (IOException e) {

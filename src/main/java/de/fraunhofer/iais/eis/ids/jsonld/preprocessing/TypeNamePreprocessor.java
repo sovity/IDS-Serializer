@@ -37,7 +37,7 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 			if(v instanceof String && k instanceof String && k.equals("@type")) {
 
 
-				// if key is a reserved term and value is a string: add 'ids:' if no other namespace at the value
+				// if key is @type and value is a string: add 'ids:' if no other namespace at the value
 				AtomicReference<String> modifiableValue = new AtomicReference<>((String) v);
 				prefixes.forEach((p, u) -> modifiableValue.set(modifiableValue.get().replace(u, p))); // replace full URI with prefix
 				if(! (modifiableValue.get().startsWith("ids:")
@@ -75,10 +75,8 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
 				}				
 
-				Iterator iter = ((ArrayList) v).iterator();
-				while (iter.hasNext()) {
-					out.put(modifiableKey, unifyTypeURIPrefix((Map) iter.next())); // TODO: What happens with an Array inside the Array?
-				}
+				out.put(modifiableKey, unifyTypeURIPrefix((ArrayList) v)); // TODO: What happens with an Array inside the Array?
+
 
 			} else {
 
@@ -95,6 +93,29 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				out.put(modifiableKey, v); // modify nothing if not @type or a map
 			}
 		});
+		return out;
+	}
+
+
+	private ArrayList unifyTypeURIPrefix(ArrayList in) {
+		ArrayList out = new ArrayList<>();
+
+		Iterator iter = in.iterator();
+
+		while (iter.hasNext()) {
+			Object v = iter.next();
+			if(v instanceof Map) {
+
+				out.add( unifyTypeURIPrefix((Map) v));
+
+
+			} else if (v instanceof String) {
+
+				out.add(v); // modify nothing if not @type or a map
+			} else {
+				out.add(v);
+			}
+		}
 		return out;
 	}
 
