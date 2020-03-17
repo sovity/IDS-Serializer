@@ -26,5 +26,5 @@
       } ]
     } ]
   },
-  "inboundModelVersion" : [ "3.0.0" ]
+  "inboundModelVersion" : [ "3.0.0", "3.0.0-SNAPSHOT" ]
 }
