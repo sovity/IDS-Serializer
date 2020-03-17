@@ -10,20 +10,20 @@
   "catalog" : {
     "@type" : "ids:Catalog",
     "id" : "http://industrialdataspace.org/catalog/111648db-d8fd-447d-93ba-a516988a6bcb",
-    "offers" : [ {
+    "offer" : [ {
       "@type" : "ids:Resource",
       "id" : "http://industrialdataspace.org/resource/a7f2ab42-4f7d-4567-b497-60c4dd495521",
-      "titles" : [ {
+      "title" : [ {
         "@value" : "Quarterly Business Report",
         "@language" : "en"
       } ],
-      "descriptions" : [ {
+      "description" : [ {
         "@value" : "Dataset without retrieval interface and further description.",
         "@language" : "en"
       } ]
     } ]
   },
-  "inboundModelVersions" : [ "1.0.1-SNAPSHOT", "1.0.2" ],
-  "outboundModelVersion" : "1.0.1-SNAPSHOT",
+  "inboundModelVersion" : [ "3.0.0", "3.0.1" ],
+  "outboundModelVersion" : "3.0.0",
   "maintainer" : "http://companyA.com/ids/participant"
 }

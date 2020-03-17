@@ -30,7 +30,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
-public class SerializerTest {
+public class SerializerTest { 
 
     private static ConnectorAvailableMessage basicInstance;
     private static Connector nestedInstance;
@@ -49,12 +49,12 @@ public class SerializerTest {
 
         basicInstance = new ConnectorAvailableMessageBuilder()
                 ._issued_(now)
-                ._modelVersion_("1.0.0")
+                ._modelVersion_("2.0.0")
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
                 .build();
 
         ArrayList<Resource> resources = new ArrayList<>();
-        resources.add(new ResourceBuilder()._version_("1.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
+        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
         resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
 
         // connector -> object with nested types
@@ -64,14 +64,14 @@ public class SerializerTest {
 
         nestedInstance = new BaseConnectorBuilder()
                 ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-                ._version_("1.0.0")
+                ._version_("2.0.0")
                 ._catalog_(catalog)
                 .build();
 
         // object with enum
         enumInstance = new RejectionMessageBuilder()
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
-                ._modelVersion_("1.0.0")
+                ._modelVersion_("2.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
                 .build();
 
@@ -196,6 +196,7 @@ public class SerializerTest {
         Connector connector = null;
         Connector connector2 = null;
         try {
+        	serializer.addPreprocessor(new TypeNamePreprocessor());
             connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
             connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
         } catch (IOException e) {
@@ -265,7 +266,7 @@ public class SerializerTest {
     @Test
     public void deserializeWithAndWithoutTypePrefix() {
         String withIdsPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/1.0.3/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"ids:TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -275,7 +276,7 @@ public class SerializerTest {
                 "}";
 
         String withoutExplicitPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/1.0.3/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -302,6 +303,7 @@ public class SerializerTest {
     }
 
     @Test
+
     public void stableCalendarFormat() throws IOException {
         String serialized = "\"2019-07-24T17:29:18.908+02:00\"";
         XMLGregorianCalendar xgc = serializer.deserialize(serialized, XMLGregorianCalendar.class);
