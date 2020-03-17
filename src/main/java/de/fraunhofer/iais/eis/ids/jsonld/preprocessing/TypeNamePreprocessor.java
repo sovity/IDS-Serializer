@@ -64,21 +64,21 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
 
 
-//			} else if(v instanceof ArrayList) {
-//
-//
-//				AtomicReference<String> modifiableKey = new AtomicReference<>((String) k);
-//				prefixes.forEach((p, u) -> modifiableKey.set(modifiableKey.get().replace(u, p))); // replace full URI with prefix
-//				if(! (modifiableKey.get().startsWith("ids:")
-//						|| modifiableKey.get().startsWith("info:")
-//						|| modifiableKey.get().startsWith("kdsf:"))) {
-//					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
-//				}				
-//
-//				Iterator iter = ((ArrayList) v).iterator();
-//				while (iter.hasNext()) {
-//					out.put(modifiableKey, unifyTypeURIPrefix((Map) iter.next())); // TODO: What happens with an Array inside the Array?
-//				}
+			} else if(v instanceof ArrayList) {
+
+
+				AtomicReference<String> modifiableKey = new AtomicReference<>((String) k);
+				prefixes.forEach((p, u) -> modifiableKey.set(modifiableKey.get().replace(u, p))); // replace full URI with prefix
+				if(! (modifiableKey.get().startsWith("ids:")
+						|| modifiableKey.get().startsWith("info:")
+						|| modifiableKey.get().startsWith("kdsf:"))) {
+					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
+				}				
+
+				Iterator iter = ((ArrayList) v).iterator();
+				while (iter.hasNext()) {
+					out.put(modifiableKey, unifyTypeURIPrefix((Map) iter.next())); // TODO: What happens with an Array inside the Array?
+				}
 
 			} else {
 
