@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.ids.SerializerUtil;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -182,8 +183,8 @@ public class SerializerTest {
         Connector connector = null;
         Connector connector_update = null;
         try {
-            connector = serializer.deserialize(readResourceToString("Connector1.json"), Connector.class);
-            connector_update = serializer.deserialize(readResourceToString("Connector1_update.json"), Connector.class);
+            connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.json"), Connector.class);
+            connector_update = serializer.deserialize(SerializerUtil.readResourceToString("Connector1_update.json"), Connector.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,8 +198,8 @@ public class SerializerTest {
         Connector connector2 = null;
         try {
         	serializer.addPreprocessor(new TypeNamePreprocessor());
-            connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
-            connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
+            connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.jsonld"), Connector.class);
+            connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2.jsonld"), Connector.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -208,7 +209,7 @@ public class SerializerTest {
 
         Model model = null;
         try {
-            model = Rio.parse(new StringReader(readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
+            model = Rio.parse(new StringReader(SerializerUtil.readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,7 +217,7 @@ public class SerializerTest {
 
         model = null;
         try {
-            model = Rio.parse(new StringReader(readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
+            model = Rio.parse(new StringReader(SerializerUtil.readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,8 +237,8 @@ public class SerializerTest {
                 "  \"http://xmlns.com/foaf/0.1/homepage\" : {\n  \"https://example.de/key\" : \"https://example.de/value\"\n}" +
                 "}";
         Broker broker = serializer.deserialize(serialized, Broker.class);
-        String originalSimplified = stripWhitespaces(serialized);
-        String reserializedSimplified = stripWhitespaces(serializer.serialize(broker, RDFFormat.JSONLD));
+        String originalSimplified = SerializerUtil.stripWhitespaces(serialized);
+        String reserializedSimplified = SerializerUtil.stripWhitespaces(serializer.serialize(broker, RDFFormat.JSONLD));
         Assert.assertEquals(originalSimplified, reserializedSimplified);
     }
 
@@ -245,7 +246,7 @@ public class SerializerTest {
     public void deserializeSingleValueAsArray() {
         ContractOffer contractOffer = null;
         try {
-            contractOffer = serializer.deserialize(readResourceToString("ContractOfferValueForArray.jsonld"), ContractOffer.class);
+            contractOffer = serializer.deserialize(SerializerUtil.readResourceToString("ContractOfferValueForArray.jsonld"), ContractOffer.class);
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -342,15 +343,4 @@ public class SerializerTest {
         Assert.assertTrue(serialized.contains("\"exp\" : \"ids:exp\"")); // ensure DatPayload fields are added to the context
     }
 
-    private String readResourceToString(String resourceName) throws IOException {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream(resourceName);
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(is, writer, "UTF-8");
-        return writer.toString();
-    }
-
-    private String stripWhitespaces(String input) {
-        return input.replaceAll("\\s+", "");
-    }
 }

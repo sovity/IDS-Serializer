@@ -61,8 +61,18 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				}
 
 
-				out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
+				// shorten an @id Map
+				if (((Map) v).containsKey("@id") && ((Map) v).keySet().size() == 1) {
+					Map idMap = new LinkedHashMap<Object, Object>();
+					idMap.put(k, ((Map) v).get("@id"));
 
+					out.putAll(unifyTypeURIPrefix(idMap));
+
+				} else {
+
+					out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
+
+				}
 
 			} else if(v instanceof ArrayList) {
 

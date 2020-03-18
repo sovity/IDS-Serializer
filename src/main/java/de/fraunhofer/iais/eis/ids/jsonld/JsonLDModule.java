@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import de.fraunhofer.iais.eis.ids.jsonld.custom.XMLGregorianCalendarDeserializer;
 import de.fraunhofer.iais.eis.ids.jsonld.custom.XMLGregorianCalendarSerializer;
 
+import java.net.URI;
+
 import javax.xml.datatype.XMLGregorianCalendar;
 
 
@@ -14,9 +16,13 @@ public class JsonLDModule extends SimpleModule {
 
     public JsonLDModule() {
         super();
+        
         setSerializerModifier(new JsonLDSerializerModifier());
+        
         addSerializer(XMLGregorianCalendar.class, new XMLGregorianCalendarSerializer());
         addDeserializer(XMLGregorianCalendar.class, new XMLGregorianCalendarDeserializer());
+        
+        addSerializer(URI.class, new UriSerializer());
     }
 
 }

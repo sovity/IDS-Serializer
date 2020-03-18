@@ -83,7 +83,12 @@ public class JsonLDSerializer extends BeanSerializer {
                     .forEach(k -> context.put(k, "ids:".concat(k)));
         } else {
             Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
-                if(f.getType().isPrimitive() || f.getType().isEnum()) return;
+            	
+                if(f.getType().isPrimitive() || f.getType().isEnum() 
+                		|| f.getType().toString().contains("java.") 
+                		|| f.getType().toString().contains("javax.")) return;
+                System.out.println(f.getType());
+                
                 boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {
@@ -112,13 +117,18 @@ public class JsonLDSerializer extends BeanSerializer {
         });
         Stream.of(bean.getClass().getMethods()).forEach(m -> {
             // once more run through all properties to check if to add IDSC to context
-            if(m.getReturnType().isEnum() && m.getReturnType().getCanonicalName().contains("fraunhofer")) {
+            if(m.getReturnType().isEnum() && m.getReturnType().getCanonicalName().contains("fraunhofer")) { // TODO this query is really hacky and dangerous as implicit assumptions about the idsc usage are used.
                 filteredContext.put("idsc", contextItems.get("idsc"));
             }
         });
         // run through fields recursively
         Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
-            if(f.getType().isPrimitive() || f.getType().isEnum()) return;
+            if(f.getType().isPrimitive() || f.getType().isEnum() 
+            		|| f.getType().toString().contains("java.") 
+            		|| f.getType().toString().contains("javax.")) return;
+            System.out.println(f.getType());
+            
+            
             boolean wasAccessible = f.isAccessible();
             f.setAccessible(true);
             try {
@@ -126,7 +136,9 @@ public class JsonLDSerializer extends BeanSerializer {
             } catch (IllegalAccessException e) {
                 System.err.println("setting accessible failed");
             }
+            
             f.setAccessible(wasAccessible);
+            
         });
     }
 }
