@@ -12,6 +12,10 @@ import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.math.BigDecimal;
@@ -24,6 +28,8 @@ import java.util.stream.Stream;
 
 public class JsonLDSerializer extends BeanSerializer {
 
+	Logger logger = LoggerFactory.getLogger(JsonLDSerializer.class);
+	
     private static int currentRecursionDepth = 0;
 
     private static final Map<String, String> contextItems;
@@ -87,14 +93,13 @@ public class JsonLDSerializer extends BeanSerializer {
                 if(f.getType().isPrimitive() || f.getType().isEnum() 
                 		|| f.getType().toString().contains("java.") 
                 		|| f.getType().toString().contains("javax.")) return;
-                System.out.println(f.getType());
                 
                 boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {
                     addJwtFieldsToContext(f.get(bean), context);
                 } catch (IllegalAccessException e) {
-                    System.err.println("setting accessible failed");
+                    logger.error("setting accessible failed"); //TODO can we really simply catch it here?
                 }
                 f.setAccessible(wasAccessible);
             });
@@ -126,7 +131,6 @@ public class JsonLDSerializer extends BeanSerializer {
             if(f.getType().isPrimitive() || f.getType().isEnum() 
             		|| f.getType().toString().contains("java.") 
             		|| f.getType().toString().contains("javax.")) return;
-            System.out.println(f.getType());
             
             
             boolean wasAccessible = f.isAccessible();
@@ -134,7 +138,7 @@ public class JsonLDSerializer extends BeanSerializer {
             try {
                 filterContextWrtBean(f.get(bean), filteredContext);
             } catch (IllegalAccessException e) {
-                System.err.println("setting accessible failed");
+                logger.error("setting accessible failed"); //TODO can we really simply catch it here?
             }
             
             f.setAccessible(wasAccessible);
