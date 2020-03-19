@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
+import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
+
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.rio.RDFFormat;
 import org.eclipse.rdf4j.rio.RDFWriter;
@@ -28,6 +30,7 @@ public class Serializer {
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
         preprocessors = new ArrayList<>();
+        this.addPreprocessor(new TypeNamePreprocessor());
     }
 
     /**
