@@ -68,7 +68,15 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 
 					out.putAll(unifyTypeURIPrefix(idMap));
 
-				} else {
+				} else if (((Map) v).containsKey("@value") && 
+						((Map) v).containsKey("@type")
+						&& ((Map) v).get("@type").toString().contains("xsd:dateTime")) {
+					
+					// shorten an @value Map with xsd:dateTimes
+					Object date = ((Map) v).get("@value");
+					out.put(modifiableKey, date);
+				
+			}else {
 
 					out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
 

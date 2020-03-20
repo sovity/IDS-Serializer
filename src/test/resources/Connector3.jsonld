@@ -1,0 +1,99 @@
+{
+ "@context" : "https://w3id.org/idsa/contexts/3.0.0/context.jsonld",
+ "@id" : "https://broker.ids.isst.fraunhofer.de/",
+  "@type" : "ids:BaseConnector",
+  "catalog" : {
+    "@id" : "https://w3id.org/idsa/autogen/catalog/c96e9f04-c3d1-46b6-a631-2248fa82bae0",
+    "@type" : "ids:Catalog",
+    "offer" : [ {
+      "@id" : "https://w3id.org/idsa/autogen/resource/aa491962-a88d-498d-bcb8-3df27f16a4af",
+      "@type" : "ids:Resource",
+      "contentType" : {
+        "@id" : "https://w3id.org/idsa/code/SCHEMA_DEFINITION"
+      },
+      "contractOffer" : {
+        "@id" : "https://w3id.org/idsa/autogen/contractOffer/5a463c06-13c8-4cf2-9b12-b949b5df17f0",
+        "@type" : "ids:ContractOffer",
+        "provider" : "https://example.com/provider"
+      },
+      "description" : "This is the description of the second resource from a test",
+      "language" : [ {
+        "@id" : "https://w3id.org/idsa/code/TN"
+      }, {
+        "@id" : "https://w3id.org/idsa/code/FI"
+      } ],
+      "title" : "This is the title of a second resource from a broker test",
+      "version" : "1.1"
+    }, {
+      "@id" : "https://w3id.org/idsa/autogen/resource/9f007fbc-4d01-4ce7-8ced-b5cb2a2c0846",
+      "@type" : "ids:Resource",
+      "contentType" : {
+        "@id" : "https://w3id.org/idsa/code/SCHEMA_DEFINITION"
+      },
+      "contractOffer" : {
+        "@id" : "https://w3id.org/idsa/autogen/contractOffer/806b9e70-3a59-4aa9-a950-131e5ea98579",
+        "@type" : "ids:ContractOffer",
+        "provider" : "https://example.com/provider"
+      },
+      "description" : "This is the description of the resource from a test",
+      "language" : [ {
+        "@id" : "https://w3id.org/idsa/code/JA"
+      }, {
+        "@id" : "https://w3id.org/idsa/code/PT"
+      } ],
+      "title" : "This is the title of a resource from a broker test",
+      "version" : "1.1"
+    }, {
+      "@id" : "https://w3id.org/idsa/autogen/resource/570367ed-3982-40ca-a172-47c3ff9879f6",
+      "@type" : "ids:Resource",
+      "contentType" : {
+        "@id" : "https://w3id.org/idsa/code/SCHEMA_DEFINITION"
+      },
+      "contractOffer" : {
+        "@id" : "https://w3id.org/idsa/autogen/contractOffer/5d5541a0-773f-454e-aca5-edbaba72d2e8",
+        "@type" : "ids:ContractOffer",
+        "provider" : "https://example.com/provider"
+      },
+      "description" : "This is the description of the resource from a test",
+      "language" : [ {
+        "@id" : "https://w3id.org/idsa/code/JA"
+      }, {
+        "@id" : "https://w3id.org/idsa/code/PT"
+      } ],
+      "title" : "This is the title of a resource from a broker test",
+      "version" : "1.1"
+    }, {
+      "@id" : "https://w3id.org/idsa/autogen/resource/f6f2a22b-fca7-4fd0-a409-e5a907f20d5e",
+      "@type" : "ids:Resource",
+      "contentType" : {
+        "@id" : "https://w3id.org/idsa/code/SCHEMA_DEFINITION"
+      },
+      "contractOffer" : {
+        "@id" : "https://w3id.org/idsa/autogen/contractOffer/c2cbf126-9f91-4f82-b9a5-1fc5d2c2fdc7",
+        "@type" : "ids:ContractOffer",
+        "provider" : "https://example.com/provider"
+      },
+      "description" : "This is the description of the resource from a test",
+      "language" : [ {
+        "@id" : "https://w3id.org/idsa/code/JA"
+      }, {
+        "@id" : "https://w3id.org/idsa/code/PT"
+      } ],
+      "title" : "This is the title of a resource from a broker test",
+      "version" : "1.1"
+    }, {
+      "@id" : "https://w3id.org/idsa/autogen/resource/39319411-77ad-4f57-906b-f960513471aa",
+      "@type" : "ids:Resource"
+  } ],
+  "curator" : [ "https://example.com/curator", "https://example.org/" ],
+  "description" : "This is a dummy description from the Interaction Library",
+  "inboundModelVersion" : [ "3.0.0", "2.0.1" ],
+  "maintainer" : [ "https://example.com/maintainer", "https://example.org/" ],
+  "outboundModelVersion" : [ "3.0.0", "2.0.1" ],
+  "securityProfile" : {
+    "@id" : "https://w3id.org/idsa/code/BASE_CONNECTOR_SECURITY_PROFILE"
+  },
+  "title" : "This is a dummy title from the Interaction Library"
+}
+}
+

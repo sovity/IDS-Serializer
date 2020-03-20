@@ -21,7 +21,10 @@ public class XMLGregorianCalendarSerializer extends StdSerializer<XMLGregorianCa
     public void serialize(XMLGregorianCalendar value, JsonGenerator gen, SerializerProvider provider) throws IOException {
         String serializedCalendar = value.toGregorianCalendar().toZonedDateTime().toString();
         serializedCalendar = serializedCalendar.substring(0, serializedCalendar.indexOf("[")); // remove [GMT+...] appendix
-        gen.writeString(serializedCalendar);
+        gen.writeStartObject();
+        gen.writeStringField("@value", serializedCalendar);
+        gen.writeStringField("@type", "xsd:dateTimeStamp");
+        gen.writeEndObject();
 
     }
 }

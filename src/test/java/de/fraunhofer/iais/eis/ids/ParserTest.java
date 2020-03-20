@@ -14,6 +14,7 @@ import de.fraunhofer.iais.eis.ConnectorAvailableMessage;
 import de.fraunhofer.iais.eis.Message;
 import de.fraunhofer.iais.eis.MessageProcessedNotificationMessage;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import de.fraunhofer.iais.eis.ids.SerializerUtil;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 
 public class ParserTest {
@@ -29,13 +30,13 @@ public class ParserTest {
 	@Test
 	public void testBaseConnector() throws IOException {
 		String baseConnector = SerializerUtil.readResourceToString("Connector1.jsonld");
-		logger.info(baseConnector);
+//		logger.info(baseConnector);
 		
 		Serializer serializer = new Serializer();
 		serializer.addPreprocessor(new TypeNamePreprocessor());
 		BaseConnector base = serializer.deserialize(baseConnector, BaseConnector.class);
 		String serialisedJsonLd = serializer.serialize(base);
-		logger.info(serialisedJsonLd);
+//		logger.info(serialisedJsonLd);
 		assertTrue(!serialisedJsonLd.isEmpty());
 	}
 
@@ -52,7 +53,7 @@ public class ParserTest {
 		serializer.addPreprocessor(new TypeNamePreprocessor());
 		Catalog catalog = serializer.deserialize(catalogAsString, Catalog.class);
 		String serialisedJsonLd = serializer.serialize(catalog);
-		logger.info(serialisedJsonLd);
+//		logger.info(serialisedJsonLd);
 		assertTrue(!serialisedJsonLd.isEmpty());
 
 	}
@@ -78,6 +79,18 @@ public class ParserTest {
 		assertTrue(message.getCorrelationMessage() != null);
 		
 		logger.info(serializer.serialize(message));
+	}
+	
+	
+	@Test
+	public void testHeavyBaseConnector() throws IOException {
+		
+		String connectorString = SerializerUtil.readResourceToString("Connector3.jsonld");
+		
+		Serializer serializer = new Serializer();
+		
+		BaseConnector connector = serializer.deserialize(connectorString, BaseConnector.class);
+		
 	}
 
 }

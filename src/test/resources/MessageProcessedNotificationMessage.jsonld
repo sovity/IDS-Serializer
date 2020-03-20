@@ -16,6 +16,9 @@
   "ids:senderAgent" : "https://www.iais.fraunhofer.de",
   "ids:issuerConnector" : "https://broker.ids.isst.fraunhofer.de/",
   "ids:correlationMessage" : {"@id": "https://52d2c3e4-88de-42ee-9261-dfd239ccb8631"},
-  "ids:issued" : "2020-03-18T12:45:11.681Z",
+  "ids:issued" : {
+    "@value" : "2020-03-18T12:45:11.682Z",
+    "@type" : "xsd:dateTimeStamp"
+  },
   "ids:modelVersion" : "3.0.0"
 }
