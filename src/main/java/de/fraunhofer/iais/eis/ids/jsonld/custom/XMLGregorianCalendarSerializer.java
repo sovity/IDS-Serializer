@@ -23,7 +23,7 @@ public class XMLGregorianCalendarSerializer extends StdSerializer<XMLGregorianCa
         serializedCalendar = serializedCalendar.substring(0, serializedCalendar.indexOf("[")); // remove [GMT+...] appendix
         gen.writeStartObject();
         gen.writeStringField("@value", serializedCalendar);
-        gen.writeStringField("@type", "xsd:dateTimeStamp");
+        gen.writeStringField("@type", "http://www.w3.org/2001/XMLSchema#dateTimeStamp");
         gen.writeEndObject();
 
     }
