@@ -3,7 +3,6 @@ package de.fraunhofer.iais.eis.ids.jsonld.custom;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
-import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -25,7 +24,6 @@ public class XMLGregorianCalendarDeserializer extends StdDeserializer<XMLGregori
     @Override
     public XMLGregorianCalendar deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         XMLGregorianCalendar xgc = null;
-        String string = p.getValueAsString();
         try {
             xgc = DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(p.getValueAsString())));
         } catch (DatatypeConfigurationException e) {
