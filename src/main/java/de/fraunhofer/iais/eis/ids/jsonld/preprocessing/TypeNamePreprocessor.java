@@ -61,8 +61,26 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				}
 
 
-				out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
+				// shorten an @id Map
+				if (((Map) v).containsKey("@id") && ((Map) v).keySet().size() == 1) {
+					Map idMap = new LinkedHashMap<Object, Object>();
+					idMap.put(k, ((Map) v).get("@id"));
 
+					out.putAll(unifyTypeURIPrefix(idMap));
+
+				} else if (((Map) v).containsKey("@value") && 
+						((Map) v).containsKey("@type")
+						&& (((Map) v).get("@type").toString().contains("dateTime")	)) {
+					
+					// shorten an @value Map with xsd:dateTimes
+					Object date = ((Map) v).get("@value");
+					out.put(modifiableKey, date);
+				
+			}else {
+
+					out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
+
+				}
 
 			} else if(v instanceof ArrayList) {
 

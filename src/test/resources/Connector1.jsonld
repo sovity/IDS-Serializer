@@ -1,7 +1,6 @@
 {"@context": "https://w3id.org/idsa/contexts/3.0.0/context.jsonld",
   "@type" : "ids:BaseConnector",
   "@id" : "https://companyA.com/connector",
-  "id" : "https://companyA.com/connector",
   "outboundModelVersion" : "3.0.0",
   "curator" : "http://companyA.com/ids/participant",
   "securityProfile" : {
