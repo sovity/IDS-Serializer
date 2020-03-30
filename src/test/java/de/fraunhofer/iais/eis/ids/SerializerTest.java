@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.ids.SerializerUtil;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -49,13 +50,13 @@ public class SerializerTest {
 
         basicInstance = new ConnectorAvailableMessageBuilder()
                 ._issued_(now)
-                ._modelVersion_("2.0.0")
+                ._modelVersion_("3.0.0")
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
                 .build();
 
         ArrayList<Resource> resources = new ArrayList<>();
-        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
-        resources.add(new ResourceBuilder()._version_("2.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
+        resources.add(new ResourceBuilder()._version_("3.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
+        resources.add(new ResourceBuilder()._version_("3.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
 
         // connector -> object with nested types
         Catalog catalog = new CatalogBuilder()
@@ -64,20 +65,20 @@ public class SerializerTest {
 
         nestedInstance = new BaseConnectorBuilder()
                 ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-                ._version_("2.0.0")
+                ._version_("3.0.0")
                 ._catalog_(catalog)
                 .build();
 
         // object with enum
         enumInstance = new RejectionMessageBuilder()
                 ._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
-                ._modelVersion_("2.0.0")
+                ._modelVersion_("3.0.0")
                 ._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
                 .build();
 
         securityProfileInstance = new BaseConnectorBuilder()
                 ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-                ._version_("1.0.0")
+                ._version_("3.0.0")
                 ._catalog_(catalog)
                 ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
                 .build();
@@ -182,8 +183,8 @@ public class SerializerTest {
         Connector connector = null;
         Connector connector_update = null;
         try {
-            connector = serializer.deserialize(readResourceToString("Connector1.json"), Connector.class);
-            connector_update = serializer.deserialize(readResourceToString("Connector1_update.json"), Connector.class);
+            connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.json"), Connector.class);
+            connector_update = serializer.deserialize(SerializerUtil.readResourceToString("Connector1_update.json"), Connector.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -197,8 +198,8 @@ public class SerializerTest {
         Connector connector2 = null;
         try {
         	serializer.addPreprocessor(new TypeNamePreprocessor());
-            connector = serializer.deserialize(readResourceToString("Connector1.jsonld"), Connector.class);
-            connector2 = serializer.deserialize(readResourceToString("Connector2.jsonld"), Connector.class);
+            connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.jsonld"), Connector.class);
+            connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2.jsonld"), Connector.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -208,7 +209,7 @@ public class SerializerTest {
 
         Model model = null;
         try {
-            model = Rio.parse(new StringReader(readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
+            model = Rio.parse(new StringReader(SerializerUtil.readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -216,7 +217,7 @@ public class SerializerTest {
 
         model = null;
         try {
-            model = Rio.parse(new StringReader(readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
+            model = Rio.parse(new StringReader(SerializerUtil.readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -224,20 +225,20 @@ public class SerializerTest {
     }
 
     @Test
-    @Ignore
+    @Ignore // TODO enable this test as soon as we can work with unknown namespaces
     public void serializeForeignProperties() throws Exception {
         serializer.addPreprocessor(new TypeNamePreprocessor());
         String serialized = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.1.0/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/3.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"ids:Broker\",\n" +
-                "  \"inboundModelVersion\" : [ \"2.0.1\" ],\n" +
+                "  \"inboundModelVersion\" : [ \"3.0.0\" ],\n" +
                 "  \"@id\" : \"https://w3id.org/idsa/autogen/broker/5b9170a7-73fd-466e-89e4-83cedfe805aa\",\n" +
                 "  \"http://xmlns.com/foaf/0.1/name\" : \"https://iais.fraunhofer.de/eis/ids/broker1/frontend\",\n" +
                 "  \"http://xmlns.com/foaf/0.1/homepage\" : {\n  \"https://example.de/key\" : \"https://example.de/value\"\n}" +
                 "}";
         Broker broker = serializer.deserialize(serialized, Broker.class);
-        String originalSimplified = stripWhitespaces(serialized);
-        String reserializedSimplified = stripWhitespaces(serializer.serialize(broker, RDFFormat.JSONLD));
+        String originalSimplified = SerializerUtil.stripWhitespaces(serialized);
+        String reserializedSimplified = SerializerUtil.stripWhitespaces(serializer.serialize(broker, RDFFormat.JSONLD));
         Assert.assertEquals(originalSimplified, reserializedSimplified);
     }
 
@@ -245,7 +246,7 @@ public class SerializerTest {
     public void deserializeSingleValueAsArray() {
         ContractOffer contractOffer = null;
         try {
-            contractOffer = serializer.deserialize(readResourceToString("ContractOfferValueForArray.jsonld"), ContractOffer.class);
+            contractOffer = serializer.deserialize(SerializerUtil.readResourceToString("ContractOfferValueForArray.jsonld"), ContractOffer.class);
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -266,7 +267,7 @@ public class SerializerTest {
     @Test
     public void deserializeWithAndWithoutTypePrefix() {
         String withIdsPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.0.0/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/3.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"ids:TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -276,7 +277,7 @@ public class SerializerTest {
                 "}";
 
         String withoutExplicitPrefix = "{\n" +
-                "  \"@context\" : \"https://w3id.org/idsa/contexts/2.0.0/context.jsonld\",\n" +
+                "  \"@context\" : \"https://w3id.org/idsa/contexts/3.0.0/context.jsonld\",\n" +
                 "  \"@type\" : \"TextResource\",\n" +
                 "  \"@id\" : \"https://creativecommons.org/licenses/by-nc/4.0/legalcode\"\n" +
                 "}";
@@ -302,10 +303,12 @@ public class SerializerTest {
         }
     }
 
+    
+    @Ignore // This test intends to check a single date, not embedded in any enclosing JSON-LD. This does not make sense with the latest serializer version.
     @Test
-
     public void stableCalendarFormat() throws IOException {
-        String serialized = "\"2019-07-24T17:29:18.908+02:00\"";
+        String serialized = "2019-07-24T17:29:18.908+02:00";
+        
         XMLGregorianCalendar xgc = serializer.deserialize(serialized, XMLGregorianCalendar.class);
         String reserialized = serializer.serialize(xgc);
         Assert.assertEquals(serialized, reserialized);
@@ -342,15 +345,4 @@ public class SerializerTest {
         Assert.assertTrue(serialized.contains("\"exp\" : \"ids:exp\"")); // ensure DatPayload fields are added to the context
     }
 
-    private String readResourceToString(String resourceName) throws IOException {
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream(resourceName);
-        StringWriter writer = new StringWriter();
-        IOUtils.copy(is, writer, "UTF-8");
-        return writer.toString();
-    }
-
-    private String stripWhitespaces(String input) {
-        return input.replaceAll("\\s+", "");
-    }
 }
