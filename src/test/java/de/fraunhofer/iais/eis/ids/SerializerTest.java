@@ -1,10 +1,10 @@
 package de.fraunhofer.iais.eis.ids;
 
 import de.fraunhofer.iais.eis.*;
-import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
+import de.fraunhofer.iais.eis.util.LocalizableString;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.io.IOUtils;
@@ -79,7 +79,7 @@ public class SerializerTest {
                 ._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
                 ._version_("1.0.0")
                 ._catalog_(catalog)
-                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
+//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
                 .build();
     }
 
@@ -171,7 +171,7 @@ public class SerializerTest {
         // do not use reflective equals here as ArrayList comparison fails due to different modCount
         Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
         Assert.assertEquals(2, deserializedResource.getDescription().size());
-        Iterator<? extends PlainLiteral> names = deserializedResource.getDescription().iterator();
+        Iterator<? extends LocalizableString> names = deserializedResource.getDescription().iterator();
 
         Assert.assertTrue(names.next().getLanguage().isEmpty());
         Assert.assertFalse(names.next().getLanguage().isEmpty());
@@ -353,4 +353,19 @@ public class SerializerTest {
     private String stripWhitespaces(String input) {
         return input.replaceAll("\\s+", "");
     }
+    
+    
+    @Test
+    public void rightOperandTest() throws IOException {
+    	
+    	Constraint constraint = new ConstraintBuilder()
+    			._leftOperand_(LeftOperand.PAY_AMOUNT)
+    			._operator_(BinaryOperator.EQ)
+    			._rightOperand_(new LocalizableString("5"))
+    			.build();
+    	
+    	String constraintString = serializer.serialize(constraint);
+    	
+    }
+    
 }
