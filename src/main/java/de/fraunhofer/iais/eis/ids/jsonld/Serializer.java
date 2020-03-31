@@ -128,7 +128,7 @@ public class Serializer {
      * Important note: The preprocessors are executed in the same order they were added.
      *
      * @param preprocessor the preprocessor to add
-     * @param validate     set wether the preprocessors output should be checked by RDF4j
+     * @param validate     set whether the preprocessors output should be checked by RDF4j
      */
     public void addPreprocessor(JsonPreprocessor preprocessor, boolean validate) {
         preprocessor.enableRDFValidation(validate);

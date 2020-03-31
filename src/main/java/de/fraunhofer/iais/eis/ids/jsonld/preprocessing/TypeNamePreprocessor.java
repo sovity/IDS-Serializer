@@ -43,7 +43,9 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				if(! (modifiableValue.get().startsWith("ids:")
 						|| modifiableValue.get().startsWith("idsc:")
 						|| modifiableValue.get().startsWith("info:")
-						|| modifiableValue.get().startsWith("kdsf:"))) {
+						|| modifiableValue.get().startsWith("kdsf:")
+						|| modifiableValue.get().startsWith("xsd:")
+						|| modifiableValue.get().startsWith("http:"))) {
 					modifiableValue.set("ids:".concat(modifiableValue.get())); // default to ids prefix for backwards compatibility
 				}
 				out.put(k, modifiableValue.get());
