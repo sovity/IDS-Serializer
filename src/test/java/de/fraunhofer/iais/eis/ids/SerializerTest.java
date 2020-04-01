@@ -4,12 +4,9 @@ import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
-import de.fraunhofer.iais.eis.util.LocalizableString;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import de.fraunhofer.iais.eis.util.Util;
-import de.fraunhofer.iais.eis.ids.SerializerUtil;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.eclipse.rdf4j.model.Model;
 import org.eclipse.rdf4j.model.impl.LinkedHashModel;
@@ -19,19 +16,17 @@ import org.eclipse.rdf4j.rio.RDFParser;
 import org.eclipse.rdf4j.rio.Rio;
 import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
 import org.eclipse.rdf4j.rio.helpers.StatementCollector;
-import org.hamcrest.Description;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import com.github.jsonldjava.core.JsonLdProcessor;
 
 import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.*;
@@ -40,9 +35,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.List;
 
 public class SerializerTest { 
 
@@ -185,7 +178,7 @@ public class SerializerTest {
 		// do not use reflective equals here as ArrayList comparison fails due to different modCount
 		Resource deserializedResource = serializer.deserialize(serialized, ResourceImpl.class);
 		Assert.assertEquals(2, deserializedResource.getDescription().size());
-		Iterator<? extends LocalizableString> names = deserializedResource.getDescription().iterator();
+		Iterator<? extends TypedLiteral> names = deserializedResource.getDescription().iterator();
 
 		Assert.assertTrue(names.next().getLanguage().isEmpty());
 		Assert.assertFalse(names.next().getLanguage().isEmpty());
@@ -342,7 +335,7 @@ public class SerializerTest {
 		Assert.assertEquals(4, model.size());
 
 		String ttl = serializer.convertJsonLdToOtherRdfFormat(serializedList, RDFFormat.TURTLE);
-		Assert.assertTrue(!ttl.isEmpty());
+		Assert.assertFalse(ttl.isEmpty());
 	}
 
 
@@ -492,8 +485,8 @@ public class SerializerTest {
 					.build();
 			String serialisedResource = serializer.serialize(resource);
 
-			LocalizableString descriptionJSONLD = fromJSONLD.getDescription().get(0);
-			LocalizableString description = resource.getDescription().get(0);
+			TypedLiteral descriptionJSONLD = fromJSONLD.getDescription().get(0);
+			TypedLiteral description = resource.getDescription().get(0);
 
 			assertTrue(descriptionJSONLD.getValue().equalsIgnoreCase(description.getValue()));
 			if (i==2) assertTrue(descriptionJSONLD.getLanguage().equalsIgnoreCase(description.getLanguage()));
@@ -544,8 +537,8 @@ public class SerializerTest {
 		for (Resource resource : resoruces ) {
 			String resourceAsJsonLD = localSerializer.serialize(resource);
 			Resource parsedResource = localSerializer.deserialize(resourceAsJsonLD, Resource.class);
-			assertTrue(resource.getDescription().get(0).getValue().equals(parsedResource.getDescription().get(0).getValue()));
-			assertTrue(resource.getDescription().get(0).getLanguage().equals(parsedResource.getDescription().get(0).getLanguage()));
+			assertEquals(resource.getDescription().get(0).getValue(), parsedResource.getDescription().get(0).getValue());
+			assertEquals(resource.getDescription().get(0).getLanguage(), parsedResource.getDescription().get(0).getLanguage());
 		}
 	}
 
