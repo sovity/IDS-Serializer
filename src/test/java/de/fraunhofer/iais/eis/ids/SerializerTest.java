@@ -161,7 +161,7 @@ public class SerializerTest {
 	@Test
 	public void jsonldSerialize_Literal() throws ConstraintViolationException, IOException {
 		Resource resource = new ResourceBuilder()
-				._description_(Util.asList(new PlainLiteral("literal no langtag"), new PlainLiteral("english literal", "en")))
+				._description_(Util.asList(new TypedLiteral("literal no langtag"), new TypedLiteral("english literal", "en")))
 				.build();
 
 		String serialized = serializer.serialize(resource);
@@ -180,7 +180,7 @@ public class SerializerTest {
 		Assert.assertEquals(2, deserializedResource.getDescription().size());
 		Iterator<? extends TypedLiteral> names = deserializedResource.getDescription().iterator();
 
-		Assert.assertTrue(names.next().getLanguage().isEmpty());
+		Assert.assertNull(names.next().getLanguage());
 		Assert.assertFalse(names.next().getLanguage().isEmpty());
 	}
 
@@ -323,7 +323,7 @@ public class SerializerTest {
 	/**
 	 * lists have to be serialized with a @context element in each child
 	 * otherwise, RDF4j does not correctly parse the data resulting in empty model and empty Turtle serialization
-	 * @throws IOException
+	 * @throws IOException on serialization failure
 	 */
 	@Test
 	public void listWithContext() throws IOException {
@@ -361,9 +361,9 @@ public class SerializerTest {
 		Constraint constraint = new ConstraintBuilder()
 				._leftOperand_(LeftOperand.PAY_AMOUNT)
 				._operator_(BinaryOperator.EQ)
-				._rightOperand_(new PlainLiteral("5", "xsd:int"))
+				._rightOperand_(new TypedLiteral("5", "xsd:int"))
 				.build();
-		String serialisedConstraint = serializer.serialize(constraint);
+		serializer.serialize(constraint);
 
 
 		String constraintString = "{\r\n" + 
@@ -385,7 +385,7 @@ public class SerializerTest {
 				"    \"@language\" : \"en\"\r\n" + 
 				"  }\r\n" + 
 				"}";
-		Constraint parsedConstraint = serializer.deserialize(constraintString, Constraint.class);
+		serializer.deserialize(constraintString, Constraint.class);
 
 	}
 
@@ -483,7 +483,7 @@ public class SerializerTest {
 					._description_(Util.asList(new PlainLiteral("a description " + (i+1), "en")))
 					._keyword_(Util.asList(new PlainLiteral("keyword" + (i+1))))
 					.build();
-			String serialisedResource = serializer.serialize(resource);
+			serializer.serialize(resource);
 
 			TypedLiteral descriptionJSONLD = fromJSONLD.getDescription().get(0);
 			TypedLiteral description = resource.getDescription().get(0);
@@ -496,7 +496,7 @@ public class SerializerTest {
 	
 
 	@Test
-	public void plainLiteralSerialiseTest() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException, URISyntaxException {
+	public void typedLiteralSerialiseTest() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException, URISyntaxException {
 		
 		Resource resource1 = new ResourceBuilder()
 				._description_(Util.asList(new PlainLiteral("a description 1")))
@@ -531,10 +531,10 @@ public class SerializerTest {
 				._keyword_(Util.asList(new TypedLiteral("\"keyword8\"^^xsd:string")))
 				.build();
 		
-		Resource[] resoruces = new Resource[] { resource1, resource2, resource3, resource4, resource5, resource6, resource7, resource8};
+		Resource[] resources = new Resource[] { resource1, resource2, resource3, resource4, resource5, resource6, resource7, resource8};
 		Serializer localSerializer = new Serializer();
 		
-		for (Resource resource : resoruces ) {
+		for (Resource resource : resources ) {
 			String resourceAsJsonLD = localSerializer.serialize(resource);
 			Resource parsedResource = localSerializer.deserialize(resourceAsJsonLD, Resource.class);
 			assertEquals(resource.getDescription().get(0).getValue(), parsedResource.getDescription().get(0).getValue());
@@ -548,7 +548,7 @@ public class SerializerTest {
 		String jsonld = SerializerUtil.readResourceToString("ContractOfferValueForArray.jsonld");
 
 		Serializer localSerializer = new Serializer();
-		Contract fromJSONLD = localSerializer.deserialize(jsonld, Contract.class);
+		localSerializer.deserialize(jsonld, Contract.class);
 
 		RDFParser rdfParser = Rio.createParser(RDFFormat.JSONLD);
 		Model model = new LinkedHashModel();
@@ -561,7 +561,7 @@ public class SerializerTest {
 
 	/**
 	 * This test checks whether different date formulations are treated accordingly
-	 * 
+	 *
 	 * @throws RDFParseException
 	 * @throws UnsupportedRDFormatException
 	 * @throws IOException
@@ -649,7 +649,7 @@ public class SerializerTest {
 
 			// parse JSON-LD
 			ConnectorAvailableMessage msg = serializer.deserialize(jsonld, ConnectorAvailableMessage.class);
-			String jsonldAsString = serializer.serialize(msg);
+			serializer.serialize(msg);
 		}
 	}
 
