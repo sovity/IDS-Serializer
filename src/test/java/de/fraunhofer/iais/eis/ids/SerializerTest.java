@@ -5,6 +5,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -343,7 +344,7 @@ public class SerializerTest {
 	public void testJwtAttributesInContext() throws IOException {
 		DatPayload datPayload = new DatPayloadBuilder()
 				._exp_(new BigInteger(String.valueOf(12)))
-				._aud_("Test")
+				._aud_(Audience.IDS_CONNECTORS_ALL)
 				.build();
 
 		String serialized = serializer.serialize(datPayload);
@@ -356,12 +357,12 @@ public class SerializerTest {
 
 
 	@Test
-	public void rightOperandTest() throws IOException { 
+	public void rightOperandTest() throws IOException, URISyntaxException {
 
 		Constraint constraint = new ConstraintBuilder()
 				._leftOperand_(LeftOperand.PAY_AMOUNT)
 				._operator_(BinaryOperator.EQ)
-				._rightOperand_(new TypedLiteral("5", "xsd:int"))
+				._rightOperand_(new TypedLiteral("5", new URI("http://www.w3.org/2001/XMLSchema#string")))
 				.build();
 		serializer.serialize(constraint);
 
@@ -381,8 +382,8 @@ public class SerializerTest {
 				"  },\r\n" + 
 				"  \"ids:rightOperand\" : {\r\n" + 
 				"    \"@value\" : \"5\",\r\n" + 
-				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#string\",\r\n" + 
-				"    \"@language\" : \"en\"\r\n" + 
+				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#string\"\r\n" +
+				//"    \"@language\" : \"en\"\r\n" +
 				"  }\r\n" + 
 				"}";
 		serializer.deserialize(constraintString, Constraint.class);

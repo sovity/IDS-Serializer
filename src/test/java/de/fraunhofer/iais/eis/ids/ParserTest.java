@@ -37,7 +37,7 @@ public class ParserTest {
 		BaseConnector base = serializer.deserialize(baseConnector, BaseConnector.class);
 		String serialisedJsonLd = serializer.serialize(base);
 //		logger.info(serialisedJsonLd);
-		assertTrue(!serialisedJsonLd.isEmpty());
+		assertFalse(serialisedJsonLd.isEmpty());
 	}
 
 
@@ -54,7 +54,7 @@ public class ParserTest {
 		Catalog catalog = serializer.deserialize(catalogAsString, Catalog.class);
 		String serialisedJsonLd = serializer.serialize(catalog);
 //		logger.info(serialisedJsonLd);
-		assertTrue(!serialisedJsonLd.isEmpty());
+		assertFalse(serialisedJsonLd.isEmpty());
 
 	}
 	
@@ -76,9 +76,10 @@ public class ParserTest {
 		serializer.addPreprocessor(new TypeNamePreprocessor());
 		
 		MessageProcessedNotificationMessage message = (MessageProcessedNotificationMessage) serializer.deserialize(messageString, Message.class);
-		assertTrue(message.getCorrelationMessage() != null);
+		assertNotNull(message.getCorrelationMessage());
 		
-		logger.info(serializer.serialize(message));
+		//logger.info(serializer.serialize(message));
+		serializer.serialize(message);
 	}
 	
 	
