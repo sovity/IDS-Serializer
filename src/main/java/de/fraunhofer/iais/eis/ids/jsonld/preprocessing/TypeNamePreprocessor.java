@@ -65,7 +65,7 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 
 				// shorten an @id Map
 				if (((Map) v).containsKey("@id") && ((Map) v).keySet().size() == 1) {
-					Map idMap = new LinkedHashMap<Object, Object>();
+					Map idMap = new LinkedHashMap<>();
 					idMap.put(k, ((Map) v).get("@id"));
 
 					out.putAll(unifyTypeURIPrefix(idMap));

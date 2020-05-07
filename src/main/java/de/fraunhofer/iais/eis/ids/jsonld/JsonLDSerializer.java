@@ -11,16 +11,12 @@ import com.fasterxml.jackson.databind.ser.BeanSerializer;
 import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -113,6 +109,12 @@ public class JsonLDSerializer extends BeanSerializer {
             if(typeNameAnnotation != null && typeNameAnnotation.value().contains(p)) {
                 filteredContext.put(p, u);
             }
+            //TODO: Dirty hard coded stuff...
+            if(typeNameAnnotation != null && typeNameAnnotation.value().toLowerCase().contains("catalog"))
+            {
+                filteredContext.put("idsc", "https://w3id.org/idsa/code/");
+            }
+            //TODO: This is not sufficient. Example: ids:Catalog does not have any direct property referring to idsc. Still, a catalog can contain a Resource, which can refer to an idsc object!
             Stream.of(bean.getClass().getMethods()).forEach(m -> {
                 JsonProperty propertyAnnotation = m.getAnnotation(JsonProperty.class);
                 if(propertyAnnotation != null && propertyAnnotation.value().contains(p)) {
