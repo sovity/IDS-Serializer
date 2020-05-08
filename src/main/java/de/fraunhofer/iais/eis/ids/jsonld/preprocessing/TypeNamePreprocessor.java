@@ -1,6 +1,8 @@
 package de.fraunhofer.iais.eis.ids.jsonld.preprocessing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TypeNamePreprocessor extends BasePreprocessor {
 
 	private static final Map<String, String> prefixes;
+	private final Logger logger = LoggerFactory.getLogger(TypeNamePreprocessor.class);
 
 	static {
 		prefixes = new HashMap<>();
@@ -52,13 +55,13 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 
 
 			} else if(v instanceof Map) {
-
-
 				AtomicReference<String> modifiableKey = new AtomicReference<>((String) k);
-				prefixes.forEach((p, u) -> modifiableKey.set(modifiableKey.get().replace(u, p))); // replace full URI with prefix
+
+				prefixes.forEach((prefix, uri) -> modifiableKey.set(modifiableKey.get().replace(uri, prefix))); // replace full URI with prefix
 				if(! (modifiableKey.get().startsWith("ids:")
 						|| modifiableKey.get().startsWith("info:")
-						|| modifiableKey.get().startsWith("kdsf:"))) {
+						|| modifiableKey.get().startsWith("kdsf:")
+						|| modifiableKey.get().startsWith("@context"))) {
 					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
 				}
 
@@ -71,16 +74,25 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 					out.putAll(unifyTypeURIPrefix(idMap));
 
 				} else if (((Map) v).containsKey("@value") && 
-						((Map) v).containsKey("@type")
-						&& (((Map) v).get("@type").toString().contains("dateTime")	)) {
-					
-					// shorten an @value Map with xsd:dateTimes
-					Object date = ((Map) v).get("@value");
-					out.put(modifiableKey, date);
+						((Map) v).containsKey("@type"))
+				{
+					if( ((Map) v).get("@type").toString().contains("dateTime")	)
+					{
+
+						// shorten an @value Map with xsd:dateTimes
+						Object date = ((Map) v).get("@value");
+						out.put(modifiableKey, date);
+					}
+					else if(((Map) v).get("@type").toString().equals("xsd:integer"))
+					{
+						int value = Integer.parseInt(((Map) v).get("@value").toString());
+						out.put(modifiableKey, value);
+					}
 				
-			}else {
+				} else {
 
 					out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
+
 
 				}
 
@@ -93,7 +105,7 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 						|| modifiableKey.get().startsWith("info:")
 						|| modifiableKey.get().startsWith("kdsf:"))) {
 					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
-				}				
+				}
 
 				out.put(modifiableKey, unifyTypeURIPrefix((ArrayList) v)); // TODO: What happens with an Array inside the Array?
 
@@ -107,7 +119,11 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 						|| modifiableKey.get().startsWith("info:")
 						|| modifiableKey.get().startsWith("kdsf:")
 						|| modifiableKey.get().startsWith("@"))) {
-					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
+					//in the context definition, a pair might look like this: "ids" : "http://www.someURL.com"
+					//Here, we start with "ids", not "ids:". So we also need to check that the key is not contained in our prefixes
+					if(!prefixes.containsKey(modifiableKey.get() + ":")) {
+						modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
+					}
 				}
 
 				out.put(modifiableKey, v); // modify nothing if not @type or a map
