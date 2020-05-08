@@ -88,6 +88,9 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 						int value = Integer.parseInt(((Map) v).get("@value").toString());
 						out.put(modifiableKey, value);
 					}
+					else { //Do the same as below
+						out.put(modifiableKey, unifyTypeURIPrefix((Map) v));
+					}
 				
 				} else {
 
