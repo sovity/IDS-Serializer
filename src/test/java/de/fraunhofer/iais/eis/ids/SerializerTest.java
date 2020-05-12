@@ -480,8 +480,8 @@ public class SerializerTest {
 			Resource fromJSONLD = localSerializer.deserialize(jsonLD, Resource.class);
 
 			Resource resource = new ResourceBuilder()
-					._description_(Util.asList(new PlainLiteral("a description " + (i+1), "en")))
-					._keyword_(Util.asList(new PlainLiteral("keyword" + (i+1))))
+					._description_(Util.asList(new TypedLiteral("a description " + (i+1), "en")))
+					._keyword_(Util.asList(new TypedLiteral("keyword" + (i+1))))
 					.build();
 			serializer.serialize(resource);
 
@@ -490,6 +490,18 @@ public class SerializerTest {
 
 			assertTrue(descriptionJSONLD.getValue().equalsIgnoreCase(description.getValue()));
 			if (i==2) assertTrue(descriptionJSONLD.getLanguage().equalsIgnoreCase(description.getLanguage()));
+		}
+	}
+
+	@Test
+	public void getLabelAndCommentsTest() throws IOException {
+		SecurityProfile profile = SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE;
+		Assert.assertFalse(profile.getComment().isEmpty());
+		Assert.assertFalse(profile.getLabel().isEmpty());
+		String rdfProfile = serializer.serialize(profile);
+		if(rdfProfile.contains("label\"") || rdfProfile.contains("comment\""))
+		{
+			Assert.fail();
 		}
 	}
 
