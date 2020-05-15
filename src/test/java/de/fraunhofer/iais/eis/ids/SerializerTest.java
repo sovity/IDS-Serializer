@@ -37,6 +37,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 public class SerializerTest { 
 
@@ -45,6 +46,7 @@ public class SerializerTest {
 	private static RejectionMessage enumInstance;
 	private static Connector securityProfileInstance;
 	private static Serializer serializer;
+	private static XMLGregorianCalendar now;
 
 	@BeforeClass
 	public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, URISyntaxException, MalformedURLException {
@@ -53,7 +55,7 @@ public class SerializerTest {
 		// object with only basic types
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
-		XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+		now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 
 		basicInstance = new ConnectorAvailableMessageBuilder()
 				._issued_(now)
@@ -89,6 +91,7 @@ public class SerializerTest {
 				._catalog_(catalog)
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
 				.build();
+		
 	}
 
 	@Test
@@ -595,6 +598,37 @@ public class SerializerTest {
 		rdfParser.parse(new StringReader(jsonld), "http://example.org/rdf#");
 
 	}
+	
+	/**
+	 * This test is based on a ticket and bugfix received on 15.05.2020
+	 * @see Erik van den Akker's email (Infomodel Serializer: NullpointerException)
+	 * @author sbader
+	 * @throws IOException 
+	 * @throws URISyntaxException 
+	 * @throws de.fraunhofer.iais.eis.util.ConstraintViolationException 
+	 */
+	@Test 
+	public void testArraysWithUris() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException, URISyntaxException {
+		Serializer serializer = new Serializer();
+		
+	    DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
+	            ._tokenFormat_(TokenFormat.JWT)
+	            ._tokenValue_("sampleToken")
+	            .build();
+
+	    ResponseMessage message = new ResponseMessageBuilder()
+	            ._securityToken_(token)
+	            ._correlationMessage_(URI.create("http://example.com"))
+	            ._issued_(now)
+	            ._issuerConnector_(URI.create("http://example.com"))
+	            ._modelVersion_("3.1.0")
+	            ._senderAgent_(URI.create("http://example.com"))
+	            ._recipientAgent_(new ArrayList<>(Util.asList(new URI("http://example.com"))))
+	            ._recipientConnector_(new ArrayList<>(Util.asList(new URI("http://example.com"))))
+	            .build();
+
+	    String s = serializer.serialize(message);
+	}
 
 
 	/**
@@ -663,9 +697,6 @@ public class SerializerTest {
 				"  }" +
 				"}";
 
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(new Date());
-		XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 		ConnectorAvailableMessage basicInstance = new ConnectorAvailableMessageBuilder()
 				._issued_(now)
 				._modelVersion_("2.0.0")
