@@ -417,6 +417,7 @@ public class SerializerTest {
 				.build();
 
 		String s = serializer.serialize(message);
+		ResponseMessage msg = serializer.deserialize(s, ResponseMessage.class);
 	}
 
 
