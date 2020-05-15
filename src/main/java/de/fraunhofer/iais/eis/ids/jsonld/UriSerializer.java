@@ -29,9 +29,7 @@ public class UriSerializer extends StdSerializer<URI> {
 		String serializedUri = value.toString();
 		//		String idPattern = "{\"@id\": \"" + serializedUri + "\"}";
 		JsonStreamContext context = gen.getOutputContext();
-		if (context.inArray()) {
-			gen.writeString(serializedUri);
-		} else if (context.getCurrentName().contains("@id")) {
+		if (context.getCurrentName() != null && context.getCurrentName().contains("@id")) {
 			gen.writeString(serializedUri);
 		} else {
 			gen.writeStartObject();

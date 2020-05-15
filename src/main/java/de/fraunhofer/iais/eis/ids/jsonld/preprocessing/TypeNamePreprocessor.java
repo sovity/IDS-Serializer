@@ -2,12 +2,14 @@ package de.fraunhofer.iais.eis.ids.jsonld.preprocessing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TypeNamePreprocessor extends BasePreprocessor {
@@ -141,8 +143,16 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 		while (iter.hasNext()) {
 			Object v = iter.next();
 			if(v instanceof Map) {
+				
+				Set keys = ((Map) v).keySet();
+				
+				if (keys.contains("@id")) {
+					out.add(((Map) v).get("@id")); // write only the value, not the '"@id": value' pair.
+					((Map) v).remove("@id");
+				}
 
-				out.add( unifyTypeURIPrefix((Map) v));
+				if (!((Map) v).isEmpty())
+					out.add( unifyTypeURIPrefix((Map) v));
 
 
 			} else if (v instanceof String) {
