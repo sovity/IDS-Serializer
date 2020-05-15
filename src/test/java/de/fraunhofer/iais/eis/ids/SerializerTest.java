@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -37,7 +36,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.List;
 
 public class SerializerTest { 
 
@@ -602,14 +600,13 @@ public class SerializerTest {
 	
 	/**
 	 * This test is based on a ticket and bugfix received on 15.05.2020
-	 * @see Erik van den Akker's email (Infomodel Serializer: NullpointerException)
+	 * see Erik van den Akker's email (Infomodel Serializer: NullpointerException)
 	 * @author sbader
-	 * @throws IOException 
-	 * @throws URISyntaxException 
-	 * @throws de.fraunhofer.iais.eis.util.ConstraintViolationException 
+	 * @throws IOException if serialization fails
+	 * @throws ConstraintViolationException in case of mandatory fields missing (should not happen here, as all fields are hard coded)
 	 */
 	@Test 
-	public void testArraysWithUris() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException, URISyntaxException {
+	public void testArraysWithUris() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException {
 		Serializer serializer = new Serializer();
 		
 	    DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
@@ -624,26 +621,20 @@ public class SerializerTest {
 	            ._issuerConnector_(URI.create("http://example.com"))
 	            ._modelVersion_("3.1.0")
 	            ._senderAgent_(URI.create("http://example.com"))
-	            ._recipientAgent_(new ArrayList<>(Util.asList(new URI("http://example.com"))))
-	            ._recipientConnector_(new ArrayList<>(Util.asList(new URI("http://example.com"))))
+	            ._recipientAgent_(new ArrayList<>(Util.asList(URI.create("http://example.com"))))
+	            ._recipientConnector_(new ArrayList<>(Util.asList(URI.create("http://example.com"))))
 	            .build();
 
-	    String s = serializer.serialize(message);
+	    serializer.serialize(message);
 	}
 
 
 	/**
 	 * This test checks whether different date formulations are treated accordingly
 	 *
-	 * @throws RDFParseException
-	 * @throws UnsupportedRDFormatException
-	 * @throws IOException
-	 * @throws DatatypeConfigurationException
-	 * @throws ConstraintViolationException
-	 * @throws URISyntaxException
 	 */
 	@Test
-	public void testDateTimeStamp() throws RDFParseException, UnsupportedRDFormatException, IOException, DatatypeConfigurationException, ConstraintViolationException, URISyntaxException {
+	public void testDateTimeStamp() throws RDFParseException, UnsupportedRDFormatException, IOException, ConstraintViolationException, URISyntaxException {
 		String jsonld1 = "{\r\n" + 
 				"  \"@context\" : {\r\n" + 
 				"    \"ids\" : \"https://w3id.org/idsa/core/\"\r\n" + 
