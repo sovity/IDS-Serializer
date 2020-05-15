@@ -23,7 +23,7 @@
 			<groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
 			<artifactId>java</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
+			<version>3.1.0</version>
 		</dependency>
 
 		<dependency>
