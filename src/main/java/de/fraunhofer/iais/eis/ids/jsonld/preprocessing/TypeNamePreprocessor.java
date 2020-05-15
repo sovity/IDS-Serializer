@@ -109,7 +109,6 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
 				}
 				
-				//TODO
 				Iterator iter = new ArrayList((ArrayList) v).iterator(); //making a copy of the old array so the iterator does not get confused by the element deletions
 				while (iter.hasNext()) {
 					Object child = iter.next();
@@ -153,13 +152,7 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 		while (iter.hasNext()) {
 			Object v = iter.next();
 			if(v instanceof Map) {
-				
-//				Set keys = ((Map) v).keySet();
-//				
-//				if (keys.contains("@id")) {
-//					out.add(((Map) v).get("@id")); // write only the value, not the '"@id": value' pair.
-//					((Map) v).remove("@id");
-//				}
+
 
 				if (!((Map) v).isEmpty())
 					out.add( unifyTypeURIPrefix((Map) v));
