@@ -20,6 +20,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -389,6 +390,31 @@ public class SerializerTest {
 
 	}
 
+	@Test
+	public void serializingListOfUrisTest() throws IOException, DatatypeConfigurationException {
+
+		DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
+				._tokenFormat_(TokenFormat.JWT)
+				._tokenValue_("sampleToken")
+				.build();
+
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(new Date());
+		XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+
+		ResponseMessage message = new ResponseMessageBuilder()
+				._securityToken_(token)
+				._correlationMessage_(URI.create("example.com"))
+				._issued_(now)
+				._issuerConnector_(URI.create("example.com"))
+				._modelVersion_("3.1.0")
+				._senderAgent_(URI.create("example.com"))
+				._recipientConnector_(Util.asList(URI.create("example.com"), URI.create("anotherExample.com")))
+				//._recipientAgent_(Util.asList(URI.create("example.com")))
+				.build();
+
+		String s = serializer.serialize(message);
+	}
 
 
 	@Test
