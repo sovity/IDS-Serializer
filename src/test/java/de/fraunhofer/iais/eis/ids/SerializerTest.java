@@ -44,6 +44,7 @@ public class SerializerTest {
 	private static RejectionMessage enumInstance;
 	private static Connector securityProfileInstance;
 	private static Serializer serializer;
+	private static XMLGregorianCalendar now;
 
 	@BeforeClass
 	public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, URISyntaxException, MalformedURLException {
@@ -52,7 +53,7 @@ public class SerializerTest {
 		// object with only basic types
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
-		XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+		now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 
 		basicInstance = new ConnectorAvailableMessageBuilder()
 				._issued_(now)
@@ -88,6 +89,7 @@ public class SerializerTest {
 				._catalog_(catalog)
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
 				.build();
+		
 	}
 
 	@Test
@@ -389,6 +391,32 @@ public class SerializerTest {
 
 	}
 
+	@Test
+	public void serializingListOfUrisTest() throws IOException, DatatypeConfigurationException {
+
+		DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
+				._tokenFormat_(TokenFormat.JWT)
+				._tokenValue_("sampleToken")
+				.build();
+
+		GregorianCalendar c = new GregorianCalendar();
+		c.setTime(new Date());
+		XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+
+		ResponseMessage message = new ResponseMessageBuilder()
+				._securityToken_(token)
+				._correlationMessage_(URI.create("example.com"))
+				._issued_(now)
+				._issuerConnector_(URI.create("example.com"))
+				._modelVersion_("3.1.0")
+				._senderAgent_(URI.create("example.com"))
+				._recipientConnector_(Util.asList(URI.create("example.com"), URI.create("anotherExample.com")))
+				//._recipientAgent_(Util.asList(URI.create("example.com")))
+				.build();
+
+		String s = serializer.serialize(message);
+		ResponseMessage msg = serializer.deserialize(s, ResponseMessage.class);
+	}
 
 
 	@Test
@@ -480,8 +508,8 @@ public class SerializerTest {
 			Resource fromJSONLD = localSerializer.deserialize(jsonLD, Resource.class);
 
 			Resource resource = new ResourceBuilder()
-					._description_(Util.asList(new PlainLiteral("a description " + (i+1), "en")))
-					._keyword_(Util.asList(new PlainLiteral("keyword" + (i+1))))
+					._description_(Util.asList(new TypedLiteral("a description " + (i+1), "en")))
+					._keyword_(Util.asList(new TypedLiteral("keyword" + (i+1))))
 					.build();
 			serializer.serialize(resource);
 
@@ -490,6 +518,18 @@ public class SerializerTest {
 
 			assertTrue(descriptionJSONLD.getValue().equalsIgnoreCase(description.getValue()));
 			if (i==2) assertTrue(descriptionJSONLD.getLanguage().equalsIgnoreCase(description.getLanguage()));
+		}
+	}
+
+	@Test
+	public void getLabelAndCommentsTest() throws IOException {
+		SecurityProfile profile = SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE;
+		Assert.assertFalse(profile.getComment().isEmpty());
+		Assert.assertFalse(profile.getLabel().isEmpty());
+		String rdfProfile = serializer.serialize(profile);
+		if(rdfProfile.contains("label\"") || rdfProfile.contains("comment\""))
+		{
+			Assert.fail();
 		}
 	}
 
@@ -557,20 +597,44 @@ public class SerializerTest {
 		rdfParser.parse(new StringReader(jsonld), "http://example.org/rdf#");
 
 	}
+	
+	/**
+	 * This test is based on a ticket and bugfix received on 15.05.2020
+	 * see Erik van den Akker's email (Infomodel Serializer: NullpointerException)
+	 * @author sbader
+	 * @throws IOException if serialization fails
+	 * @throws ConstraintViolationException in case of mandatory fields missing (should not happen here, as all fields are hard coded)
+	 */
+	@Test 
+	public void testArraysWithUris() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException {
+		Serializer serializer = new Serializer();
+		
+	    DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
+	            ._tokenFormat_(TokenFormat.JWT)
+	            ._tokenValue_("sampleToken")
+	            .build();
+
+	    ResponseMessage message = new ResponseMessageBuilder()
+	            ._securityToken_(token)
+	            ._correlationMessage_(URI.create("http://example.com"))
+	            ._issued_(now)
+	            ._issuerConnector_(URI.create("http://example.com"))
+	            ._modelVersion_("3.1.0")
+	            ._senderAgent_(URI.create("http://example.com"))
+	            ._recipientAgent_(new ArrayList<>(Util.asList(URI.create("http://example.com"))))
+	            ._recipientConnector_(new ArrayList<>(Util.asList(URI.create("http://example.com"))))
+	            .build();
+
+	    serializer.serialize(message);
+	}
 
 
 	/**
 	 * This test checks whether different date formulations are treated accordingly
 	 *
-	 * @throws RDFParseException
-	 * @throws UnsupportedRDFormatException
-	 * @throws IOException
-	 * @throws DatatypeConfigurationException
-	 * @throws ConstraintViolationException
-	 * @throws URISyntaxException
 	 */
 	@Test
-	public void testDateTimeStamp() throws RDFParseException, UnsupportedRDFormatException, IOException, DatatypeConfigurationException, ConstraintViolationException, URISyntaxException {
+	public void testDateTimeStamp() throws RDFParseException, UnsupportedRDFormatException, IOException, ConstraintViolationException, URISyntaxException {
 		String jsonld1 = "{\r\n" + 
 				"  \"@context\" : {\r\n" + 
 				"    \"ids\" : \"https://w3id.org/idsa/core/\"\r\n" + 
@@ -625,9 +689,6 @@ public class SerializerTest {
 				"  }" +
 				"}";
 
-		GregorianCalendar c = new GregorianCalendar();
-		c.setTime(new Date());
-		XMLGregorianCalendar now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
 		ConnectorAvailableMessage basicInstance = new ConnectorAvailableMessageBuilder()
 				._issued_(now)
 				._modelVersion_("2.0.0")

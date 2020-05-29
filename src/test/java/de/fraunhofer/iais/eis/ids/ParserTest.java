@@ -4,17 +4,12 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 
+import de.fraunhofer.iais.eis.*;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fraunhofer.iais.eis.BaseConnector;
-import de.fraunhofer.iais.eis.Catalog;
-import de.fraunhofer.iais.eis.ConnectorAvailableMessage;
-import de.fraunhofer.iais.eis.Message;
-import de.fraunhofer.iais.eis.MessageProcessedNotificationMessage;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.iais.eis.ids.SerializerUtil;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 
 public class ParserTest {
@@ -33,7 +28,7 @@ public class ParserTest {
 //		logger.info(baseConnector);
 		
 		Serializer serializer = new Serializer();
-		serializer.addPreprocessor(new TypeNamePreprocessor());
+		//serializer.addPreprocessor(new TypeNamePreprocessor());
 		BaseConnector base = serializer.deserialize(baseConnector, BaseConnector.class);
 		String serialisedJsonLd = serializer.serialize(base);
 //		logger.info(serialisedJsonLd);
@@ -48,14 +43,25 @@ public class ParserTest {
 	 */
 	@Test
 	public void testCatalog() throws IOException {
-		String catalogAsString = SerializerUtil.readResourceToString("Catalog.jsonld");
+		String catalogAsString = SerializerUtil.readResourceToString("Catalog1.jsonld");
 		Serializer serializer = new Serializer();
-		serializer.addPreprocessor(new TypeNamePreprocessor());
+		//serializer.addPreprocessor(new TypeNamePreprocessor());
 		Catalog catalog = serializer.deserialize(catalogAsString, Catalog.class);
 		String serialisedJsonLd = serializer.serialize(catalog);
 //		logger.info(serialisedJsonLd);
 		assertFalse(serialisedJsonLd.isEmpty());
 
+	}
+
+	@Test
+	public void testConnectorWithComplexCatalog() throws IOException {
+		String catalogAsString = SerializerUtil.readResourceToString("Catalog2.jsonld");
+		Serializer serializer = new Serializer();
+		//serializer.addPreprocessor(new TypeNamePreprocessor());
+		Connector connector = serializer.deserialize(catalogAsString, Connector.class);
+		String serialisedJsonLd = serializer.serialize(connector);
+//		logger.info(serialisedJsonLd);
+		assertFalse(serialisedJsonLd.isEmpty());
 	}
 	
 	
@@ -73,7 +79,7 @@ public class ParserTest {
 		String messageString  = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
 		
 		Serializer serializer = new Serializer();
-		serializer.addPreprocessor(new TypeNamePreprocessor());
+		//serializer.addPreprocessor(new TypeNamePreprocessor());
 		
 		MessageProcessedNotificationMessage message = (MessageProcessedNotificationMessage) serializer.deserialize(messageString, Message.class);
 		assertNotNull(message.getCorrelationMessage());

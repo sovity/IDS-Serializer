@@ -1,5 +1,5 @@
 {
-    "@context" : "https://w3id.org/idsa/contexts/3.0.0/context.jsonld",
+    "@context" : "https://w3id.org/idsa/contexts/3.0.0/context.json",
 
     "@type" : "ids:ContractOffer",
     "@id" : "https://mdm-connector.ids.isst.fraunhofer.de/examplecontract/bab-bayern-sample/",
