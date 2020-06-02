@@ -5,6 +5,8 @@ import de.fraunhofer.iais.eis.ids.jsonld.custom.XMLGregorianCalendarDeserializer
 import de.fraunhofer.iais.eis.ids.jsonld.custom.XMLGregorianCalendarSerializer;
 
 import java.net.URI;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 

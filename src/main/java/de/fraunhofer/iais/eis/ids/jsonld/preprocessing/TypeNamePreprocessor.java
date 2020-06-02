@@ -47,7 +47,8 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 						|| modifiableValue.get().startsWith("info:")
 						|| modifiableValue.get().startsWith("kdsf:")
 						|| modifiableValue.get().startsWith("xsd:")
-						|| modifiableValue.get().startsWith("http:"))) {
+						|| modifiableValue.get().startsWith("http://")
+						|| modifiableValue.get().startsWith("https://"))) {
 					modifiableValue.set("ids:".concat(modifiableValue.get())); // default to ids prefix for backwards compatibility
 				}
 				out.put(k, modifiableValue.get());
@@ -60,6 +61,8 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				if(! (modifiableKey.get().startsWith("ids:")
 						|| modifiableKey.get().startsWith("info:")
 						|| modifiableKey.get().startsWith("kdsf:")
+						|| modifiableKey.get().startsWith("http://")
+						|| modifiableKey.get().startsWith("https://")
 						|| modifiableKey.get().startsWith("@context"))) {
 					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
 				}
@@ -105,7 +108,9 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				prefixes.forEach((p, u) -> modifiableKey.set(modifiableKey.get().replace(u, p))); // replace full URI with prefix
 				if(! (modifiableKey.get().startsWith("ids:")
 						|| modifiableKey.get().startsWith("info:")
-						|| modifiableKey.get().startsWith("kdsf:"))) {
+						|| modifiableKey.get().startsWith("kdsf:")
+						|| modifiableKey.get().startsWith("http://")
+						|| modifiableKey.get().startsWith("https://"))) {
 					modifiableKey.set("ids:".concat(modifiableKey.get())); // default to ids prefix for backwards compatibility
 				}
 				
@@ -129,6 +134,8 @@ public class TypeNamePreprocessor extends BasePreprocessor {
 				if(! (modifiableKey.get().startsWith("ids:")
 						|| modifiableKey.get().startsWith("info:")
 						|| modifiableKey.get().startsWith("kdsf:")
+						|| modifiableKey.get().startsWith("http://")
+						|| modifiableKey.get().startsWith("https://")
 						|| modifiableKey.get().startsWith("@"))) {
 					//in the context definition, a pair might look like this: "ids" : "http://www.someURL.com"
 					//Here, we start with "ids", not "ids:". So we also need to check that the key is not contained in our prefixes
