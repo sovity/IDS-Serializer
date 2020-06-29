@@ -52,24 +52,7 @@ public class ParserTest {
 		assertFalse(serialisedJsonLd.isEmpty());
 
 	}
-
-
-	/**
-	 * Main purpose: test for JSON Arrays
-	 *
-	 * @throws IOException
-	 */
-	@Test
-	public void testRiotanaSelfDescr() throws IOException {
-		String catalogAsString = SerializerUtil.readResourceToString("riotana-desc.json");
-		Serializer serializer = new Serializer();
-		//serializer.addPreprocessor(new TypeNamePreprocessor());
-		BaseConnector conn = serializer.deserialize(catalogAsString, BaseConnector.class);
-		String serialisedJsonLd = serializer.serialize(conn);
-//		logger.info(serialisedJsonLd);
-		assertFalse(serialisedJsonLd.isEmpty());
-
-	}
+	
 
 	@Test
 	public void testConnectorWithComplexCatalog() throws IOException {
