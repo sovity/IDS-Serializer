@@ -30,6 +30,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -57,13 +58,13 @@ public class SerializerTest {
 
 		basicInstance = new ConnectorAvailableMessageBuilder()
 				._issued_(now)
-				._modelVersion_("2.0.0")
+				._modelVersion_("3.1.0")
 				._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
 				.build();
 
 		ArrayList<Resource> resources = new ArrayList<>();
-		resources.add(new ResourceBuilder()._version_("3.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
-		resources.add(new ResourceBuilder()._version_("3.0.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
+		resources.add(new ResourceBuilder()._version_("3.1.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
+		resources.add(new ResourceBuilder()._version_("3.1.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
 
 		// connector -> object with nested types
 		Catalog catalog = new CatalogBuilder()
@@ -72,7 +73,7 @@ public class SerializerTest {
 
 		nestedInstance = new BaseConnectorBuilder()
 				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-				._version_("3.0.0")
+				._version_("3.1.0")
 				._catalog_(catalog)
 				.build();
 
@@ -93,7 +94,7 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void jsonldSerialize_Basic() throws IOException {
+	public void jsonldSerialize_Basic() throws IOException, NoSuchFieldException, IllegalAccessException {
 		String connectorAvailableMessage = serializer.serialize(basicInstance);
 		Assert.assertNotNull(connectorAvailableMessage);
 		Model model = null;
@@ -105,13 +106,20 @@ public class SerializerTest {
 		Assert.assertNotNull(model);
 
 		ConnectorAvailableMessage deserializedConnectorAvailableMessage = serializer.deserialize(connectorAvailableMessage, ConnectorAvailableMessageImpl.class);
+
 		Assert.assertEquals(basicInstance.getId(), deserializedConnectorAvailableMessage.getId());
 		Assert.assertNotNull(deserializedConnectorAvailableMessage);
+		Assert.assertTrue(connectorAvailableMessage.equalsIgnoreCase(serializer.serialize(deserializedConnectorAvailableMessage)));
+
+		Field properties = ConnectorAvailableMessageImpl.class.getDeclaredField("properties");
+		properties.setAccessible(true);
+		properties.set(deserializedConnectorAvailableMessage, null); // Serialiser creates an empty HashMap, which kills the following equality check
+
 		Assert.assertTrue(EqualsBuilder.reflectionEquals(basicInstance, deserializedConnectorAvailableMessage, true, Object.class, true));
 	}
 
 	@Test
-	public void jsonldSerialize_Nested() throws IOException {
+	public void jsonldSerialize_Nested() throws IOException, NoSuchFieldException, IllegalAccessException {
 		String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
 		Assert.assertNotNull(connector);
 
@@ -125,11 +133,16 @@ public class SerializerTest {
 
 		Connector deserializedConnector = serializer.deserialize(connector, BaseConnectorImpl.class);
 		Assert.assertNotNull(deserializedConnector);
+
+		Field properties = BaseConnectorImpl.class.getDeclaredField("properties");
+		properties.setAccessible(true);
+		properties.set(deserializedConnector, null); // Serialiser creates an empty HashMap, which kills the following equality check
+
 		Assert.assertTrue(EqualsBuilder.reflectionEquals(nestedInstance, deserializedConnector, true, Object.class, true));
 	}
 
 	@Test
-	public void jsonldSerialize_Enum() throws IOException {
+	public void jsonldSerialize_Enum() throws IOException, NoSuchFieldException, IllegalAccessException {
 		String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.JSONLD);
 		Assert.assertNotNull(rejectionMessage);
 
@@ -143,6 +156,11 @@ public class SerializerTest {
 
 		RejectionMessage deserializedRejectionMessage = serializer.deserialize(rejectionMessage, RejectionMessage.class);
 		Assert.assertNotNull(deserializedRejectionMessage);
+
+		Field properties = RejectionMessageImpl.class.getDeclaredField("properties");
+		properties.setAccessible(true);
+		properties.set(deserializedRejectionMessage, null); // Serialiser creates an empty HashMap, which kills the following equality check
+
 		Assert.assertTrue(EqualsBuilder.reflectionEquals(enumInstance, deserializedRejectionMessage, true, Object.class, true));
 	}
 
@@ -262,13 +280,17 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void deserializeThroughInheritanceChain() throws IOException {
+	public void deserializeThroughInheritanceChain() throws IOException, NoSuchFieldException, IllegalAccessException {
 
 		DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
 				._contentVersion_("test")
 				.build();
 		String serialized = serializer.serialize(sdr);
 		Message m = serializer.deserialize(serialized, Message.class);
+		Field properties = DescriptionRequestMessageImpl.class.getDeclaredField("properties");
+		properties.setAccessible(true);
+		properties.set(m, null); // Serialiser creates an empty HashMap, which kills the following equality check
+
 		Assert.assertTrue(EqualsBuilder.reflectionEquals(sdr, m, true, Object.class, true));
 	}
 
@@ -301,12 +323,20 @@ public class SerializerTest {
 			Object deserializedWithAbsoluteURI = serializer.deserialize(withAbsoluteURI, TextResource.class);
 			Object deserializedWithoutExplicitPrefix = serializer.deserialize(withoutExplicitPrefix, TextResource.class);
 
+			Field properties = TextResourceImpl.class.getDeclaredField("properties");
+			properties.setAccessible(true);
+			properties.set(defaultDeserialization, null); // Serialiser creates an empty HashMap, which kills the following equality check
+			properties.set(deserializedWithIdsPrefix, null); // Serialiser creates an empty HashMap, which kills the following equality check
+			properties.set(deserializedWithAbsoluteURI, null); // Serialiser creates an empty HashMap, which kills the following equality check
+			properties.set(deserializedWithoutExplicitPrefix, null); // Serialiser creates an empty HashMap, which kills the following equality check
+
+
 			serializer.removePreprocessor(preprocessor);
 
 			Assert.assertTrue(EqualsBuilder.reflectionEquals(defaultDeserialization, deserializedWithIdsPrefix, true, Object.class, true));
 			Assert.assertTrue(EqualsBuilder.reflectionEquals(defaultDeserialization, deserializedWithAbsoluteURI, true, Object.class, true));
 			Assert.assertTrue(EqualsBuilder.reflectionEquals(defaultDeserialization, deserializedWithoutExplicitPrefix, true, Object.class, true));
-		} catch (IOException e) {
+		} catch (IOException | NoSuchFieldException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
 	}
