@@ -52,7 +52,7 @@ public class ParserTest {
 		assertFalse(serialisedJsonLd.isEmpty());
 
 	}
-	
+
 
 	@Test
 	public void testConnectorWithComplexCatalog() throws IOException {
@@ -88,6 +88,22 @@ public class ParserTest {
 		//logger.info(serializer.serialize(message));
 		serializer.serialize(message);
 	}
+
+	@Test
+	public void testArtifactRequestMessage() throws IOException {
+
+		String messageString  = SerializerUtil.readResourceToString("ArtifactRequestMessage.jsonld");
+
+		Serializer serializer = new Serializer();
+		//serializer.addPreprocessor(new TypeNamePreprocessor());
+
+		ArtifactRequestMessage message = (ArtifactRequestMessage) serializer.deserialize(messageString, Message.class);
+		assertNotNull(message.getRequestedArtifact());
+
+		//logger.info(serializer.serialize(message));
+		serializer.serialize(message);
+	}
+
 	
 	
 	@Test
