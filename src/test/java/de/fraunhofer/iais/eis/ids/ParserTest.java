@@ -89,6 +89,26 @@ public class ParserTest {
 		serializer.serialize(message);
 	}
 	
+	/**
+	 * Test deserialize of ContracRejectionMessage
+	 * Created an example of ContracRejectionMessage in String, deserialize it and check two properties of it.
+	 * @throws IOException
+	 */
+	@Test
+	public void testContractRejectionMessage() throws IOException {
+		
+		String messageString  = SerializerUtil.readResourceToString("ContractRejectionMessage.jsonld");
+		
+		Serializer serializer = new Serializer();
+		
+		ContractRejectionMessage message = (ContractRejectionMessage) serializer.deserialize(messageString, Message.class);
+		
+		assertNotNull(message.getCorrelationMessage());
+		assertNotNull(message.getSecurityToken());
+
+		serializer.serialize(message);
+	}
+	
 	
 	@Test
 	public void testHeavyBaseConnector() throws IOException {
