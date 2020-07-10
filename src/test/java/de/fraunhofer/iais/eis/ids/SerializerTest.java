@@ -375,7 +375,7 @@ public class SerializerTest {
 	public void testJwtAttributesInContext() throws IOException {
 		DatPayload datPayload = new DatPayloadBuilder()
 				._exp_(new BigInteger(String.valueOf(12)))
-				._aud_(Audience.IDS_CONNECTORS_ALL)
+				._aud_(Audience.IDS_CONNECTOR_ATTRIBUTES_ALL)
 				.build();
 
 		String serialized = serializer.serialize(datPayload);
