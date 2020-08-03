@@ -6,21 +6,18 @@ import java.io.IOException;
 
 import de.fraunhofer.iais.eis.*;
 import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 
 public class ParserTest {
 
-	Logger logger = LoggerFactory.getLogger(ParserTest.class);
+	//Logger logger = LoggerFactory.getLogger(ParserTest.class);
 
 
 	/**
 	 * Main purpose: test for ids and idsc in the context
-	 * 
-	 * @throws IOException
+	 *
+	 * @throws IOException if source file cannot be read or if parsing fails
 	 */
 	@Test
 	public void testBaseConnector() throws IOException {
@@ -38,8 +35,8 @@ public class ParserTest {
 
 	/**
 	 * Main purpose: test for JSON Arrays
-	 * 
-	 * @throws IOException
+	 *
+	 * @throws IOException if source file cannot be read or if parsing fails
 	 */
 	@Test
 	public void testCatalog() throws IOException {
@@ -71,7 +68,7 @@ public class ParserTest {
 	 * Main purpose: test for RDF Objects at JSON value position (reference by URI, not by xsd:anyURI or xsd:string Literals):
 	 * for instance "ids:correlationMessage" : {"@id": "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"} vs. 
 	 * "ids:correlationMessage" : "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"
-	 * @throws IOException 
+	 * @throws IOException if source file cannot be read or if parsing fails
 	 * 
 	 */
 	@Test
@@ -92,7 +89,7 @@ public class ParserTest {
 	/**
 	 * Test deserialize of ContracRejectionMessage
 	 * Created an example of ContracRejectionMessage in String, deserialize it and check two properties of it.
-	 * @throws IOException
+	 * @throws IOException if source file cannot be read or if parsing fails
 	 */
 	@Test
 	public void testContractRejectionMessage() throws IOException {
@@ -105,6 +102,7 @@ public class ParserTest {
 		
 		assertNotNull(message.getCorrelationMessage());
 		assertNotNull(message.getSecurityToken());
+		assertNotNull(message.getContractRejectionReason());
 
 		serializer.serialize(message);
 	}
@@ -116,9 +114,9 @@ public class ParserTest {
 		String connectorString = SerializerUtil.readResourceToString("Connector3.jsonld");
 		
 		Serializer serializer = new Serializer();
-		
-		BaseConnector connector = serializer.deserialize(connectorString, BaseConnector.class);
-		
+
+		serializer.deserialize(connectorString, BaseConnector.class);
+
 	}
 
 }
