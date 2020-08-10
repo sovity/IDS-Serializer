@@ -68,7 +68,7 @@ public class SerializerTest {
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
-				._offeredResources_(resources)
+				._offeredResource_(resources)
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
@@ -360,12 +360,13 @@ public class SerializerTest {
 	 */
 	@Test
 	public void listWithContext() throws IOException {
-		ContractOffer contractOffer1 = new ContractOfferBuilder()._refersTo_(PolicyTemplate.ACCESSAGREEMENTTOSECURECONSUMERTEMPLATE).build();
-		ContractOffer contractOffer2 = new ContractOfferBuilder()._refersTo_(PolicyTemplate.ACCESSAGREEMENTTOSECURECONSUMERTEMPLATE).build();
+		ContractOffer contractOffer1 = new ContractOfferBuilder().build();
+		ContractOffer contractOffer2 = new ContractOfferBuilder().build();
+		//TODO: This test is rather minimalistic now. Used to be more complex
 		String serializedList = serializer.serialize(Util.asList(contractOffer1, contractOffer2));
 
 		Model model = Rio.parse(new StringReader(serializedList), null, RDFFormat.JSONLD);
-		Assert.assertEquals(4, model.size());
+		Assert.assertEquals(2, model.size());
 
 		String ttl = serializer.convertJsonLdToOtherRdfFormat(serializedList, RDFFormat.TURTLE);
 		Assert.assertFalse(ttl.isEmpty());
@@ -554,7 +555,7 @@ public class SerializerTest {
 
 	@Test
 	public void getLabelAndCommentsTest() throws IOException {
-		SecurityProfile profile = SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE;
+		SecurityProfile profile = SecurityProfile.BASE_SECURITY_PROFILE;
 		Assert.assertFalse(profile.getComment().isEmpty());
 		Assert.assertFalse(profile.getLabel().isEmpty());
 		String rdfProfile = serializer.serialize(profile);
