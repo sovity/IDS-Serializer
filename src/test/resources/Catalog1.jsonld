@@ -2,7 +2,7 @@
 	"@context" : "https://w3id.org/idsa/contexts/3.0.0/context.jsonld", 
 	"@type" : "ids:ResourceCatalog",
 	"@id" : "https://iais.fraunhofer.de/eis/ids/someBroker/catalog", 
-	"offeredResources" : [ {
+	"offeredResource" : [ {
         "@id" : "https://w3id.org/idsa/autogen/resource/8bc5b952-1376-4356-93cd-7be0e669c587", 
         "@type" : "ids:Resource", 
         "contentType" : { 
