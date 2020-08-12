@@ -74,6 +74,20 @@
 		</dependency>
 
 
+		<!-- Apache Jena libs for parsing messages to a graph -->
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>3.16.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.topbraid</groupId>
+			<artifactId>shacl</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+
+
 		<!-- RDF4J RIO format libs -->
 
 		<!--<dependency> <groupId>org.eclipse.rdf4j</groupId> <artifactId>rdf4j-rio-api</artifactId> 

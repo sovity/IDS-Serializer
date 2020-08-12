@@ -5,12 +5,13 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import de.fraunhofer.iais.eis.*;
+import de.fraunhofer.iais.eis.ids.jsonld.MessageParser;
+import org.apache.jena.rdf.model.Model;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 
 public class ParserTest {
 
@@ -20,7 +21,6 @@ public class ParserTest {
 	/**
 	 * Main purpose: test for ids and idsc in the context
 	 * 
-	 * @throws IOException
 	 */
 	@Test
 	public void testBaseConnector() throws IOException {
@@ -39,7 +39,6 @@ public class ParserTest {
 	/**
 	 * Main purpose: test for JSON Arrays
 	 * 
-	 * @throws IOException
 	 */
 	@Test
 	public void testCatalog() throws IOException {
@@ -71,8 +70,7 @@ public class ParserTest {
 	 * Main purpose: test for RDF Objects at JSON value position (reference by URI, not by xsd:anyURI or xsd:string Literals):
 	 * for instance "ids:correlationMessage" : {"@id": "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"} vs. 
 	 * "ids:correlationMessage" : "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"
-	 * @throws IOException 
-	 * 
+	 *
 	 */
 	@Test
 	public void testMessage() throws IOException {
@@ -97,8 +95,18 @@ public class ParserTest {
 		
 		Serializer serializer = new Serializer();
 		
-		BaseConnector connector = serializer.deserialize(connectorString, BaseConnector.class);
+		serializer.deserialize(connectorString, BaseConnector.class);
 		
+	}
+
+	@Test
+	public void ontologyDownloadTest() throws IOException {
+		MessageParser.downloadOntology = true;
+		MessageParser.init();
+		String messageString  = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
+
+		Model model = MessageParser.readMessage(messageString);
+		logger.info("Model contains " + model.size() + " triples.");
 	}
 
 }
