@@ -1,5 +1,6 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFParser;
@@ -10,8 +11,14 @@ import org.topbraid.spin.util.JenaUtil;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MessageParser {
 
@@ -69,7 +76,21 @@ public class MessageParser {
      * @return The model of the message plus ontology
      * @throws IOException if the ontology could not be retrieved
      */
+    //TODO: Slow!
     public static Model readMessage(String message) throws IOException {
+
+        Model targetModel = JenaUtil.createMemoryModel();
+
+        //Read incoming message to the same model
+        RDFParser.create()
+                .source(new ByteArrayInputStream(message.getBytes()))
+                .lang(Lang.JSONLD)
+                .errorHandler(ErrorHandlerFactory.getDefaultErrorHandler())
+                .parse(targetModel.getGraph());
+        return targetModel;
+    }
+
+    public static Model readMessageAndOntology(String message) throws IOException {
 
         //Make sure ontology is initialized (does nothing if already initialized)
         init();
@@ -84,6 +105,70 @@ public class MessageParser {
                 .errorHandler(ErrorHandlerFactory.getDefaultErrorHandler())
                 .parse(combinedModel.getGraph());
         return combinedModel;
+    }
+
+    public <T> void getDeclaredFields(Class<T> bean)
+    {
+        Field[] fields = bean.getDeclaredFields();
+        if(bean.isInterface())
+        {
+            System.out.println("Note that interfaces have no fields.");
+        }
+        else
+        {
+            System.out.println("Num fields: " + fields.length);
+        }
+        for(Field field : fields)
+        {
+            System.out.println(field.getName());
+        }
+
+        Method[] methods = bean.getMethods();
+        for(Method method : methods) {
+            System.out.println(method.getReturnType().getName() + " " + method.getName());
+        }
+
+        List<String> methodNames = Arrays.stream(methods).filter(method -> {
+            String name = method.getName();
+            //Filter out irrelevant methods
+            return name.startsWith("get") && !name.equals("getProperties") && !name.equals("getComment") && !name.equals("getLabel");
+        }).map(method -> {
+            //Remove "get" part
+            String reducedName = method.getName().substring(3);
+
+            //Turn first character to lower case
+            char[] c = reducedName.toCharArray();
+            c[0] = Character.toLowerCase(c[0]);
+            return new String(c);
+        }).collect(Collectors.toList());
+
+        System.out.println("METHOD NAMES");
+        methodNames.forEach(System.out::println);
+
+
+        System.out.println("IMPLEMENTING CLASSES");
+        ArrayList<Class<?>> implementingClasses = getImplementingClasses(bean);
+        for(Class<?> impl : implementingClasses)
+        {
+            System.out.println(impl.getName());
+        }
+
+    }
+
+    public static ArrayList<Class<?>> getImplementingClasses(Class<?> someClass)
+    {
+        ArrayList<Class<?>> result = new ArrayList<>();
+        JsonSubTypes subTypeAnnotation = someClass.getAnnotation(JsonSubTypes.class);
+        if(subTypeAnnotation != null) {
+            JsonSubTypes.Type[] types = subTypeAnnotation.value();
+            for(JsonSubTypes.Type type : types)
+            {
+                result.addAll(getImplementingClasses(type.value()));
+            }
+        }
+        if(!someClass.isInterface())
+            result.add(someClass);
+        return result;
     }
 
 }
