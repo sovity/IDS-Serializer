@@ -148,10 +148,17 @@ public class ParserTest {
 		}
 	}
 
+	@Test
+	public void parseMessageTest() throws IOException {
+		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
+		MessageParser.downloadOntology = true;
+		Message message = MessageParser.getInstance().parseMessage(messageString, Message.class);
+	}
+
 
 	@Test
 	public void reflectionTest() {
-		new MessageParser().getDeclaredFields(InfrastructureComponent.class);
+		MessageParser.getInstance().getDeclaredFields(InfrastructureComponent.class);
 	}
 
 }
