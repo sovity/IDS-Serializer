@@ -1,11 +1,12 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.apache.jena.query.*;
+import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
@@ -201,113 +202,51 @@ public class MessageParser {
                             //Here, we need to work with the GenericParameterTypes instead to find out what kind of ArrayList we are dealing with
                             if(isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0]))
                             {
-                                ArrayList list = new ArrayList();
-                                //TODO convert to int/float/...
-                                list.addAll(Arrays.asList(currentSparqlBinding.split(" ")));
+                                ArrayList<Object> list = new ArrayList<>();
+                                for(String s : currentSparqlBinding.split("\\|"))
+                                {
+                                    Literal literal = ResourceFactory.createPlainLiteral(s);
+
+                                    //Is the type of the ArrayList some built in Java primitive?
+
+                                    String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
+                                    if(builtInMap.containsKey(typeName))
+                                    {
+                                        //Yes, it is. We MUST NOT call Class.forName(name)!
+                                        list.add(handlePrimitive(builtInMap.get(typeName), literal, null));
+                                    }
+                                    else
+                                    {
+                                        //Not a Java primitive, we may call Class.forName(name)
+                                        list.add(handlePrimitive(Class.forName(typeName), literal, s));
+                                    }
+                                }
                                 entry.getValue().invoke(returnObject, list);
                             }
                             else
                             {
                                 //TODO: foreach object in current binding, add result to some ArrayList, give it to: entry.getValue().invoke()
+
                             }
                         }
                         else {
                             //Our implementation of checking for primitives (i.e. also includes URLs, Strings, XMLGregorianCalendars, ...
                             if (isPrimitive(currentType)) {
 
-                                //Java way of checking for primitives, i.e. int, char, float, double, ...
-                                if(currentType.isPrimitive())
-                                {
-                                    //Is it REALLY a primitive, as of a Java primitive? (Above, we also considered things like String, URI, ... to be "primitive")
-                                    //If it is an actual primitive, there is no need to instantiate anything. Just give it to the function
-                                    if(currentType.getSimpleName().equals("int"))
-                                    {
-                                        entry.getValue().invoke(returnObject, Integer.parseInt(currentSparqlBinding));
-                                    }
-                                    else if(currentType.getSimpleName().equals("boolean"))
-                                    {
-                                        entry.getValue().invoke(returnObject, Boolean.parseBoolean(currentSparqlBinding));
-                                    }
-                                    //TODO: long, short, float, double, byte
-                                    entry.getValue().invoke(returnObject, currentSparqlBinding);
-                                    System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is a Java primitive");
-                                    continue;
+                                Literal literal = null;
+                                try {
+                                    literal = querySolution.getLiteral(sparqlParameterName);
                                 }
+                                catch (Exception ignored) {}
 
-                                System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is some other (rather) primitive value");
-
-                                //Check for the more complex literals
-
-                                //URI
-                                if(URI.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, new URI(currentSparqlBinding));
-                                    continue;
-                                }
-
-                                //String
-                                if(String.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, currentSparqlBinding);
-                                    continue;
-                                }
-
-                                //XMLGregorianCalendar
-                                if(XMLGregorianCalendar.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(querySolution.get(sparqlParameterName).asLiteral().getValue().toString()))));
-                                    continue;
-                                }
-
-                                //TypedLiteral
-                                if(TypedLiteral.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, new TypedLiteral(currentSparqlBinding));
-                                    continue;
-                                }
-
-                                if(PlainLiteral.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, new PlainLiteral(currentSparqlBinding));
-                                    continue;
-                                }
-
-                                //BigInteger
-                                if(BigInteger.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, new BigInteger(currentSparqlBinding));
-                                    continue;
-                                }
-
-                                //byte[]
-                                if(byte[].class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, currentSparqlBinding.getBytes());
-                                    continue;
-                                }
-
-                                //Duration
-                                if(Duration.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, DatatypeFactory.newInstance().newDuration(currentSparqlBinding));
-                                    continue;
-                                }
-
-                                //RdfResource
-                                if(RdfResource.class.isAssignableFrom(currentType))
-                                {
-                                    entry.getValue().invoke(returnObject, new RdfResource(currentSparqlBinding));
-                                    continue;
-                                }
+                                entry.getValue().invoke(returnObject, handlePrimitive(currentType, literal, currentSparqlBinding));
 
                             } else {
                                 System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is not primitive");
-
                                 continue; //TODO
                                 //TODO: handleObject();
                             }
                         }
-                        entry.getValue().invoke(returnObject, querySolution.get(sparqlParameterName));
                     }
 
                 }
@@ -316,10 +255,94 @@ public class MessageParser {
 
             return returnObject;
         }
-        catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException e)
+        catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException | ClassNotFoundException e)
         {
             throw new IOException("Failed to instantiate desired class", e);
         }
+    }
+
+    //TODO for performance: Don't pass the full querySolution here, but just one node...
+    private Object handlePrimitive(Class<?> currentType, Literal literal, String currentSparqlBinding) throws URISyntaxException, DatatypeConfigurationException, IOException {
+        //Java way of checking for primitives, i.e. int, char, float, double, ...
+        if(currentType.isPrimitive())
+        {
+            System.out.println(currentType.getName() + " is a Java primitive");
+            if(literal == null)
+            {
+                throw new NullPointerException("Trying to handle Java primitive, but got no literal value");
+            }
+            //If it is an actual primitive, there is no need to instantiate anything. Just give it to the function
+            switch (currentType.getSimpleName()) {
+                case "int":
+                    return literal.getInt();
+                case "boolean":
+                    return literal.getBoolean();
+                case "long":
+                    return literal.getLong();
+                case "short":
+                    return literal.getShort();
+                case "float":
+                    return literal.getFloat();
+                case "double":
+                    return literal.getDouble();
+                case "byte":
+                    return literal.getByte();
+            }
+        }
+
+        System.out.println(currentType.getName() + " is some other (rather) primitive value");
+
+        //Check for the more complex literals
+
+        //URI
+        if(URI.class.isAssignableFrom(currentType))
+        {
+            return new URI(currentSparqlBinding);
+        }
+
+        //String
+        if(String.class.isAssignableFrom(currentType))
+        {
+            return currentSparqlBinding;
+        }
+
+        //XMLGregorianCalendar
+        if(XMLGregorianCalendar.class.isAssignableFrom(currentType))
+        {
+            return DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(literal.getValue().toString())));
+        }
+
+        //TypedLiteral
+        if(TypedLiteral.class.isAssignableFrom(currentType))
+        {
+            return new TypedLiteral(currentSparqlBinding);
+        }
+
+        //BigInteger
+        if(BigInteger.class.isAssignableFrom(currentType))
+        {
+            return new BigInteger(currentSparqlBinding);
+        }
+
+        //byte[]
+        if(byte[].class.isAssignableFrom(currentType))
+        {
+            return currentSparqlBinding.getBytes();
+        }
+
+        //Duration
+        if(Duration.class.isAssignableFrom(currentType))
+        {
+            return DatatypeFactory.newInstance().newDuration(currentSparqlBinding);
+        }
+
+        //RdfResource
+        if(RdfResource.class.isAssignableFrom(currentType))
+        {
+            return new RdfResource(currentSparqlBinding);
+        }
+
+        throw new IOException("Unrecognized primitive type: " + currentType.getName());
     }
 
     private final Map<String,Class<?>> builtInMap = new HashMap<>();{
@@ -335,13 +358,7 @@ public class MessageParser {
     }
 
     private boolean isArrayListTypePrimitive(Type t) throws IOException {
-        String typeName = t.getTypeName();
-        if(!typeName.startsWith("java.util.ArrayList<? extends "))
-        {
-            throw new IOException("Illegal argument encountered while interpreting type parameter");
-        }
-        //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
-        typeName = typeName.substring(typeName.lastIndexOf(" "), typeName.length() - 1);
+        String typeName = extractTypeNameFromArrayList(t);
         System.out.println("Extracted type name from ArrayList: " + typeName);
 
         try {
@@ -351,8 +368,18 @@ public class MessageParser {
         }
         catch (ClassNotFoundException e)
         {
-            throw new IOException("Unable to retrieve class from generic");
+            throw new IOException("Unable to retrieve class from generic", e);
         }
+    }
+
+    private String extractTypeNameFromArrayList(Type t) throws IOException {
+        String typeName = t.getTypeName();
+        if(!typeName.startsWith("java.util.ArrayList<? extends "))
+        {
+            throw new IOException("Illegal argument encountered while interpreting type parameter");
+        }
+        //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
+        return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
     }
 
     private boolean isPrimitive(Class<?> input)
