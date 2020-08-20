@@ -103,17 +103,6 @@ public class ParserTest {
 	}
 
 	@Test
-	public void ontologyDownloadTest() throws IOException {
-		MessageParser.downloadOntology = true;
-		MessageParser.init();
-		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
-
-		Model model = MessageParser.readMessageAndOntology(messageString);
-		logger.info("Model contains " + model.size() + " triples.");
-		Assert.assertTrue(model.size() > 300);
-	}
-
-	@Test
 	public void extractClassesFromMessageString() throws IOException {
 		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
 
@@ -151,15 +140,9 @@ public class ParserTest {
 	@Test
 	public void parseMessageTest() throws IOException {
 		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
-		MessageParser.downloadOntology = true;
 		Message message = MessageParser.getInstance().parseMessage(messageString, Message.class);
 		System.out.println(message.toRdf());
 	}
 
-
-	@Test
-	public void reflectionTest() {
-		MessageParser.getInstance().getDeclaredFields(InfrastructureComponent.class);
-	}
 
 }

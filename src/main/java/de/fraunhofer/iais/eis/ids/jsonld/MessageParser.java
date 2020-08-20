@@ -31,15 +31,14 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 //TODO: To create TypedLiterals (and PlainLiterals), we are creating a dependency to the whole java libraries. Can we improve on that?
 public class MessageParser {
 
-    private static Model ontologyModel = null;
+    //private static Model ontologyModel = null;
 
-    public static boolean downloadOntology = false;
+    //public static boolean downloadOntology = false;
 
     private static MessageParser instance;
 
@@ -57,6 +56,38 @@ public class MessageParser {
 
     private <T> T handleObject(Model inputModel, String objectUri, Class<T> targetClass) throws IOException {
         try {
+
+            if(!targetClass.getSimpleName().endsWith("Impl"))
+            {
+                //We don't know the desired class yet. This is only known for the root object
+                ArrayList<Class<?>> implementingClasses = MessageParser.getImplementingClasses(targetClass);
+
+                String queryString = "SELECT ?type { BIND(<" + objectUri + "> AS ?s). ?s a ?type . }";
+                Query query = QueryFactory.create(queryString);
+                QueryExecution queryExecution = QueryExecutionFactory.create(query, inputModel);
+                ResultSet resultSet = queryExecution.execSelect();
+
+                if(!resultSet.hasNext())
+                {
+                    throw new IOException("Could not extract class of child object. ID: " + objectUri);
+                }
+
+
+                while (resultSet.hasNext()) {
+                    QuerySolution solution = resultSet.nextSolution();
+                    String fullName = solution.get("type").toString();
+                    String className = fullName.substring(fullName.lastIndexOf('/') + 1);
+
+                    for (Class<?> currentClass : implementingClasses) {
+                        if (currentClass.getSimpleName().equals(className + "Impl")) {
+                            targetClass = (Class<T>) currentClass;
+                            System.out.println("Found implementing class: " + currentClass.getSimpleName() + " (of child object: " + objectUri + ")");
+                            break;
+                        }
+                    }
+                }
+            }
+
             //T returnObject = (T) targetClass.getConstructor().setAccessible(true).newInstance();
 
             Constructor<T> constructor = targetClass.getDeclaredConstructor();
@@ -156,31 +187,34 @@ public class MessageParser {
             System.out.println(queryString);
 
             //Copy the ontology inputModel
-            Model combinedModel = ontologyModel;
+            //Model combinedModel = ontologyModel;
 
             //Add the message inputModel to it - prevents additional parsing of the message
             //TODO: Is this even needed?! Maybe we can save some time here. We probably don't need the ontology at all, as we extract subclasses from Jackson
-            combinedModel.add(inputModel);
+            //combinedModel.add(inputModel);
 
             Query query = QueryFactory.create(queryString);
 
             //Evaluate query on combined model
-            QueryExecution queryExecution = QueryExecutionFactory.create(query, combinedModel);
+            QueryExecution queryExecution = QueryExecutionFactory.create(query, inputModel);
             ResultSet resultSet = queryExecution.execSelect();
 
 
             if(!resultSet.hasNext())
             {
                 return returnObject;
-                //TODO: throw exception? What about objects which are allowed to be totally empty, such as catalogs?
             }
 
-            //TODO: how does something like "key" : { "@value" : "uri" } behave? Is this a "complex object"?
 
             while(resultSet.hasNext())
             {
-                //TODO: There should be no more than one occurrence. Do some check?
                 QuerySolution querySolution = resultSet.next();
+
+                if(resultSet.hasNext())
+                {
+                    throw new IOException("Multiple bindings for SPARQL query which should only have one binding!");
+                }
+
                 for(Map.Entry<String, Method> entry : methodMap.entrySet())
                 {
 
@@ -189,17 +223,27 @@ public class MessageParser {
                     //boolean nullable = !targetClass.getDeclaredField("_" + entry.getKey()).isAnnotationPresent(NotNull.class);
 
                     String sparqlParameterName = entry.getKey();
+
                     if(Collection.class.isAssignableFrom(currentType)) {
                         sparqlParameterName += "s"; //plural form for the concatenated values
                     }
                     if(querySolution.contains(sparqlParameterName))
                     {
                         String currentSparqlBinding = querySolution.get(sparqlParameterName).toString();
+
+                        if(currentType.isEnum())
+                        {
+                            entry.getValue().invoke(returnObject, handleEnum(currentType, currentSparqlBinding));
+                            continue;
+                        }
+
+
                         //There is a binding. If it is a complex sub-object, we need to recursively call this function
                         if(Collection.class.isAssignableFrom(currentType))
                         {
                             //We are working with ArrayLists.
                             //Here, we need to work with the GenericParameterTypes instead to find out what kind of ArrayList we are dealing with
+                            String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
                             if(isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0]))
                             {
                                 ArrayList<Object> list = new ArrayList<>();
@@ -209,7 +253,6 @@ public class MessageParser {
 
                                     //Is the type of the ArrayList some built in Java primitive?
 
-                                    String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
                                     if(builtInMap.containsKey(typeName))
                                     {
                                         //Yes, it is. We MUST NOT call Class.forName(name)!
@@ -225,12 +268,25 @@ public class MessageParser {
                             }
                             else
                             {
-                                //TODO: foreach object in current binding, add result to some ArrayList, give it to: entry.getValue().invoke()
-
+                                //List of complex sub-objects, such as a list of Resources in a ResourceCatalog
+                                ArrayList<Object> list = new ArrayList<>();
+                                for(String s : currentSparqlBinding.split("\\|"))
+                                {
+                                    if(Class.forName(typeName).isEnum())
+                                    {
+                                        list.add(handleEnum(Class.forName(typeName), s));
+                                    }
+                                    else {
+                                        list.add(handleObject(inputModel, s, Class.forName(typeName)));
+                                    }
+                                }
+                                entry.getValue().invoke(returnObject, list);
                             }
                         }
+
+                        //Not an ArrayList of objects expected, but rather one object
                         else {
-                            //Our implementation of checking for primitives (i.e. also includes URLs, Strings, XMLGregorianCalendars, ...
+                            //Our implementation of checking for primitives (i.e. also includes URLs, Strings, XMLGregorianCalendars, ...)
                             if (isPrimitive(currentType)) {
 
                                 Literal literal = null;
@@ -243,8 +299,8 @@ public class MessageParser {
 
                             } else {
                                 System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is not primitive");
-                                continue; //TODO
-                                //TODO: handleObject();
+
+                                entry.getValue().invoke(returnObject, handleObject(inputModel, currentSparqlBinding, entry.getValue().getParameterTypes()[0]));
                             }
                         }
                     }
@@ -252,13 +308,26 @@ public class MessageParser {
                 }
             }
 
-
             return returnObject;
         }
         catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException | ClassNotFoundException e)
         {
             throw new IOException("Failed to instantiate desired class", e);
         }
+    }
+
+    private <T> T handleEnum(Class<T> enumClass, String url) throws IOException {
+        if (!enumClass.isEnum()) {
+            throw new RuntimeException("Non-Enum class passed to handleEnum function.");
+        }
+        T[] constants = (T[]) enumClass.getEnumConstants();
+        boolean found = false;
+        for (T constant : constants) {
+            if (url.equals(constant.toString())) {
+                return constant;
+            }
+        }
+        throw new IOException("Failed to find matching enum value for " + url);
     }
 
     //TODO for performance: Don't pass the full querySolution here, but just one node...
@@ -397,19 +466,17 @@ public class MessageParser {
         //covers int, long, short, float, double, boolean, byte
         if(input.isPrimitive()) return true;
 
-        //TODO: is "." placeholder or a dot?
-        //covers URI, String, BigInteger, BigDecimal, Duration
-        if(input.getName().startsWith("java.") || input.getName().startsWith("javax.")) return true;
-
-        //TODO: complete this. Or: do some other check, such as test the name space
-        if(URI.class.isAssignableFrom(input) || String.class.isAssignableFrom(input))
-            return true;
-
-        return false;
+        return (URI.class.isAssignableFrom(input) ||
+                String.class.isAssignableFrom(input) ||
+                XMLGregorianCalendar.class.isAssignableFrom(input) ||
+                TypedLiteral.class.isAssignableFrom(input) ||
+                BigInteger.class.isAssignableFrom(input) ||
+                byte[].class.isAssignableFrom(input) ||
+                Duration.class.isAssignableFrom(input) ||
+                RdfResource.class.isAssignableFrom(input));
     }
 
     public <T> T parseMessage(String message, Class<T> targetClass) throws IOException {
-        init();
         Model model = MessageParser.readMessage(message);
 
         ArrayList<Class<?>> implementingClasses = MessageParser.getImplementingClasses(targetClass);
@@ -457,49 +524,6 @@ public class MessageParser {
 
     }
 
-
-    /**
-     * This function initialized the MessageParser class. It will be called automatically upon being requested to read a message.
-     * You can manually call this function on startup to avoid a delay later on.
-     * Note that you can choose whether to download the ontology or from resources via the downloadOntology static variable.
-     * @throws IOException if the ontology cannot be loaded
-     */
-    public static void init() throws IOException {
-        //Check if ontology model exists yet
-        if(ontologyModel != null)
-        {
-            return;
-        }
-
-        //Does not exist. Initialize
-        ontologyModel = JenaUtil.createMemoryModel();
-
-        //Load ontology
-        InputStream inputStream;
-
-        //From web or from local file?
-        if(downloadOntology) {
-            //try to download from GitHub
-            URL url;
-            try {
-
-                //TODO
-                url = new URL("https://github.com/International-Data-Spaces-Association/InformationModel/releases/download/v4.0.0/IDS-InformationModel-v4.0.0.ttl");
-            }
-            catch (MalformedURLException e)
-            {
-                throw new IOException("Failed to download ontology.", e);
-            }
-            inputStream = url.openConnection().getInputStream();
-        }
-        else {
-            //Load from local file
-            inputStream = MessageParser.class.getResourceAsStream("ontology.ttl");
-        }
-        //Pipe the input stream (whether it is from web or local file) into Apache Jena model
-        ontologyModel.read(inputStream, null, FileUtils.langTurtle);
-    }
-
     /**
      * Reads a message into an Apache Jena model.
      * If the class was not previously initialized, it will automatically initialize upon this function call.
@@ -519,68 +543,16 @@ public class MessageParser {
 
     public static Model readMessageAndOntology(String message) throws IOException {
 
-        //Make sure ontology is initialized (does nothing if already initialized)
-        init();
-
         //Copy ontology model
-        Model combinedModel = ontologyModel;
+        Model messageModel = JenaUtil.createMemoryModel();
 
         //Read incoming message to the same model
         RDFParser.create()
                 .source(new ByteArrayInputStream(message.getBytes()))
                 .lang(Lang.JSONLD)
                 .errorHandler(ErrorHandlerFactory.getDefaultErrorHandler())
-                .parse(combinedModel.getGraph());
-        return combinedModel;
-    }
-
-    //TODO to be deleted
-    public <T> void getDeclaredFields(Class<T> bean)
-    {
-        Field[] fields = bean.getDeclaredFields();
-        if(bean.isInterface())
-        {
-            System.out.println("Note that interfaces have no fields.");
-        }
-        else
-        {
-            System.out.println("Num fields: " + fields.length);
-        }
-        for(Field field : fields)
-        {
-            System.out.println(field.getName());
-        }
-
-        Method[] methods = bean.getMethods();
-        for(Method method : methods) {
-            System.out.println(method.getReturnType().getName() + " " + method.getName());
-        }
-
-        List<String> methodNames = Arrays.stream(methods).filter(method -> {
-            String name = method.getName();
-            //Filter out irrelevant methods
-            return name.startsWith("get") && !name.equals("getProperties") && !name.equals("getComment") && !name.equals("getLabel");
-        }).map(method -> {
-            //Remove "get" part
-            String reducedName = method.getName().substring(3);
-
-            //Turn first character to lower case
-            char[] c = reducedName.toCharArray();
-            c[0] = Character.toLowerCase(c[0]);
-            return new String(c);
-        }).collect(Collectors.toList());
-
-        System.out.println("METHOD NAMES");
-        methodNames.forEach(System.out::println);
-
-
-        System.out.println("IMPLEMENTING CLASSES");
-        ArrayList<Class<?>> implementingClasses = getImplementingClasses(bean);
-        for(Class<?> impl : implementingClasses)
-        {
-            System.out.println(impl.getName());
-        }
-
+                .parse(messageModel.getGraph());
+        return messageModel;
     }
 
     public static ArrayList<Class<?>> getImplementingClasses(Class<?> someClass)
