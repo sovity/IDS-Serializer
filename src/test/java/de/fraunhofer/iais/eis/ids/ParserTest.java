@@ -3,13 +3,9 @@ package de.fraunhofer.iais.eis.ids;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.ids.jsonld.MessageParser;
-import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Model;
-import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,40 +98,6 @@ public class ParserTest {
 		
 	}
 
-	@Test
-	public void extractClassesFromMessageString() throws IOException {
-		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
-
-		Model model = MessageParser.readMessage(messageString);
-
-		//For incoming messages, we just tell the serializer that it is a Message, but not what kind of message
-		//So we use the same input here and require to compute the correct subclass.
-		Class<?> targetClass = Message.class;
-
-		ArrayList<Class<?>> implementingClasses = MessageParser.getImplementingClasses(targetClass);
-
-
-		String queryString = "SELECT ?type { ?s a ?type . }";
-		Query query = QueryFactory.create(queryString);
-		QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
-		ResultSet resultSet = queryExecution.execSelect();
-		Assert.assertTrue(resultSet.hasNext());
-
-
-		while (resultSet.hasNext()) {
-			QuerySolution solution = resultSet.nextSolution();
-			String fullName = solution.get("type").toString();
-			String className = fullName.substring(fullName.lastIndexOf('/') + 1);
-
-			for(Class<?> currentClass : implementingClasses)
-			{
-				if(currentClass.getSimpleName().equals(className + "Impl"))
-				{
-					System.out.println("Found correct class: " + currentClass.getSimpleName());
-				}
-			}
-		}
-	}
 
 	@Test
 	public void parseMessageTest() throws IOException {

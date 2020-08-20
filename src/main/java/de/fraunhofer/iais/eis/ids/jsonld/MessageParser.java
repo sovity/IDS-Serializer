@@ -7,11 +7,8 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ResourceFactory;
-import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
-import org.apache.jena.riot.RDFParser;
-import org.apache.jena.riot.system.ErrorHandlerFactory;
 import org.topbraid.spin.util.JenaUtil;
 
 import javax.validation.constraints.NotNull;
@@ -32,10 +29,6 @@ import java.util.*;
 //TODO: To create TypedLiterals (and PlainLiterals), we are creating a dependency to the whole java libraries. Can we improve on that?
 //TODO: We still need to look into unknown properties and add them to the "properties" map
 public class MessageParser {
-
-    //private static Model ontologyModel = null;
-
-    //public static boolean downloadOntology = false;
 
     private static MessageParser instance;
 
@@ -78,7 +71,6 @@ public class MessageParser {
                     for (Class<?> currentClass : implementingClasses) {
                         if (currentClass.getSimpleName().equals(className + "Impl")) {
                             targetClass = (Class<T>) currentClass;
-                            System.out.println("Found implementing class: " + currentClass.getSimpleName() + " (of child object: " + objectUri + ")");
                             break;
                         }
                     }
@@ -91,14 +83,6 @@ public class MessageParser {
             constructor.setAccessible(true);
 
             T returnObject = constructor.newInstance();
-
-/*            Field[] fields = returnObject.getClass().getDeclaredFields();
-            System.out.println("FIELDS:");
-            for(Field field : fields)
-            {
-                System.out.println(field.getName());
-            }
- */
 
             //Get methods
             Method[] methods = returnObject.getClass().getDeclaredMethods();
@@ -132,11 +116,11 @@ public class MessageParser {
                 {
                     //Yes, it is assignable multiple times. Concatenate multiple values together using some delimiter
                     //TODO: What kind of delimiter would be appropriate here?
+                    //TODO: Language is lost with GROUP_CONCAT, see https://stackoverflow.com/a/25497695/9743294
                     queryStringBuilder.append(" (GROUP_CONCAT(?").append(key1).append(";separator=\"|\") AS ?").append(key1).append("s) ");
 
                 }
                 else {
-                    //System.out.println("Collection is not assignable from " + value.getParameterTypes()[0]);
                     //No, it's not a list. No need to aggregate
                     queryStringBuilder.append(" ?").append(key1);
                     //We will have to GROUP BY this variable though...
@@ -180,14 +164,6 @@ public class MessageParser {
             }
 
             String queryString = queryStringBuilder.toString();
-
-            System.out.println(queryString);
-
-            //Copy the ontology inputModel
-            //Model combinedModel = ontologyModel;
-
-            //Add the message inputModel to it - prevents additional parsing of the message
-            //combinedModel.add(inputModel);
 
             Query query = QueryFactory.create(queryString);
 
@@ -242,9 +218,14 @@ public class MessageParser {
                             String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
                             if(isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0]))
                             {
+                                System.out.println(currentSparqlBinding);
                                 ArrayList<Object> list = new ArrayList<>();
                                 for(String s : currentSparqlBinding.split("\\|"))
                                 {
+
+                                    //TODO: language is lost here... Maybe?!
+                                    //querySolution.get(sparqlParameterName).
+                                    System.out.println(s);
                                     Literal literal = ResourceFactory.createPlainLiteral(s);
 
                                     //Is the type of the ArrayList some built in Java primitive?
@@ -294,7 +275,7 @@ public class MessageParser {
                                 entry.getValue().invoke(returnObject, handlePrimitive(currentType, literal, currentSparqlBinding));
 
                             } else {
-                                System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is not primitive");
+                                //System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is not primitive");
 
                                 entry.getValue().invoke(returnObject, handleObject(inputModel, currentSparqlBinding, entry.getValue().getParameterTypes()[0]));
                             }
@@ -316,8 +297,7 @@ public class MessageParser {
         if (!enumClass.isEnum()) {
             throw new RuntimeException("Non-Enum class passed to handleEnum function.");
         }
-        T[] constants = (T[]) enumClass.getEnumConstants();
-        boolean found = false;
+        T[] constants = enumClass.getEnumConstants();
         for (T constant : constants) {
             if (url.equals(constant.toString())) {
                 return constant;
@@ -330,7 +310,7 @@ public class MessageParser {
         //Java way of checking for primitives, i.e. int, char, float, double, ...
         if(currentType.isPrimitive())
         {
-            System.out.println(currentType.getName() + " is a Java primitive");
+            //System.out.println(currentType.getName() + " is a Java primitive");
             if(literal == null)
             {
                 throw new NullPointerException("Trying to handle Java primitive, but got no literal value");
@@ -354,7 +334,7 @@ public class MessageParser {
             }
         }
 
-        System.out.println(currentType.getName() + " is some other (rather) primitive value");
+        //System.out.println(currentType.getName() + " is some other (rather) primitive value");
 
         //Check for the more complex literals
 
@@ -379,6 +359,16 @@ public class MessageParser {
         //TypedLiteral
         if(TypedLiteral.class.isAssignableFrom(currentType))
         {
+            if(!literal.getLanguage().equals(""))
+            {
+                System.out.println("Creating language tagged typed literal");
+                return new TypedLiteral(literal.getValue().toString(), literal.getLanguage());
+            }
+            if(literal.getDatatypeURI() != null)
+            {
+                System.out.println("Creating literal with type");
+                return new TypedLiteral(literal.getValue().toString(), new URI(literal.getDatatypeURI()));
+            }
             return new TypedLiteral(currentSparqlBinding);
         }
 
@@ -423,7 +413,7 @@ public class MessageParser {
 
     private boolean isArrayListTypePrimitive(Type t) throws IOException {
         String typeName = extractTypeNameFromArrayList(t);
-        System.out.println("Extracted type name from ArrayList: " + typeName);
+        //System.out.println("Extracted type name from ArrayList: " + typeName);
 
         try {
             //Do not try to call Class.forName(primitive) -- that would throw an exception
@@ -446,15 +436,13 @@ public class MessageParser {
         return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
     }
 
-    private boolean isPrimitive(Class<?> input)
-    {
+    private boolean isPrimitive(Class<?> input) throws IOException {
         //TODO: collection, (but not Map? May not matter, as we excluded the "properties" method)
 
         //Collections are not simple
         if(Collection.class.isAssignableFrom(input))
         {
-            System.out.println("Encountered collection in isPrimitive. Use isArrayListTypePrimitive instead");
-            return false;
+            throw new IOException("Encountered collection in isPrimitive. Use isArrayListTypePrimitive instead");
         }
 
         //check for: plain/typed literal, XMLGregorianCalendar, byte[], RdfResource
@@ -500,7 +488,7 @@ public class MessageParser {
                 {
                     returnId = solution.get("id").toString();
                     returnClass = currentClass;
-                    System.out.println("Found implementing class: " + currentClass.getSimpleName());
+                    //System.out.println("Found implementing class: " + currentClass.getSimpleName());
                     break;
                 }
             }
@@ -525,7 +513,7 @@ public class MessageParser {
      * @param message Message to be read
      * @return The model of the message plus ontology
      */
-    public static Model readMessage(String message) {
+    private static Model readMessage(String message) {
 
         Model targetModel = JenaUtil.createMemoryModel();
 
@@ -536,21 +524,8 @@ public class MessageParser {
         return targetModel;
     }
 
-    public static Model readMessageAndOntology(String message) throws IOException {
 
-        //Copy ontology model
-        Model messageModel = JenaUtil.createMemoryModel();
-
-        //Read incoming message to the same model
-        RDFParser.create()
-                .source(new ByteArrayInputStream(message.getBytes()))
-                .lang(Lang.JSONLD)
-                .errorHandler(ErrorHandlerFactory.getDefaultErrorHandler())
-                .parse(messageModel.getGraph());
-        return messageModel;
-    }
-
-    public static ArrayList<Class<?>> getImplementingClasses(Class<?> someClass)
+    static ArrayList<Class<?>> getImplementingClasses(Class<?> someClass)
     {
         ArrayList<Class<?>> result = new ArrayList<>();
         JsonSubTypes subTypeAnnotation = someClass.getAnnotation(JsonSubTypes.class);
