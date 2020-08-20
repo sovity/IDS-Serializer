@@ -153,6 +153,7 @@ public class ParserTest {
 		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
 		MessageParser.downloadOntology = true;
 		Message message = MessageParser.getInstance().parseMessage(messageString, Message.class);
+		System.out.println(message.toRdf());
 	}
 
 

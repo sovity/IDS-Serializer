@@ -1,6 +1,9 @@
 package de.fraunhofer.iais.eis.ids.jsonld;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.util.RdfResource;
+import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.riot.Lang;
@@ -12,18 +15,25 @@ import org.apache.jena.util.FileUtils;
 import org.topbraid.spin.util.JenaUtil;
 
 import javax.validation.constraints.NotNull;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
+import java.math.BigInteger;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
+//TODO: To create TypedLiterals (and PlainLiterals), we are creating a dependency to the whole java libraries. Can we improve on that?
 public class MessageParser {
 
     private static Model ontologyModel = null;
@@ -44,44 +54,11 @@ public class MessageParser {
         return instance;
     }
 
-    public <T> T parseMessage(String message, Class<T> targetClass) throws IOException {
-        init();
-        Model model = MessageParser.readMessage(message);
-
-        ArrayList<Class<?>> implementingClasses = MessageParser.getImplementingClasses(targetClass);
-
-        String queryString = "SELECT ?id ?type { ?id a ?type . }";
-        Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
-        ResultSet resultSet = queryExecution.execSelect();
-
-        if(!resultSet.hasNext())
-        {
-            throw new IOException("Could not extract class from input message");
-        }
-
-        Class<?> returnClass = null;
-        String returnId = null;
-
-        while (resultSet.hasNext()) {
-            QuerySolution solution = resultSet.nextSolution();
-            String fullName = solution.get("type").toString();
-            returnId = solution.get("id").toString();
-            String className = fullName.substring(fullName.lastIndexOf('/') + 1);
-
-            for(Class<?> currentClass : implementingClasses)
-            {
-                if(currentClass.getSimpleName().equals(className + "Impl"))
-                {
-                    returnClass = currentClass;
-                    System.out.println("Found implementing class: " + currentClass.getSimpleName());
-                }
-            }
-        }
+    private <T> T handleObject(Model inputModel, String objectUri, Class<T> targetClass) throws IOException {
         try {
-            //T returnObject = (T) returnClass.getConstructor().setAccessible(true).newInstance();
+            //T returnObject = (T) targetClass.getConstructor().setAccessible(true).newInstance();
 
-            Constructor<T> constructor = (Constructor<T>) returnClass.getDeclaredConstructor();
+            Constructor<T> constructor = targetClass.getDeclaredConstructor();
             constructor.setAccessible(true);
 
             T returnObject = constructor.newInstance();
@@ -116,26 +93,44 @@ public class MessageParser {
 
             });
 
+            List<String> groupByKeys = new ArrayList<>();
+
             StringBuilder queryStringBuilder = new StringBuilder();
             queryStringBuilder.append("PREFIX ids: <https://w3id.org/idsa/core/>\nSELECT");
-            methodMap.forEach((key1, value) -> queryStringBuilder.append(" ?").append(key1));
+            methodMap.forEach((key1, value) -> {
+                //Is the return type some sort of List?
+                if(Collection.class.isAssignableFrom(value.getParameterTypes()[0]))
+                {
+                    //Yes, it is assignable multiple times. Concatenate multiple values together using some delimiter
+                    //TODO: What kind of delimiter would be appropriate here?
+                    queryStringBuilder.append(" (GROUP_CONCAT(?").append(key1).append(";separator=\"|\") AS ?").append(key1).append("s) ");
+
+                }
+                else {
+                    //System.out.println("Collection is not assignable from " + value.getParameterTypes()[0]);
+                    //No, it's not a list. No need to aggregate
+                    queryStringBuilder.append(" ?").append(key1);
+                    //We will have to GROUP BY this variable though...
+                    groupByKeys.add(key1);
+                }
+            });
             queryStringBuilder.append(" { ");
 
 
             for(Map.Entry<String, Method> entry : methodMap.entrySet())
             {
                 //Is this a field which is annotated by NOT NULL?
-                boolean notNull = returnClass.getDeclaredField("_" + entry.getKey()).isAnnotationPresent(NotNull.class);
+                boolean nullable = !targetClass.getDeclaredField("_" + entry.getKey()).isAnnotationPresent(NotNull.class);
 
-                //If not, we need to make this optional
-                if(!notNull)
+                //If it is "nullable", we need to make this optional
+                if(nullable)
                 {
-                    queryStringBuilder.append(" OPTIONAL { ");
+                    queryStringBuilder.append(" OPTIONAL {");
                 }
-                queryStringBuilder.append("<").append(returnId).append("> ") //subject
+                queryStringBuilder.append(" <").append(objectUri).append("> ") //subject, as passed to the function
                         .append("ids:").append(entry.getKey()) //predicate
-                        .append(" ?").append(entry.getKey()).append(" . "); //object
-                if(!notNull)
+                        .append(" ?").append(entry.getKey()).append(" ."); //object
+                if(nullable)
                 {
                     queryStringBuilder.append("} ");
                 }
@@ -143,27 +138,296 @@ public class MessageParser {
 
 
             queryStringBuilder.append(" } ");
-            //TODO: GROUP BY and GROUP_CONCAT
-            //TODO: If a "complex object" is expected, do something similar as this, just without parsing
-            queryString = queryStringBuilder.toString();
+
+            //Do we need to group? We do, if there is at least one property which can occur multiple times
+            //We added all those properties, which may only occur once, to the groupByKeys list
+            if(groupByKeys.size() < methodMap.size())
+            {
+                queryStringBuilder.append("GROUP BY");
+                for(String key : groupByKeys)
+                {
+                    queryStringBuilder.append(" ?").append(key);
+                }
+            }
+
+            String queryString = queryStringBuilder.toString();
 
             System.out.println(queryString);
 
-            //Copy the ontology model
+            //Copy the ontology inputModel
             Model combinedModel = ontologyModel;
 
-            query = QueryFactory.create(queryString);
-            queryExecution = QueryExecutionFactory.create(query, combinedModel);
-            resultSet = queryExecution.execSelect();
-            //Add the message model to it - prevents additional parsing of the message
-            ontologyModel.add(model);
+            //Add the message inputModel to it - prevents additional parsing of the message
+            //TODO: Is this even needed?! Maybe we can save some time here. We probably don't need the ontology at all, as we extract subclasses from Jackson
+            combinedModel.add(inputModel);
+
+            Query query = QueryFactory.create(queryString);
+
+            //Evaluate query on combined model
+            QueryExecution queryExecution = QueryExecutionFactory.create(query, combinedModel);
+            ResultSet resultSet = queryExecution.execSelect();
+
+
+            if(!resultSet.hasNext())
+            {
+                return returnObject;
+                //TODO: throw exception? What about objects which are allowed to be totally empty, such as catalogs?
+            }
+
+            //TODO: how does something like "key" : { "@value" : "uri" } behave? Is this a "complex object"?
+
+            while(resultSet.hasNext())
+            {
+                //TODO: There should be no more than one occurrence. Do some check?
+                QuerySolution querySolution = resultSet.next();
+                for(Map.Entry<String, Method> entry : methodMap.entrySet())
+                {
+
+                    Class<?> currentType = entry.getValue().getParameterTypes()[0];
+                    //Is this a field which is annotated by NOT NULL?
+                    //boolean nullable = !targetClass.getDeclaredField("_" + entry.getKey()).isAnnotationPresent(NotNull.class);
+
+                    String sparqlParameterName = entry.getKey();
+                    if(Collection.class.isAssignableFrom(currentType)) {
+                        sparqlParameterName += "s"; //plural form for the concatenated values
+                    }
+                    if(querySolution.contains(sparqlParameterName))
+                    {
+                        String currentSparqlBinding = querySolution.get(sparqlParameterName).toString();
+                        //There is a binding. If it is a complex sub-object, we need to recursively call this function
+                        if(Collection.class.isAssignableFrom(currentType))
+                        {
+                            //We are working with ArrayLists.
+                            //Here, we need to work with the GenericParameterTypes instead to find out what kind of ArrayList we are dealing with
+                            if(isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0]))
+                            {
+                                ArrayList list = new ArrayList();
+                                //TODO convert to int/float/...
+                                list.addAll(Arrays.asList(currentSparqlBinding.split(" ")));
+                                entry.getValue().invoke(returnObject, list);
+                            }
+                            else
+                            {
+                                //TODO: foreach object in current binding, add result to some ArrayList, give it to: entry.getValue().invoke()
+                            }
+                        }
+                        else {
+                            //Our implementation of checking for primitives (i.e. also includes URLs, Strings, XMLGregorianCalendars, ...
+                            if (isPrimitive(currentType)) {
+
+                                //Java way of checking for primitives, i.e. int, char, float, double, ...
+                                if(currentType.isPrimitive())
+                                {
+                                    //Is it REALLY a primitive, as of a Java primitive? (Above, we also considered things like String, URI, ... to be "primitive")
+                                    //If it is an actual primitive, there is no need to instantiate anything. Just give it to the function
+                                    if(currentType.getSimpleName().equals("int"))
+                                    {
+                                        entry.getValue().invoke(returnObject, Integer.parseInt(currentSparqlBinding));
+                                    }
+                                    else if(currentType.getSimpleName().equals("boolean"))
+                                    {
+                                        entry.getValue().invoke(returnObject, Boolean.parseBoolean(currentSparqlBinding));
+                                    }
+                                    //TODO: long, short, float, double, byte
+                                    entry.getValue().invoke(returnObject, currentSparqlBinding);
+                                    System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is a Java primitive");
+                                    continue;
+                                }
+
+                                System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is some other (rather) primitive value");
+
+                                //Check for the more complex literals
+
+                                //URI
+                                if(URI.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, new URI(currentSparqlBinding));
+                                    continue;
+                                }
+
+                                //String
+                                if(String.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, currentSparqlBinding);
+                                    continue;
+                                }
+
+                                //XMLGregorianCalendar
+                                if(XMLGregorianCalendar.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(querySolution.get(sparqlParameterName).asLiteral().getValue().toString()))));
+                                    continue;
+                                }
+
+                                //TypedLiteral
+                                if(TypedLiteral.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, new TypedLiteral(currentSparqlBinding));
+                                    continue;
+                                }
+
+                                if(PlainLiteral.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, new PlainLiteral(currentSparqlBinding));
+                                    continue;
+                                }
+
+                                //BigInteger
+                                if(BigInteger.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, new BigInteger(currentSparqlBinding));
+                                    continue;
+                                }
+
+                                //byte[]
+                                if(byte[].class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, currentSparqlBinding.getBytes());
+                                    continue;
+                                }
+
+                                //Duration
+                                if(Duration.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, DatatypeFactory.newInstance().newDuration(currentSparqlBinding));
+                                    continue;
+                                }
+
+                                //RdfResource
+                                if(RdfResource.class.isAssignableFrom(currentType))
+                                {
+                                    entry.getValue().invoke(returnObject, new RdfResource(currentSparqlBinding));
+                                    continue;
+                                }
+
+                            } else {
+                                System.out.println(entry.getValue().getParameterTypes()[0].getName() + " is not primitive");
+
+                                continue; //TODO
+                                //TODO: handleObject();
+                            }
+                        }
+                        entry.getValue().invoke(returnObject, querySolution.get(sparqlParameterName));
+                    }
+
+                }
+            }
+
 
             return returnObject;
         }
-        catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException e)
+        catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException e)
         {
             throw new IOException("Failed to instantiate desired class", e);
         }
+    }
+
+    private final Map<String,Class<?>> builtInMap = new HashMap<>();{
+        builtInMap.put("int", Integer.TYPE );
+        builtInMap.put("long", Long.TYPE );
+        builtInMap.put("double", Double.TYPE );
+        builtInMap.put("float", Float.TYPE );
+        builtInMap.put("bool", Boolean.TYPE );
+        builtInMap.put("char", Character.TYPE );
+        builtInMap.put("byte", Byte.TYPE );
+        builtInMap.put("void", Void.TYPE );
+        builtInMap.put("short", Short.TYPE );
+    }
+
+    private boolean isArrayListTypePrimitive(Type t) throws IOException {
+        String typeName = t.getTypeName();
+        if(!typeName.startsWith("java.util.ArrayList<? extends "))
+        {
+            throw new IOException("Illegal argument encountered while interpreting type parameter");
+        }
+        //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
+        typeName = typeName.substring(typeName.lastIndexOf(" "), typeName.length() - 1);
+        System.out.println("Extracted type name from ArrayList: " + typeName);
+
+        try {
+            //Do not try to call Class.forName(primitive) -- that would throw an exception
+            if(builtInMap.containsKey(typeName)) return true;
+            return isPrimitive(Class.forName(typeName));
+        }
+        catch (ClassNotFoundException e)
+        {
+            throw new IOException("Unable to retrieve class from generic");
+        }
+    }
+
+    private boolean isPrimitive(Class<?> input)
+    {
+        //TODO: collection, (but not Map? May not matter, as we excluded the "properties" method)
+
+        //Collections are not simple
+        if(Collection.class.isAssignableFrom(input))
+        {
+            System.out.println("Encountered collection in isPrimitive. Use isArrayListTypePrimitive instead");
+            return false;
+        }
+
+        //check for: plain/typed literal, XMLGregorianCalendar, byte[], RdfResource
+        //covers int, long, short, float, double, boolean, byte
+        if(input.isPrimitive()) return true;
+
+        //TODO: is "." placeholder or a dot?
+        //covers URI, String, BigInteger, BigDecimal, Duration
+        if(input.getName().startsWith("java.") || input.getName().startsWith("javax.")) return true;
+
+        //TODO: complete this. Or: do some other check, such as test the name space
+        if(URI.class.isAssignableFrom(input) || String.class.isAssignableFrom(input))
+            return true;
+
+        return false;
+    }
+
+    public <T> T parseMessage(String message, Class<T> targetClass) throws IOException {
+        init();
+        Model model = MessageParser.readMessage(message);
+
+        ArrayList<Class<?>> implementingClasses = MessageParser.getImplementingClasses(targetClass);
+
+        String queryString = "SELECT ?id ?type { ?id a ?type . }";
+        Query query = QueryFactory.create(queryString);
+        QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
+        ResultSet resultSet = queryExecution.execSelect();
+
+        if(!resultSet.hasNext())
+        {
+            throw new IOException("Could not extract class from input message");
+        }
+
+        Class<?> returnClass = null;
+        String returnId = null;
+
+        while (resultSet.hasNext()) {
+            QuerySolution solution = resultSet.nextSolution();
+            String fullName = solution.get("type").toString();
+            String className = fullName.substring(fullName.lastIndexOf('/') + 1);
+
+            for(Class<?> currentClass : implementingClasses)
+            {
+                if(currentClass.getSimpleName().equals(className + "Impl"))
+                {
+                    returnId = solution.get("id").toString();
+                    returnClass = currentClass;
+                    System.out.println("Found implementing class: " + currentClass.getSimpleName());
+                    break;
+                }
+            }
+            if(returnClass != null) break;
+        }
+
+        if(returnClass == null)
+        {
+            throw new NullPointerException("Could not determine an appropriate implementing class for " + targetClass.getName());
+        }
+
+        //At this point, we parsed the model and know to which implementing class we want to parse
+
+
+        return (T)handleObject(model, returnId, returnClass);
+
     }
 
 
