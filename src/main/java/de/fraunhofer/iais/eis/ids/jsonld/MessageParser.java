@@ -12,7 +12,6 @@ import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.jena.riot.RDFParser;
 import org.apache.jena.riot.system.ErrorHandlerFactory;
-import org.apache.jena.util.FileUtils;
 import org.topbraid.spin.util.JenaUtil;
 
 import javax.validation.constraints.NotNull;
@@ -22,18 +21,16 @@ import javax.xml.datatype.Duration;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.*;
 import java.math.BigInteger;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
 
 
 //TODO: To create TypedLiterals (and PlainLiterals), we are creating a dependency to the whole java libraries. Can we improve on that?
+//TODO: We still need to look into unknown properties and add them to the "properties" map
 public class MessageParser {
 
     //private static Model ontologyModel = null;
@@ -190,7 +187,6 @@ public class MessageParser {
             //Model combinedModel = ontologyModel;
 
             //Add the message inputModel to it - prevents additional parsing of the message
-            //TODO: Is this even needed?! Maybe we can save some time here. We probably don't need the ontology at all, as we extract subclasses from Jackson
             //combinedModel.add(inputModel);
 
             Query query = QueryFactory.create(queryString);
@@ -330,7 +326,6 @@ public class MessageParser {
         throw new IOException("Failed to find matching enum value for " + url);
     }
 
-    //TODO for performance: Don't pass the full querySolution here, but just one node...
     private Object handlePrimitive(Class<?> currentType, Literal literal, String currentSparqlBinding) throws URISyntaxException, DatatypeConfigurationException, IOException {
         //Java way of checking for primitives, i.e. int, char, float, double, ...
         if(currentType.isPrimitive())

@@ -141,7 +141,7 @@ public class ParserTest {
 	public void parseMessageTest() throws IOException {
 		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
 		Message message = MessageParser.getInstance().parseMessage(messageString, Message.class);
-		System.out.println(message.toRdf());
+		System.out.println(message.toRdf()); //at this stage, it does nothing. Debug to look into variables
 	}
 
 
