@@ -188,6 +188,32 @@ public class MessageParser {
 
             String queryString = queryStringBuilder.toString();
 
+            StringBuilder queryForOtherProperties = new StringBuilder();
+            //Query for all unknown properties and their values
+            //Select properties and values only
+            queryForOtherProperties.append("PREFIX ids: <https://w3id.org/idsa/core/>\n PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n SELECT ?p ?o { ");
+
+            //Respect ALL properties and values
+            queryForOtherProperties.append(" <").append(objectUri).append("> ?p ?o .\n");
+
+            //Exclude known properties
+            queryForOtherProperties.append("FILTER (?p NOT IN (rdf:type");
+
+            //Predicates usually look like: .append("ids:").append(entry.getKey())
+            for(Map.Entry<String, Method> entry : methodMap.entrySet())
+            {
+                queryForOtherProperties.append(", ");
+                queryForOtherProperties.append("ids:").append(entry.getKey());
+            }
+
+            queryForOtherProperties.append(")). } ");
+
+
+            Query externalPropertiesQuery = QueryFactory.create(queryForOtherProperties.toString());
+            QueryExecution externalPropertiesQueryExecution = QueryExecutionFactory.create(externalPropertiesQuery, inputModel);
+            ResultSet externalPropertiesResultSet = externalPropertiesQueryExecution.execSelect();
+
+
             Query query = QueryFactory.create(queryString);
 
             //Evaluate query on combined model
@@ -200,23 +226,32 @@ public class MessageParser {
                 //no content... ONLY allowed, if the class has optional fields, only!
                 if(containsNotNullableField)
                 {
-                    String notNullableFieldNames = "";
+                    StringBuilder notNullableFieldNames = new StringBuilder();
                     for(Map.Entry<String, Method> entry : methodMap.entrySet())
                     {
                         if(targetClass.getDeclaredField("_" + entry.getKey()).isAnnotationPresent(NotNull.class))
                         {
                             if(notNullableFieldNames.length() > 0)
                             {
-                                notNullableFieldNames += ", ";
+                                notNullableFieldNames.append(", ");
                             }
-                            notNullableFieldNames += entry.getKey();
+                            notNullableFieldNames.append(entry.getKey());
                         }
                     }
                     System.out.println("Executed query: " + queryString);
-                    throw new IOException("Mandatory field of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " not filled or invalid. Note that the value of \"@id\" fields MUST be a valid URI. Mandatory fields are: " + notNullableFieldNames);
+                    throw new IOException("Mandatory field of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " not filled or invalid. Note that the value of \"@id\" fields MUST be a valid URI. Mandatory fields are: " + notNullableFieldNames.toString());
                 }
 
                 return returnObject;
+            }
+
+            //TODO: This is rather flat so far. Nested external properties are not captured yet
+            while(externalPropertiesResultSet.hasNext())
+            {
+                QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
+                System.out.println("Added external property: " + externalPropertySolution.get("p").toString());
+                Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
+                setProperty.invoke(returnObject, externalPropertySolution.get("p").toString(), externalPropertySolution.get("o"));
             }
 
 

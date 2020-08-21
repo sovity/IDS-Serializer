@@ -475,7 +475,7 @@ public class SerializerTest {
 				.build();
 
 		String s = serializer.serialize(message);
-		System.out.println(s);
+		//System.out.println(s);
 		ResponseMessage msg = serializer.deserialize(s, ResponseMessage.class);
 	}
 

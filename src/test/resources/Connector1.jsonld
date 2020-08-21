@@ -8,10 +8,10 @@
     "@id" : "idsc:BASE_SECURITY_PROFILE"
   },
   "maintainer" : "http://companyA.com/ids/participant",
-  "catalog" : {
-    "@type" : "ids:Catalog",
+  "resourceCatalog" : {
+    "@type" : "ids:ResourceCatalog",
     "@id" : "http://industrialdataspace.org/catalog/85050e7c-1530-4980-93bc-87d94a831af9",
-    "offer" : [ {
+    "offeredResource" : [ {
       "@type" : "ids:Resource",
       "@id" : "http://industrialdataspace.org/resource/516eb953-c789-4bc4-a989-264e3755698a",
       "description" : [ {

@@ -57,8 +57,8 @@ public class ParserTest {
 		String catalogAsString = SerializerUtil.readResourceToString("Catalog2.jsonld");
 		Serializer serializer = new Serializer();
 		//serializer.addPreprocessor(new TypeNamePreprocessor());
-		Connector connector = serializer.deserialize(catalogAsString, Connector.class);
-		String serialisedJsonLd = serializer.serialize(connector);
+		ResourceCatalog catalog = serializer.deserialize(catalogAsString, ResourceCatalog.class);
+		String serialisedJsonLd = serializer.serialize(catalog);
 //		logger.info(serialisedJsonLd);
 		assertFalse(serialisedJsonLd.isEmpty());
 	}
