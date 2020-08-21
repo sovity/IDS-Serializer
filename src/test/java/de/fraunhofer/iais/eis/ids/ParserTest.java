@@ -98,6 +98,16 @@ public class ParserTest {
 		
 	}
 
+	@Test
+	public void readMessageTest() throws IOException {
+		String msgAsString = SerializerUtil.readResourceToString("toBeDeleted.jsonld");
+
+		Serializer serializer = new Serializer();
+
+		serializer.deserialize(msgAsString, Message.class);
+
+	}
+
 
 	@Test
 	public void parseMessageTest() throws IOException {

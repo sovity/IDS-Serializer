@@ -28,6 +28,7 @@ import java.util.*;
 
 //TODO: To create TypedLiterals (and PlainLiterals), we are creating a dependency to the whole java libraries. Can we improve on that?
 //TODO: We still need to look into unknown properties and add them to the "properties" map
+//TODO: Change the type of Exceptions being thrown?
 public class MessageParser {
 
     private static MessageParser instance;
@@ -106,6 +107,12 @@ public class MessageParser {
 
             });
 
+            Field idField = returnObject.getClass().getDeclaredField("id");
+            boolean wasAccessible = idField.isAccessible();
+            idField.setAccessible(true);
+            idField.set(returnObject, new URI(objectUri));
+            idField.setAccessible(wasAccessible);
+
             List<String> groupByKeys = new ArrayList<>();
 
             StringBuilder queryStringBuilder = new StringBuilder();
@@ -140,6 +147,8 @@ public class MessageParser {
             queryStringBuilder.append(" { ");
 
 
+            boolean containsNotNullableField = false;
+
             for(Map.Entry<String, Method> entry : methodMap.entrySet())
             {
                 //Is this a field which is annotated by NOT NULL?
@@ -149,6 +158,10 @@ public class MessageParser {
                 if(nullable)
                 {
                     queryStringBuilder.append(" OPTIONAL {");
+                }
+                else
+                {
+                    containsNotNullableField = true;
                 }
                 queryStringBuilder.append(" <").append(objectUri).append("> ") //subject, as passed to the function
                         .append("ids:").append(entry.getKey()) //predicate
@@ -164,7 +177,7 @@ public class MessageParser {
 
             //Do we need to group? We do, if there is at least one property which can occur multiple times
             //We added all those properties, which may only occur once, to the groupByKeys list
-            if(groupByKeys.size() < methodMap.size())
+            if(!groupByKeys.isEmpty())
             {
                 queryStringBuilder.append("GROUP BY");
                 for(String key : groupByKeys)
@@ -184,6 +197,25 @@ public class MessageParser {
 
             if(!resultSet.hasNext())
             {
+                //no content... ONLY allowed, if the class has optional fields, only!
+                if(containsNotNullableField)
+                {
+                    String notNullableFieldNames = "";
+                    for(Map.Entry<String, Method> entry : methodMap.entrySet())
+                    {
+                        if(targetClass.getDeclaredField("_" + entry.getKey()).isAnnotationPresent(NotNull.class))
+                        {
+                            if(notNullableFieldNames.length() > 0)
+                            {
+                                notNullableFieldNames += ", ";
+                            }
+                            notNullableFieldNames += entry.getKey();
+                        }
+                    }
+                    System.out.println("Executed query: " + queryString);
+                    throw new IOException("Mandatory field of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " not filled or invalid. Note that the value of \"@id\" fields MUST be a valid URI. Mandatory fields are: " + notNullableFieldNames);
+                }
+
                 return returnObject;
             }
 
@@ -407,7 +439,7 @@ public class MessageParser {
         //BigInteger
         if(BigInteger.class.isAssignableFrom(currentType))
         {
-            return new BigInteger(currentSparqlBinding);
+            return new BigInteger(literal.getString());
         }
 
         //byte[]
@@ -495,6 +527,12 @@ public class MessageParser {
         Model model = MessageParser.readMessage(message);
 
         ArrayList<Class<?>> implementingClasses = MessageParser.getImplementingClasses(targetClass);
+        /*System.out.println("Implementing classes of " + targetClass + " are: ");
+        for(Class<?> c : implementingClasses)
+        {
+            System.out.println(c.getName());
+        }
+         */
 
         String queryString = "SELECT ?id ?type { ?id a ?type . }";
         Query query = QueryFactory.create(queryString);
@@ -514,8 +552,15 @@ public class MessageParser {
             String fullName = solution.get("type").toString();
             String className = fullName.substring(fullName.lastIndexOf('/') + 1);
 
+            //For legacy purposes...
+            if(className.startsWith("ids:"))
+            {
+                className = className.substring(4);
+            }
+
             for(Class<?> currentClass : implementingClasses)
             {
+                //System.out.println(className + " == " + currentClass.getSimpleName() + "Impl ? " +  currentClass.getSimpleName().equals(className + "Impl"));
                 if(currentClass.getSimpleName().equals(className + "Impl"))
                 {
                     returnId = solution.get("id").toString();

@@ -370,7 +370,7 @@
 	},
 			"ids:outboundModelVersion" : "3.0.0",
 			"ids:securityProfile" : {
-		"@id" : "idsc:BASE_CONNECTOR_SECURITY_PROFILE"
+		"@id" : "idsc:BASE_SECURITY_PROFILE"
 	},
 			"ids:title" : "This is a dummy title from the Interaction Library"
 }

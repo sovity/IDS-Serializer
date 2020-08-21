@@ -5,8 +5,7 @@
   "curator" : "http://companyA.com/ids/participant",
   "securityProfile" : {
     "@type" : "ids:SecurityProfile",
-    "@id" : "http://industrialdataspace.org/securityProfile/5d7f7dc6-9005-43dd-88f1-dd8c51698c8f",
-    "basedOn" : [ "ids:PredefinedSecurityProfile", "https://w3id.org/idsa/core/Level0SecurityProfile" ]
+    "@id" : "idsc:BASE_SECURITY_PROFILE"
   },
   "maintainer" : "http://companyA.com/ids/participant",
   "catalog" : {
