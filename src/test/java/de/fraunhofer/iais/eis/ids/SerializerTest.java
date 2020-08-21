@@ -608,9 +608,16 @@ public class SerializerTest {
 		
 		for (Resource resource : resources ) {
 			String resourceAsJsonLD = localSerializer.serialize(resource);
-			Resource parsedResource = localSerializer.deserialize(resourceAsJsonLD, Resource.class);
-			assertEquals(resource.getDescription().get(0).getValue(), parsedResource.getDescription().get(0).getValue());
-			assertEquals(resource.getDescription().get(0).getLanguage(), parsedResource.getDescription().get(0).getLanguage());
+			try {
+				Resource parsedResource = localSerializer.deserialize(resourceAsJsonLD, Resource.class);
+				assertEquals(resource.getDescription().get(0).getValue(), parsedResource.getDescription().get(0).getValue());
+				assertEquals(resource.getDescription().get(0).getLanguage(), parsedResource.getDescription().get(0).getLanguage());
+			}
+			catch (IOException e)
+			{
+				System.out.println(resourceAsJsonLD);
+				Assert.fail();
+			}
 		}
 	}
 

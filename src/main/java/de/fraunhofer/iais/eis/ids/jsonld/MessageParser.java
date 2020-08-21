@@ -114,9 +114,19 @@ public class MessageParser {
                 //Is the return type some sort of List?
                 if(Collection.class.isAssignableFrom(value.getParameterTypes()[0]))
                 {
+                    boolean isTypedLiteral = false;
                     //Yes, it is assignable multiple times. Concatenate multiple values together using some delimiter
                     //TODO: What kind of delimiter would be appropriate here?
-                    //TODO: Language is lost with GROUP_CONCAT, see https://stackoverflow.com/a/25497695/9743294
+                    try {
+                        String typeName = extractTypeNameFromArrayList(value.getGenericParameterTypes()[0]);
+                        if(typeName.endsWith("TypedLiteral")) isTypedLiteral = true;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(isTypedLiteral)
+                    {
+                        queryStringBuilder.append(" (GROUP_CONCAT(CONCAT('\"',?").append(key1).append(",'\"@', lang(?").append(key1).append("));separator=\"|\") AS ?").append(key1).append("sLang) ");
+                    }
                     queryStringBuilder.append(" (GROUP_CONCAT(?").append(key1).append(";separator=\"|\") AS ?").append(key1).append("s) ");
 
                 }
@@ -218,15 +228,37 @@ public class MessageParser {
                             String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
                             if(isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0]))
                             {
-                                System.out.println(currentSparqlBinding);
+                                if(typeName.endsWith("TypedLiteral"))
+                                {
+                                    try {
+                                        currentSparqlBinding = querySolution.get(sparqlParameterName + "Lang").toString();
+                                    }
+                                    catch (NullPointerException ignored)
+                                    {
+                                        //TODO: Would it be wise to make the parsing fail at this point?
+                                        // It happens when, for example, an unknown @type parameter is passed (e.g. "@type" : "xsd:string" with unknown namespace xsd)
+                                    }
+                                }
                                 ArrayList<Object> list = new ArrayList<>();
                                 for(String s : currentSparqlBinding.split("\\|"))
                                 {
-
-                                    //TODO: language is lost here... Maybe?!
+                                    Literal literal;
                                     //querySolution.get(sparqlParameterName).
-                                    System.out.println(s);
-                                    Literal literal = ResourceFactory.createPlainLiteral(s);
+                                    if(s.endsWith("@"))
+                                    {
+                                        s = s.substring(2, s.length() - 3);
+                                        literal = ResourceFactory.createStringLiteral(s);
+                                    }
+                                    else if(s.startsWith("\\"))
+                                    {
+                                        //turn something like \"my Desc 1\"@en to "my Desc 1"@en
+                                        s = s.substring(1).replace("\\\"@", "\"@");
+                                        literal = ResourceFactory.createLangLiteral(s.substring(1, s.lastIndexOf("@") - 1), s.substring(s.lastIndexOf("@") + 1));
+                                    }
+                                    else
+                                    {
+                                        literal = ResourceFactory.createPlainLiteral(s);
+                                    }
 
                                     //Is the type of the ArrayList some built in Java primitive?
 
@@ -361,12 +393,12 @@ public class MessageParser {
         {
             if(!literal.getLanguage().equals(""))
             {
-                System.out.println("Creating language tagged typed literal");
+                //System.out.println("Creating language tagged typed literal");
                 return new TypedLiteral(literal.getValue().toString(), literal.getLanguage());
             }
             if(literal.getDatatypeURI() != null)
             {
-                System.out.println("Creating literal with type");
+                //System.out.println("Creating literal with type");
                 return new TypedLiteral(literal.getValue().toString(), new URI(literal.getDatatypeURI()));
             }
             return new TypedLiteral(currentSparqlBinding);
