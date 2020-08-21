@@ -11,17 +11,15 @@ import org.junit.Test;
 import de.fraunhofer.iais.eis.DataResource;
 import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import org.junit.runner.notification.RunListener;
 
-import javax.validation.constraints.AssertTrue;
 
 public class DomainSpecificResourcesTest {
 
-	@Test
 	/**
 	 * This test loads a JSON-LD with unknown (neither ids, idsc, fhg digital etc.) namespaces and checks whether some
 	 * of them survived the parsing/serialization
 	 */
+	@Test
 	public void test() throws IOException {
 		
 		byte[] encoded = Files.readAllBytes(Paths.get("src/test/resources/Life-Expectancy.jsonld"));

@@ -191,6 +191,9 @@ public class MessageParser {
             StringBuilder queryForOtherProperties = new StringBuilder();
             //Query for all unknown properties and their values
             //Select properties and values only
+
+            //TODO: SBA grab complex foreign sub objects
+            //CONSTRUCT { ?s ?p ?o } { ?s ?p ?o. FILTER(?p NOT IN (liste der ids: properties)) }
             queryForOtherProperties.append("PREFIX ids: <https://w3id.org/idsa/core/>\n PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n SELECT ?p ?o { ");
 
             //Respect ALL properties and values
@@ -249,7 +252,7 @@ public class MessageParser {
             while(externalPropertiesResultSet.hasNext())
             {
                 QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
-                System.out.println("Added external property: " + externalPropertySolution.get("p").toString());
+                //System.out.println("Added external property: " + externalPropertySolution.get("p").toString());
                 Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
                 setProperty.invoke(returnObject, externalPropertySolution.get("p").toString(), externalPropertySolution.get("o"));
             }
@@ -302,6 +305,8 @@ public class MessageParser {
                                     }
                                     catch (NullPointerException ignored)
                                     {
+                                        //TODO log exception
+
                                         //TODO: Would it be wise to make the parsing fail at this point?
                                         // It happens when, for example, an unknown @type parameter is passed (e.g. "@type" : "xsd:string" with unknown namespace xsd)
                                     }

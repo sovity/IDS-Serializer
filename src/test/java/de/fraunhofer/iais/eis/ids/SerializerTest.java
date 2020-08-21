@@ -54,7 +54,7 @@ public class SerializerTest {
 		// object with only basic types
 		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
-		now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+		now = DatatypeFactory.newInstance().newXMLGregorianCalendar(c).normalize();
 
 		basicInstance = new ConnectorUpdateMessageBuilder()
 				._issued_(now)
