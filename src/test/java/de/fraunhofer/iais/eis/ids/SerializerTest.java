@@ -117,14 +117,14 @@ public class SerializerTest {
 		Assert.assertEquals(basicInstance.getId(), deserializedConnectorAvailableMessage.getId());
 		Assert.assertNotNull(deserializedConnectorAvailableMessage);
 
-		//This check is too primitive... E.g. the parser may change the time format (e.g. from 8:00:00+02:00 to 6:00:00Z)
-		//Assert.assertTrue(connectorAvailableMessage.equalsIgnoreCase(serializer.serialize(deserializedConnectorAvailableMessage)));
+		Assert.assertEquals(basicInstance.getContentVersion(), deserializedConnectorAvailableMessage.getContentVersion());
+		Assert.assertEquals(basicInstance.getModelVersion(), deserializedConnectorAvailableMessage.getModelVersion());
+		Assert.assertEquals(basicInstance.getIssuerConnector(), deserializedConnectorAvailableMessage.getIssuerConnector());
+		Assert.assertEquals(basicInstance.getSenderAgent(), deserializedConnectorAvailableMessage.getSenderAgent());
+		Assert.assertEquals(basicInstance.getSecurityToken().getTokenValue(), deserializedConnectorAvailableMessage.getSecurityToken().getTokenValue());
+		Assert.assertEquals(basicInstance.getCorrelationMessage(), deserializedConnectorAvailableMessage.getCorrelationMessage());
+		Assert.assertEquals(basicInstance.getAffectedConnector(), deserializedConnectorAvailableMessage.getAffectedConnector());
 
-		Field properties = ConnectorUpdateMessageImpl.class.getDeclaredField("properties");
-		properties.setAccessible(true);
-		properties.set(deserializedConnectorAvailableMessage, null); // Serialiser creates an empty HashMap, which kills the following equality check
-
-		Assert.assertTrue(EqualsBuilder.reflectionEquals(basicInstance, deserializedConnectorAvailableMessage, true, Object.class, true));
 	}
 
 	@Test
@@ -167,11 +167,13 @@ public class SerializerTest {
 		RejectionMessage deserializedRejectionMessage = serializer.deserialize(rejectionMessage, RejectionMessage.class);
 		Assert.assertNotNull(deserializedRejectionMessage);
 
-		Field properties = RejectionMessageImpl.class.getDeclaredField("properties");
-		properties.setAccessible(true);
-		properties.set(deserializedRejectionMessage, null); // Serialiser creates an empty HashMap, which kills the following equality check
-
-		Assert.assertTrue(EqualsBuilder.reflectionEquals(enumInstance, deserializedRejectionMessage, true, Object.class, true));
+		Assert.assertEquals(enumInstance.getContentVersion(), deserializedRejectionMessage.getContentVersion());
+		Assert.assertEquals(enumInstance.getModelVersion(), deserializedRejectionMessage.getModelVersion());
+		Assert.assertEquals(enumInstance.getIssuerConnector(), deserializedRejectionMessage.getIssuerConnector());
+		Assert.assertEquals(enumInstance.getSenderAgent(), deserializedRejectionMessage.getSenderAgent());
+		Assert.assertEquals(enumInstance.getSecurityToken().getTokenValue(), deserializedRejectionMessage.getSecurityToken().getTokenValue());
+		Assert.assertEquals(enumInstance.getRejectionReason(), deserializedRejectionMessage.getRejectionReason());
+		Assert.assertEquals(enumInstance.getCorrelationMessage(), deserializedRejectionMessage.getCorrelationMessage());
 	}
 
 	@Test
@@ -316,11 +318,21 @@ public class SerializerTest {
 				.build();
 		String serialized = serializer.serialize(sdr);
 		Message m = serializer.deserialize(serialized, Message.class);
-		Field properties = DescriptionRequestMessageImpl.class.getDeclaredField("properties");
-		properties.setAccessible(true);
-		properties.set(m, null); // Serializer creates an empty HashMap, which kills the following equality check
 
-		Assert.assertTrue(EqualsBuilder.reflectionEquals(sdr, m, true, Object.class, true));
+		Assert.assertEquals(sdr.getContentVersion(), m.getContentVersion());
+		Assert.assertEquals(sdr.getModelVersion(), m.getModelVersion());
+		Assert.assertEquals(sdr.getIssuerConnector(), m.getIssuerConnector());
+		Assert.assertEquals(sdr.getSenderAgent(), m.getSenderAgent());
+		Assert.assertEquals(sdr.getSecurityToken().getTokenValue(), m.getSecurityToken().getTokenValue());
+
+		//Field properties = DescriptionRequestMessageImpl.class.getDeclaredField("properties");
+		//properties.setAccessible(true);
+		//properties.set(m, null); // Serializer creates an empty HashMap, which kills the following equality check
+
+		//reflectionEquals cannot be used reliably anymore, as the process of putting incoming RDF into a model and extracting it can transform the values legally
+		//E.g., it is perfectly valid to transform a timestamp 2020-01-01T10:00:00+02:00 to 2020-01-01T:08:00:00Z (i.e. getting rid of the offset)
+		//Such transformations kill the assertion though...
+		//Assert.assertTrue(EqualsBuilder.reflectionEquals(sdr, m, true, Object.class, true));
 	}
 
 	@Test
@@ -551,11 +563,11 @@ public class SerializerTest {
 				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
 				"  \"ids:description\" : {\r\n" + 
 				"    \"@value\" : \"a description 5\",\r\n" + 
-				"    \"@type\" : \"xsd:string\"\r\n" + // with string type  and xsd: prefix
+				"    \"@type\" : \"xsd:string\"\r\n" + // with string type and xsd: prefix. Note that this is an unknown namespace and therefore invalid! The serializer will throw a warning
 				"  },\r\n" + 
 				"  \"ids:keyword\" : {\r\n" + 
 				"    \"@value\" : \"keyword5\",\r\n" + 
-				"    \"@type\" : \"xsd:string\"\r\n" + // with string type and xsd: prefix
+				"    \"@type\" : \"xsd:string\"\r\n" + // with string type and xsd: prefix Note that this is an unknown namespace and therefore invalid! The serializer will throw a warning
 				"  }\r\n" + 
 				"}";
 
@@ -627,6 +639,7 @@ public class SerializerTest {
 				._description_(Util.asList(new TypedLiteral("\"a description 7\"^^http://www.w3.org/2001/XMLSchema#string")))
 				._keyword_(Util.asList(new TypedLiteral("\"keyword7\"^^http://www.w3.org/2001/XMLSchema#string")))
 				.build();
+		//Note that the following resource uses the unknown namespace "xsd:" -- the serializer will throw a warning here
 		Resource resource8 = new ResourceBuilder()
 				._description_(Util.asList(new TypedLiteral("\"a description 8\"^^xsd:string")))
 				._keyword_(Util.asList(new TypedLiteral("\"keyword8\"^^xsd:string")))
