@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import de.fraunhofer.iais.eis.*;
-import de.fraunhofer.iais.eis.ids.jsonld.MessageParser;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +111,7 @@ public class ParserTest {
 	@Test
 	public void parseMessageTest() throws IOException {
 		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
-		Message message = MessageParser.getInstance().parseMessage(messageString, Message.class);
+		Message message = new Serializer().deserialize(messageString, Message.class);
 		System.out.println(message.toRdf()); //at this stage, it does nothing. Debug to look into variables
 	}
 
