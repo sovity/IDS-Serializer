@@ -112,7 +112,7 @@ public class Serializer {
      * @param prefix Prefix to be added
      * @param namespaceUrl URL of the prefix
      */
-    public void addKnownNamespace(String prefix, String namespaceUrl)
+    public static void addKnownNamespace(String prefix, String namespaceUrl)
     {
         MessageParser.knownNamespaces.put(prefix, namespaceUrl);
     }
