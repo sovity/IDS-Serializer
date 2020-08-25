@@ -104,7 +104,7 @@ public class Serializer {
      * @return an object representing the provided JSON(-LD) structure
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
-        return new MessageParser().parseMessage(serialization, valueType);
+        return new Parser().parseMessage(serialization, valueType);
     }
 
     /**
@@ -114,7 +114,7 @@ public class Serializer {
      */
     public static void addKnownNamespace(String prefix, String namespaceUrl)
     {
-        MessageParser.knownNamespaces.put(prefix, namespaceUrl);
+        Parser.knownNamespaces.put(prefix, namespaceUrl);
     }
 
     /**

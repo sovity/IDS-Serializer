@@ -5,6 +5,7 @@ It handles serializing Java objects created by [the CodeGen tool](https://jira.i
 For both directions, Jackson Annotations on the classes, fields and functions are of great importance.
 While serializing, these annotations are used to determine the name of objects and arrays, while during parsing (deserialization) the annotations are used to find appropriate implementing classes of interfaces, determine mandatory fields, and more.
 An illustration of the parsing workflow (not illustrating foreign namespace objects) is shown below.
+
 ![Parser Workflow](documentation/workflow/Parser_Workflow.png)
 
 Note that during the parsing stage, there are some implicit dependencies on certain naming conventions.

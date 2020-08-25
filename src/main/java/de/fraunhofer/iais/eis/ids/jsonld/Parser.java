@@ -34,9 +34,9 @@ import java.util.*;
  * Internal class to handle the parsing of JSON-LD into java objects
  * @author mboeckmann
  */
-class MessageParser {
+class Parser {
 
-    Logger logger = LoggerFactory.getLogger(MessageParser.class);
+    Logger logger = LoggerFactory.getLogger(Parser.class);
 
     static Map<String, String> knownNamespaces = new HashMap<>();
 
