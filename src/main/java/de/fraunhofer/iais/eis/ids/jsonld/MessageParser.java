@@ -310,6 +310,9 @@ class MessageParser {
                 return returnObject;
             }
 
+
+            // now as all declared instances and classes are treated, which are also represented in the respective java
+            // dependency, take care about the ones within foreign namespaces and add those to the 'properties' field
             Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
             Method getProperties = returnObject.getClass().getDeclaredMethod("getProperties");
 
@@ -768,6 +771,9 @@ class MessageParser {
         }
          */
 
+        // Query to retrieve all instances in the input graph that have a class assignement
+        // Assumption: if the classname (?type) is equal to the target class, this should be
+        // instance we actually want to parse
         String queryString = "SELECT ?id ?type { ?id a ?type . }";
         Query query = QueryFactory.create(queryString);
         QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
