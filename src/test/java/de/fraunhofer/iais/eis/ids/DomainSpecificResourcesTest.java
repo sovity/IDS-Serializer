@@ -5,12 +5,17 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Map;
 
+import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.junit.Test;
 
 import de.fraunhofer.iais.eis.DataResource;
 import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 public class DomainSpecificResourcesTest {
@@ -31,8 +36,16 @@ public class DomainSpecificResourcesTest {
 
 		String serialized_resource = serializer.serialize(res);
 		System.out.println(serialized_resource);
-		assertTrue(serialized_resource.contains("\"http://rdfs.org/ns/void#distinctObjects\" : 3"));
-		assertTrue(serialized_resource.contains("\"http://rdfs.org/ns/void#triples\" : 1"));
+		assertTrue(serialized_resource.contains("\"http://rdfs.org/ns/void#distinctObjects\" :"));
+		assertTrue(res.getProperties().containsKey("http://rdfs.org/ns/void#distinctObjects"));
+		Object o = res.getProperties().get("http://rdfs.org/ns/void#distinctObjects");
+		assertTrue(o instanceof TypedLiteral);
+		assertEquals("111", ((TypedLiteral) o).getValue());
+		assertEquals("http://www.w3.org/2001/XMLSchema#integer", ((TypedLiteral) o).getType());
+		assertTrue(res.getProperties().containsKey("http://rdfs.org/ns/void#propertyPartition"));
+		Object o2 = res.getProperties().get("http://rdfs.org/ns/void#propertyPartition");
+		assertTrue(o2 instanceof ArrayList);
+		assertTrue(serialized_resource.contains("\"http://rdfs.org/ns/void#triples\" :"));
 		assertTrue(serialized_resource.contains("\"http://rdfs.org/ns/void#property\" :"));
 		assertTrue(serialized_resource.contains("\"@id\" : \"http://dbpedia.org/resource/Year\""));
 
@@ -54,6 +67,19 @@ public class DomainSpecificResourcesTest {
 		Resource res2 = serializer.deserialize(serialized1, DataResource.class);
 		String serialized2 = serializer.serialize(res2);
 
-		assertTrue(serialized1.equalsIgnoreCase(serialized2));
+		//Make sure they have the same key set
+		for(Map.Entry<String, Object> entry : res1.getProperties().entrySet())
+		{
+			assertTrue(res2.getProperties().containsKey(entry.getKey()));
+		}
+		for(Map.Entry<String, Object> entry : res2.getProperties().entrySet())
+		{
+			assertTrue(res1.getProperties().containsKey(entry.getKey()));
+		}
+
+		assertTrue(res1.getProperties().size() > 10);
+
+
+		//assertTrue(serialized1.equalsIgnoreCase(serialized2));
 	}
 }

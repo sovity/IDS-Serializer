@@ -7,6 +7,7 @@ import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.Literal;
 import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.RDFNode;
 import org.apache.jena.rdf.model.ResourceFactory;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
@@ -248,7 +249,6 @@ class MessageParser {
                 queryForOtherProperties.append("PREFIX ").append(entry.getKey()).append(" <").append(entry.getValue()).append(">\n");
             }
 
-            //TODO: SBA grab complex foreign sub objects
             //Respect ALL properties and values
             queryForOtherProperties.append(" SELECT ?p ?o {  <").append(objectUri).append("> ?p ?o .\n");
 
@@ -310,12 +310,60 @@ class MessageParser {
                 return returnObject;
             }
 
-            //TODO SBA: This is rather flat so far. Nested external properties are not captured yet
+            Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
+            Method getProperties = returnObject.getClass().getDeclaredMethod("getProperties");
+
             while (externalPropertiesResultSet.hasNext()) {
                 QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
-                //System.out.println("Added external property: " + externalPropertySolution.get("p").toString());
-                Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
-                setProperty.invoke(returnObject, externalPropertySolution.get("p").toString(), externalPropertySolution.get("o"));
+
+                HashMap<String, Object> currentProperties = (HashMap<String, Object>) getProperties.invoke(returnObject);
+
+                //Avoid NullPointerException
+                if(currentProperties == null)
+                {
+                    currentProperties = new HashMap<>();
+                }
+
+                String propertyUri = externalPropertySolution.get("p").toString();
+
+                //Does this key already exist? If yes, we need to store the value as array to not override them
+                if(currentProperties.containsKey(propertyUri)) {
+                    //If it is not an array list yet, turn it into one
+                    if (!(currentProperties.get(propertyUri) instanceof ArrayList)) {
+                        ArrayList<Object> newList = new ArrayList<>();
+                        newList.add(currentProperties.get(propertyUri));
+                        currentProperties.put(propertyUri, newList);
+                    }
+                }
+
+                //Literals and complex objects need to be handled differently
+                //Literals can be treated as flat values, whereas complex objects require recursive calls
+                if(externalPropertySolution.get("o").isLiteral())
+                {
+                    Object o = handleForeignLiteral(externalPropertySolution.getLiteral("o"));
+                    //If it is already an ArrayList, add new value to it
+                    if(currentProperties.containsKey(propertyUri)) {
+                        ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
+                        currentPropertyArray.add(o);
+                        setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                    }
+                    //Otherwise save as new plain value
+                    else {
+                        setProperty.invoke(returnObject, propertyUri, o);
+                    }
+                }
+                else {
+                    //It is a complex object. Distinguish whether or not we need to store as array
+                    HashMap<String, Object> subMap = handleForeignNode(externalPropertySolution.getResource("o"), new HashMap<>(), inputModel);
+                    subMap.put("@id", externalPropertySolution.getResource("o").getURI()); //TODO: if something is a list of IDs, only one is captured
+                    if (currentProperties.containsKey(propertyUri)) {
+                        ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
+                        currentPropertyArray.add(subMap);
+                        setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                    } else {
+                        setProperty.invoke(returnObject, propertyUri, subMap);
+                    }
+                }
             }
 
             //SPARQL binding present, iterate over result and construct return object
@@ -428,6 +476,87 @@ class MessageParser {
         } catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException | ClassNotFoundException e) {
             throw new IOException("Failed to instantiate desired class", e);
         }
+    }
+
+    private Object handleForeignLiteral(Literal literal) throws URISyntaxException {
+        if(literal.getLanguage() != null && !literal.getLanguage().equals(""))
+        {
+            return new TypedLiteral(literal.getString(), literal.getLanguage());
+        }
+        //If not, does it have some datatype URI?
+        else if(literal.getDatatypeURI() != null && !literal.getDatatypeURI().equals(""))
+        {
+            return new TypedLiteral(literal.getString(), new URI(literal.getDatatypeURI()));
+        }
+        //If both is not true, add it as normal string
+        else
+        {
+            return literal.getString();
+        }
+    }
+
+    private HashMap<String, Object> handleForeignNode(RDFNode node, HashMap<String, Object> map, Model model) throws IOException, URISyntaxException {
+        //Make sure it is not a literal. If it were, we would not know the property name and could not add this to the map
+        //Literals must be handled "one recursion step above"
+        if(node.isLiteral())
+        {
+            throw new IOException("Literal passed to handleForeignNode. Must be non-literal RDF node");
+        }
+
+        //Run SPARQL query retrieving all information (only one hop!) about this node
+        String queryString = "SELECT ?p ?o { BIND(<" + node.asNode().getURI() + "> AS ?s) . ?s ?p ?o . } ";
+        Query query = QueryFactory.create(queryString);
+        QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
+        ResultSet resultSet = queryExecution.execSelect();
+
+
+
+        //Handle outgoing properties of this foreign node
+        while(resultSet.hasNext())
+        {
+            QuerySolution querySolution = resultSet.next();
+
+            String propertyUri = querySolution.get("p").toString();
+
+            if(map.containsKey(propertyUri)) {
+                //If it is not an array list yet, turn it into one
+                if (!(map.get(propertyUri) instanceof ArrayList)) {
+                    ArrayList<Object> newList = new ArrayList<>();
+                    newList.add(map.get(propertyUri));
+                    map.put(propertyUri, newList);
+                }
+            }
+
+            //Check the type of object we have. If it is a literal, just add it as "flat value" to the map
+            if(querySolution.get("o").isLiteral())
+            {
+                //Handle some small literal. This function will turn this into a TypedLiteral if appropriate
+                Object o = handleForeignLiteral(querySolution.getLiteral("o"));
+                if(map.containsKey(propertyUri))
+                {
+                    map.put(querySolution.get("p").toString(), ((ArrayList)map.get(propertyUri)).add(o));
+                }
+                else
+                {
+                    map.put(querySolution.get("p").toString(), o);
+                }
+            }
+
+            //If it is not a literal, we need to call this function recursively. Create new map for sub object
+            else
+            {
+                HashMap<String, Object> subMap = handleForeignNode(querySolution.getResource("o"), new HashMap<>(), model);
+                subMap.put("@id", querySolution.getResource("o").getURI());
+                if(map.containsKey(propertyUri))
+                {
+                    map.put(querySolution.get("p").toString(), ((ArrayList)map.get(propertyUri)).add(subMap));
+                }
+                else {
+                    map.put(querySolution.get("p").toString(), subMap);
+                }
+            }
+        }
+        return map;
     }
 
 
