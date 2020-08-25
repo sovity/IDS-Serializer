@@ -358,7 +358,7 @@ class MessageParser {
                 else {
                     //It is a complex object. Distinguish whether or not we need to store as array
                     HashMap<String, Object> subMap = handleForeignNode(externalPropertySolution.getResource("o"), new HashMap<>(), inputModel);
-                    subMap.put("@id", externalPropertySolution.getResource("o").getURI()); //TODO: if something is a list of IDs, only one is captured
+                    subMap.put("@id", externalPropertySolution.getResource("o").getURI());
                     if (currentProperties.containsKey(propertyUri)) {
                         ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
                         currentPropertyArray.add(subMap);
@@ -821,10 +821,9 @@ class MessageParser {
 
     /**
      * Reads a message into an Apache Jena model.
-     * If the class was not previously initialized, it will automatically initialize upon this function call.
      *
      * @param message Message to be read
-     * @return The model of the message plus ontology
+     * @return The model of the message
      */
     private Model readMessage(String message) {
 
