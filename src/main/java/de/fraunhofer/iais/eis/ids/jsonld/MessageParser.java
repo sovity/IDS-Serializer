@@ -615,7 +615,7 @@ class MessageParser {
         if (currentType.isPrimitive()) {
             //System.out.println(currentType.getName() + " is a Java primitive");
             if (literal == null) {
-                throw new NullPointerException("Trying to handle Java primitive, but got no literal value");
+                throw new IOException("Trying to handle Java primitive, but got no literal value");
             }
             //If it is an actual primitive, there is no need to instantiate anything. Just give it to the function
             switch (currentType.getSimpleName()) {
@@ -803,7 +803,7 @@ class MessageParser {
         }
 
         if (returnClass == null) {
-            throw new NullPointerException("Could not determine an appropriate implementing class for " + targetClass.getName());
+            throw new IOException("Could not transform input to an appropriate implementing class for " + targetClass.getName());
         }
 
         //At this point, we parsed the model and know to which implementing class we want to parse
