@@ -106,4 +106,20 @@ public class ParserTest {
 	}
 
 
+
+	/**
+	 * This one tests whether the serializer can work with relative URIs.
+	 *
+	 * @throws IOException
+	 */
+	@Test
+	public void relativeUriTest() throws IOException {
+
+		String baseConnector = SerializerUtil.readResourceToString("Connector1.jsonld");
+		baseConnector = baseConnector.replace("\"curator\" : \"http://companyA.com/ids/participant\"","\"curator\" : \"./ids/participant\"");
+		BaseConnector connector = new Serializer().deserialize(baseConnector, BaseConnector.class);
+
+		String serializedConnector = new Serializer().serialize(connector);
+		assertTrue(serializedConnector.contains("/ids/participant"));
+	}
 }
