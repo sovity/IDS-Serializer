@@ -6,10 +6,13 @@
 
 	<groupId>de.fraunhofer.iais.eis.ids</groupId>
 	<artifactId>infomodel-serializer</artifactId>
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.0.2-SNAPSHOT</version>
 
 	<properties>
+		<java.version>1.8</java.version>
 		<!--<java.version>11</java.version>-->
+		<infomodel.version>4.0.1-SNAPSHOT</infomodel.version>
+		<jackson.version>2.11.0</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
 	</properties>
@@ -22,14 +25,14 @@
 		<dependency>
 			<groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
 			<artifactId>util</artifactId>
-			<version>${project.version}</version>
+			<version>${infomodel.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
 			<artifactId>java</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
+			<version>${infomodel.version}</version>
 		</dependency>
 
 		<dependency>
@@ -41,7 +44,7 @@
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.9.9</version>
+			<version>${jackson.version}</version>
 		</dependency>
 
 		<dependency>
