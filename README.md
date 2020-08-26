@@ -1,4 +1,4 @@
-#International Data Spaces Serializer
+# International Data Spaces Serializer
 
 This repository contains the IDS Serializer.
 It handles serializing Java objects created by [the CodeGen tool](https://jira.iais.fraunhofer.de/stash/projects/ICTSL/repos/ids-infomodel-codegen/browse) to JSON-LD and vice versa.
