@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 
 public class ParserTest {
 
@@ -20,7 +19,6 @@ public class ParserTest {
 	/**
 	 * Main purpose: test for ids and idsc in the context
 	 * 
-	 * @throws IOException
 	 */
 	@Test
 	public void testBaseConnector() throws IOException {
@@ -39,7 +37,6 @@ public class ParserTest {
 	/**
 	 * Main purpose: test for JSON Arrays
 	 * 
-	 * @throws IOException
 	 */
 	@Test
 	public void testCatalog() throws IOException {
@@ -59,8 +56,8 @@ public class ParserTest {
 		String catalogAsString = SerializerUtil.readResourceToString("Catalog2.jsonld");
 		Serializer serializer = new Serializer();
 		//serializer.addPreprocessor(new TypeNamePreprocessor());
-		Connector connector = serializer.deserialize(catalogAsString, Connector.class);
-		String serialisedJsonLd = serializer.serialize(connector);
+		ResourceCatalog catalog = serializer.deserialize(catalogAsString, ResourceCatalog.class);
+		String serialisedJsonLd = serializer.serialize(catalog);
 //		logger.info(serialisedJsonLd);
 		assertFalse(serialisedJsonLd.isEmpty());
 	}
@@ -71,8 +68,7 @@ public class ParserTest {
 	 * Main purpose: test for RDF Objects at JSON value position (reference by URI, not by xsd:anyURI or xsd:string Literals):
 	 * for instance "ids:correlationMessage" : {"@id": "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"} vs. 
 	 * "ids:correlationMessage" : "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"
-	 * @throws IOException 
-	 * 
+	 *
 	 */
 	@Test
 	public void testMessage() throws IOException {
@@ -113,8 +109,17 @@ public class ParserTest {
 		
 		Serializer serializer = new Serializer();
 		
-		BaseConnector connector = serializer.deserialize(connectorString, BaseConnector.class);
+		serializer.deserialize(connectorString, BaseConnector.class);
 		
 	}
+
+
+	@Test
+	public void parseMessageTest() throws IOException {
+		String messageString = SerializerUtil.readResourceToString("MessageProcessedNotificationMessage.jsonld");
+		Message message = new Serializer().deserialize(messageString, Message.class);
+		System.out.println(message.toRdf()); //at this stage, it does nothing. Debug to look into variables
+	}
+
 
 }

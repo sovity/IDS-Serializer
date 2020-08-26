@@ -5,14 +5,13 @@
   "curator" : "http://companyA.com/ids/participant",
   "securityProfile" : {
     "@type" : "ids:SecurityProfile",
-    "@id" : "http://industrialdataspace.org/securityProfile/5d7f7dc6-9005-43dd-88f1-dd8c51698c8f",
-    "basedOn" : [ "ids:PredefinedSecurityProfile", "https://w3id.org/idsa/core/Level0SecurityProfile" ]
+    "@id" : "idsc:BASE_SECURITY_PROFILE"
   },
   "maintainer" : "http://companyA.com/ids/participant",
-  "catalog" : {
-    "@type" : "ids:Catalog",
+  "resourceCatalog" : {
+    "@type" : "ids:ResourceCatalog",
     "@id" : "http://industrialdataspace.org/catalog/85050e7c-1530-4980-93bc-87d94a831af9",
-    "offer" : [ {
+    "offeredResource" : [ {
       "@type" : "ids:Resource",
       "@id" : "http://industrialdataspace.org/resource/516eb953-c789-4bc4-a989-264e3755698a",
       "description" : [ {

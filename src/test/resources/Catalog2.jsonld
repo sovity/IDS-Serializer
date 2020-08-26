@@ -1,376 +1,267 @@
- {
-			"@context" : { "ids" : "https://w3id.org/idsa/core/",
-			"idsc" : "https://w3id.org/idsa/code/"
-	},
-			"@id" : "https://broker.ids.isst.fraunhofer.de/",
-			"@type" : "ids:BaseConnector",
-			"ids:catalog" : {
-		"@id" : "https://w3id.org/idsa/autogen/catalog/e4ff92f7-5c0b-4715-b636-ed87a9c77565",
-				"@type" : "ids:Catalog",
-				"ids:offer" : [ {
-			"@id" : "https://w3id.org/idsa/autogen/resource/cd337a4a-ac86-4930-9481-145b931cf0a5",
-					"@type" : "ids:Resource",
-					"ids:contentType" : {
-				"@id" : "idsc:SCHEMA_DEFINITION"
-			},
-			"ids:description" : "This is the description of the second resource from a test",
-					"ids:language" : [ {
-				"@id" : "idsc:TN"
-			}, {
-				"@id" : "idsc:FI"
-			} ],
-			"ids:title" : "This is the title of a second resource from a broker test",
-					"ids:version" : "1.1"
-		}, {
-			"@id" : "https://w3id.org/idsa/autogen/resource/efde59ef-f580-4233-aaca-ab6ece222ae1",
-					"@type" : "ids:Resource",
-					"ids:contentStandard" : {
-				"@id" : "http://contentstandard.org"
-			},
-			"ids:contentType" : {
-				"@id" : "idsc:SCHEMA_DEFINITION"
-			},
-			"ids:contractOffer" : {
-				"@id" : "https://w3id.org/idsa/autogen/contractOffer/140945da-80f7-4bb2-a5e0-3996b78c56aa",
-						"@type" : "ids:ContractOffer",
-						"ids:consumer" : {
-					"@id" : "http://consumer.org"
-				},
-				"ids:contractDate" : {
-					"@type" : "xsd:dateTimeStamp",
-							"@value" : "2000-07-30T00:00Z"
-				},
-				"ids:contractDocument" : {
-					"@id" : "https://w3id.org/idsa/autogen/textResource/de77ae98-a4a2-4b19-9313-a3ff7a3ae6aa",
-							"@type" : "ids:TextResource",
-							"ids:description" : "Description of the textual contract document",
-							"ids:title" : "Title of the textual contract document"
-				},
-				"ids:contractEnd" : {
-					"@type" : "xsd:dateTimeStamp",
-							"@value" : "2001-06-19T00:00Z"
-				},
-				"ids:contractStart" : {
-					"@type" : "xsd:dateTimeStamp",
-							"@value" : "2000-10-20T00:00Z"
-				},
-				"ids:obligation" : {
-					"@id" : "https://w3id.org/idsa/autogen/duty/1b5e5a74-0f2b-4f7f-8f09-9f44461f50ec",
-							"@type" : "ids:Duty",
-							"ids:action" : {
-						"@id" : "idsc:READ"
-					},
-					"ids:assignee" : {
-						"@id" : "https://w3id.org/idsa/autogen/participant/2cf92610-0856-41e2-b20b-11d300379742",
-								"@type" : "ids:Participant",
-								"ids:corporateEmailAddress" : "contact@info.org",
-								"ids:corporateHomepage" : {
-							"@id" : "http://info.org"
-						},
-						"ids:description" : "Description of the Obligation assignee",
-								"ids:memberPerson" : {
-							"@id" : "https://w3id.org/idsa/autogen/person/47b44802-ec6e-41c0-9ad9-5673165bba4c",
-									"@type" : "ids:Person",
-									"ids:emailAddress" : "max.mueller@info.org",
-									"ids:familyName" : "Mueller",
-									"ids:givenName" : "Max",
-									"ids:homepage" : "http://myhomepage.com",
-									"ids:phoneNumber" : "01234567890"
-						},
-						"ids:title" : "Obligation Assignee title"
-					},
-					"ids:assigner" : {
-						"@id" : "https://w3id.org/idsa/autogen/participant/526db6d0-947b-48f4-b25b-b7e222e1e99d",
-								"@type" : "ids:Participant",
-								"ids:corporateEmailAddress" : "contact@info.org",
-								"ids:corporateHomepage" : {
-							"@id" : "http://info.org"
-						},
-						"ids:description" : "Description of the Obligation assigner",
-								"ids:memberPerson" : {
-							"@id" : "https://w3id.org/idsa/autogen/person/02f56ddc-e22b-4a4f-aa4e-9ec2c2a32e6c",
-									"@type" : "ids:Person",
-									"ids:emailAddress" : "max.mueller@info.org",
-									"ids:familyName" : "Mueller",
-									"ids:givenName" : "Max",
-									"ids:homepage" : "http://myhomepage.com",
-									"ids:phoneNumber" : "01234567890"
-						},
-						"ids:title" : "Obligation Assigner title"
-					},
-					"ids:constraint" : {
-						"@id" : "https://w3id.org/idsa/autogen/constraint/575b2b3d-cff3-408c-8048-ae94ac1f9f9e",
-								"@type" : "ids:Constraint",
-								"ids:leftOperand" : {
-							"@id" : "idsc:QUANTITY"
-						},
-						"ids:operator" : {
-							"@id" : "idsc:EQUALS"
-						},
-						"ids:rightOperand" : "5",
-								"ids:unit" : {
-							"@id" : "https://w3id.org/idsa/autogen/unit/006b2555-d661-4006-b230-f92598a59251",
-									"@type" : "ids:Unit"
-						}
-					},
-					"ids:description" : "Description of the obligation",
-							"ids:title" : "Title Obligation"
-				},
-				"ids:permission" : {
-					"@id" : "https://w3id.org/idsa/autogen/permission/d4f29e98-f061-48c0-945a-5610c5b18482",
-							"@type" : "ids:Permission",
-							"ids:action" : {
-						"@id" : "idsc:READ"
-					},
-					"ids:assignee" : {
-						"@id" : "https://w3id.org/idsa/autogen/participant/c40ec3ab-6538-486c-acb1-053c4c534bca",
-								"@type" : "ids:Participant",
-								"ids:corporateEmailAddress" : "contact@info.org",
-								"ids:corporateHomepage" : {
-							"@id" : "http://info.org"
-						},
-						"ids:description" : "Description of the Permission assignee",
-								"ids:memberPerson" : {
-							"@id" : "https://w3id.org/idsa/autogen/person/3601fb95-a2d5-45a6-aea8-dfe8ebb56e53",
-									"@type" : "ids:Person",
-									"ids:emailAddress" : "max.mueller@info.org",
-									"ids:familyName" : "Mueller",
-									"ids:givenName" : "Max",
-									"ids:homepage" : "http://myhomepage.com",
-									"ids:phoneNumber" : "01234567890"
-						},
-						"ids:title" : "Permission Assignee title"
-					},
-					"ids:assigner" : {
-						"@id" : "https://w3id.org/idsa/autogen/participant/939bf6ed-e2ee-4975-a1ef-11b9fe8b14c2",
-								"@type" : "ids:Participant",
-								"ids:corporateEmailAddress" : "contact@info.org",
-								"ids:corporateHomepage" : {
-							"@id" : "http://info.org"
-						},
-						"ids:description" : "Description of the Permission assigner",
-								"ids:memberPerson" : {
-							"@id" : "https://w3id.org/idsa/autogen/person/12083c78-be84-4e04-9486-587427e0b0b4",
-									"@type" : "ids:Person",
-									"ids:emailAddress" : "max.mueller@info.org",
-									"ids:familyName" : "Mueller",
-									"ids:givenName" : "Max",
-									"ids:homepage" : "http://myhomepage.com",
-									"ids:phoneNumber" : "01234567890"
-						},
-						"ids:title" : "Permission Assigner title"
-					},
-					"ids:constraint" : {
-						"@id" : "https://w3id.org/idsa/autogen/constraint/75b28afd-f213-4acf-bcc0-4fab73edb635",
-								"@type" : "ids:Constraint",
-								"ids:leftOperand" : {
-							"@id" : "idsc:PAY_AMOUNT"
-						},
-						"ids:operator" : {
-							"@id" : "idsc:EQUALS"
-						},
-						"ids:rightOperand" : "200",
-								"ids:unit" : {
-							"@id" : "https://w3id.org/idsa/autogen/unit/0c71a1b4-8601-458e-b40a-585437ffa9e8",
-									"@type" : "ids:Unit"
-						}
-					},
-					"ids:description" : "permission description",
-							"ids:duty" : {
-						"@id" : "https://w3id.org/idsa/autogen/duty/1c1ad639-e9ce-43b8-8fd8-bd2011033cbf",
-								"@type" : "ids:Duty"
-					},
-					"ids:title" : "permission title"
-				},
-				"ids:prohibition" : {
-					"@id" : "https://w3id.org/idsa/autogen/prohibition/391651c9-2f80-4c78-8470-ceadc5b19edf",
-							"@type" : "ids:Prohibition",
-							"ids:action" : {
-						"@id" : "idsc:ANONYMIZE"
-					},
-					"ids:assignee" : {
-						"@id" : "https://w3id.org/idsa/autogen/participant/2b45cb39-1921-459d-b9c8-e0cac4e1d640",
-								"@type" : "ids:Participant",
-								"ids:corporateEmailAddress" : "contact@info.org",
-								"ids:corporateHomepage" : {
-							"@id" : "http://info.org"
-						},
-						"ids:description" : "Description of the Prohibition assignee",
-								"ids:memberPerson" : {
-							"@id" : "https://w3id.org/idsa/autogen/person/2e43e108-7585-4f68-a30f-441a702b48e8",
-									"@type" : "ids:Person",
-									"ids:emailAddress" : "max.mueller@info.org",
-									"ids:familyName" : "Mueller",
-									"ids:givenName" : "Max",
-									"ids:homepage" : "http://myhomepage.com",
-									"ids:phoneNumber" : "01234567890"
-						},
-						"ids:title" : "Prohibition Assignee title"
-					},
-					"ids:assigner" : {
-						"@id" : "https://w3id.org/idsa/autogen/participant/e85ed4e6-6813-4126-a4d2-8b075a2fc6e7",
-								"@type" : "ids:Participant",
-								"ids:corporateEmailAddress" : "contact@info.org",
-								"ids:corporateHomepage" : {
-							"@id" : "http://info.org"
-						},
-						"ids:description" : "Description of the Prohibition assigner",
-								"ids:memberPerson" : {
-							"@id" : "https://w3id.org/idsa/autogen/person/2673fa20-d0a6-42cc-9294-1a5f83f5416e",
-									"@type" : "ids:Person",
-									"ids:emailAddress" : "max.mueller@info.org",
-									"ids:familyName" : "Mueller",
-									"ids:givenName" : "Max",
-									"ids:homepage" : "http://myhomepage.com",
-									"ids:phoneNumber" : "01234567890"
-						},
-						"ids:title" : "Prohibition Assigner title"
-					},
-					"ids:constraint" : {
-						"@id" : "https://w3id.org/idsa/autogen/constraint/004717b6-58a2-4f59-94aa-e5ad65efad4e",
-								"@type" : "ids:Constraint",
-								"ids:leftOperand" : {
-							"@id" : "idsc:POLICY_EVALUATION_TIME"
-						},
-						"ids:operator" : {
-							"@id" : "idsc:DEFINES_AS"
-						},
-						"ids:rightOperand" : "24 months",
-								"ids:unit" : {
-							"@id" : "https://w3id.org/idsa/autogen/unit/029a91e8-29a3-42fc-9c08-a3656ffe2bbd",
-									"@type" : "ids:Unit"
-						}
-					},
-					"ids:description" : "prohibition description",
-							"ids:title" : "prohibition title"
-				},
-				"ids:provider" : {
-					"@id" : "http://provider.org"
-				},
-				"ids:refersTo" : {
-					"@id" : "idsc:AgreementTemplate"
-				}
-			},
-			"ids:customLicense" : {
-				"@id" : "http://customlicense.org"
-			},
-			"ids:description" : [ "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur\n\n + \n            \t\t\t\t        unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam\\n + \ndignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.", "Extending the description" ],
-			"ids:keyword" : [ "broker", "dummy", "test" ],
-			"ids:language" : [ {
-				"@id" : "idsc:JA"
-			}, {
-				"@id" : "idsc:PT"
-			} ],
-			"ids:representation" : {
-				"@id" : "https://w3id.org/idsa/autogen/textRepresentation/b958f0a3-7099-4b4b-ac12-be25336a1e1e",
-						"@type" : "ids:TextRepresentation",
-						"ids:domainVocabulary" : {
-					"@id" : "https://w3id.org/idsa/autogen/vocabularyData/bd37a86f-50ce-4c3c-845a-479278122e0e",
-							"@type" : "ids:VocabularyData",
-							"ids:vocabulary" : {
-						"@id" : "http://textVovabulary.com"
-					}
-				},
-				"ids:instance" : {
-					"@id" : "https://w3id.org/idsa/autogen/artifact/3e8d2098-3436-476b-8baa-5cd0940e5bbf",
-							"@type" : "ids:Artifact",
-							"ids:byteSize" : 0,
-					"ids:creationDate" : {
-						"@type" : "xsd:dateTimeStamp",
-								"@value" : "2015-10-15T00:00Z"
-					},
-					"ids:fileName" : "data.pdf"
-				},
-				"ids:mediaType" : {
-					"@id" : "idsc:APPLICATION_PDF",
-							"@type" : "ids:IANAMediaType"
-				},
-				"ids:representationStandard" : {
-					"@id" : "http://textRepresentation.org"
-				}
-			},
-			"ids:resourceEndpoint" : [ {
-				"@id" : "https://w3id.org/idsa/autogen/staticEndpoint/602470ff-030f-4ebe-b3d9-d992aa6f243a",
-						"@type" : "ids:StaticEndpoint",
-						"ids:endpointArtifact" : {
-					"@id" : "https://w3id.org/idsa/autogen/artifact/2be8901d-d575-4feb-aff9-7a4e9808f7ef",
-							"@type" : "ids:Artifact",
-							"ids:byteSize" : {
-						"@type" : "xsd:integer",
-								"@value" : "123"
-					},
-					"ids:checkSum" : "artifact checksum",
-							"ids:creationDate" : {
-						"@type" : "xsd:dateTimeStamp",
-								"@value" : "2000-10-15T00:00Z"
-					},
-					"ids:fileName" : "staticfile.txt"
-				},
-				"ids:endpointHost" : {
-					"@id" : "https://w3id.org/idsa/autogen/host/3eca9ae3-afbc-4db1-8c73-0d2cfb9c8c84",
-							"@type" : "ids:Host",
-							"ids:accessUrl" : {
-						"@id" : "http://staticAccessURL.com"
-					},
-					"ids:pathPrefix" : "pathprefix",
-							"ids:protocol" : {
-						"@id" : "idsc:HTTP"
-					}
-				},
-				"ids:inboundPath" : "a static inbound path",
-						"ids:outboundPath" : "a static outbound path",
-						"ids:path" : "a Static endpoint path"
-			}, {
-				"@id" : "https://w3id.org/idsa/autogen/interactiveEndpoint/0ee28bab-3187-42ed-9930-bae9cb16cd35",
-						"@type" : "ids:InteractiveEndpoint",
-						"ids:endpointHost" : {
-					"@id" : "https://w3id.org/idsa/autogen/host/67099907-07b9-4158-b27b-1492e02f4edd",
-							"@type" : "ids:Host",
-							"ids:accessUrl" : {
-						"@id" : "http://interactiveAccessURL.com"
-					},
-					"ids:pathPrefix" : "pathprefix",
-							"ids:protocol" : {
-						"@id" : "idsc:HTTP2"
-					}
-				},
-				"ids:endpointOperationBinding" : {
-					"@id" : "https://w3id.org/idsa/autogen/operationBinding/bcd74a02-1833-4f4c-800c-972e90a5345f",
-							"@type" : "ids:OperationBinding",
-							"ids:apiDocument" : {
-						"@id" : "https://w3id.org/idsa/autogen/resource/23194bf6-194f-4c07-a1e1-0ee8d7662efa",
-								"@type" : "ids:Resource"
-					},
-					"ids:boundOperation" : {
-						"@id" : "https://w3id.org/idsa/autogen/consumeContentOperation/ba9b5306-b3d4-4013-bbe5-396abdfce691",
-								"@type" : "ids:ConsumeContentOperation"
-					}
-				},
-				"ids:inboundPath" : "an interactive inbound path",
-						"ids:outboundPath" : "an interactive outbound path",
-						"ids:path" : "an interactive endpoint path"
-			} ],
-			"ids:standardLicense" : {
-				"@id" : "idsc:OTHERFREEWARELICENSE"
-			},
-			"ids:title" : "This is the title of a resource from a broker test",
-					"ids:version" : "v0.0.1"
-		}, {
-			"@id" : "https://w3id.org/idsa/autogen/resource/0aa0529e-16d0-43dd-b8c5-ee1efff12fbf",
-					"@type" : "ids:Resource"
-		} ]
-	},
-			"ids:curator" : {
-		"@id" : "https://example.org/"
-	},
-			"ids:description" : "This is a dummy description from the Interaction Library",
-			"ids:inboundModelVersion" : "3.0.0",
-			"ids:maintainer" : {
-		"@id" : "https://example.org/"
-	},
-			"ids:outboundModelVersion" : "3.0.0",
-			"ids:securityProfile" : {
-		"@id" : "idsc:BASE_CONNECTOR_SECURITY_PROFILE"
-	},
-			"ids:title" : "This is a dummy title from the Interaction Library"
+{
+  "@context" : {
+    "ids" : "https://w3id.org/idsa/core/",
+    "idsc" : "https://w3id.org/idsa/code/"
+  },
+  "@type" : "ids:ResourceCatalog",
+  "@id" : "https://w3id.org/idsa/autogen/resourceCatalog/bdd84a2c-3152-4c9f-b98a-cf21a1b95545",
+  "ids:offeredResource" : [ {
+    "@type" : "ids:Resource",
+    "@id" : "https://w3id.org/idsa/autogen/resource/75168972-5abb-4b22-b02e-b77ebfc8f65b",
+    "ids:language" : [ {
+      "@id" : "idsc:DE"
+    }, {
+      "@id" : "idsc:ES"
+    } ],
+    "ids:description" : [ {
+      "@value" : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    } ],
+    "ids:version" : "v0.0.1",
+    "ids:contentType" : {
+      "@id" : "idsc:SCHEMA_DEFINITION"
+    },
+    "ids:resourceEndpoint" : [ {
+      "@type" : "ids:ConnectorEndpoint",
+      "@id" : "https://w3id.org/idsa/autogen/connectorEndpoint/bc23257d-b352-4ef0-aef1-1f60cda1aa6a",
+      "ids:path" : "a Static endpoint path",
+      "ids:inboundPath" : "a static inbound path",
+      "ids:outboundPath" : "a static outbound path",
+      "ids:endpointArtifact" : {
+        "@type" : "ids:Artifact",
+        "@id" : "https://w3id.org/idsa/autogen/artifact/994e61af-1a23-4eb7-b4b3-0468a49ea1d4",
+        "ids:fileName" : "staticfile.txt",
+        "ids:byteSize" : 150,
+        "ids:checkSum" : "artifact checksum",
+        "ids:creationDate" : {
+          "@value" : "2000-10-15T00:00:00.000Z",
+          "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+        }
+      }
+    } ],
+    "ids:customLicense" : {
+      "@id" : "http://customlicense.org"
+    },
+    "ids:standardLicense" : {
+      "@id" : "http://example.org/license"
+    },
+    "ids:contractOffer" : [ {
+      "@type" : "ids:ContractOffer",
+      "@id" : "https://w3id.org/idsa/autogen/contractOffer/1978ff26-64e2-4158-a5e8-b1336f415b4f",
+      "ids:permission" : [ {
+        "@type" : "ids:Permission",
+        "@id" : "https://w3id.org/idsa/autogen/permission/97cf609a-a184-4d7a-a6d1-450e678574c1",
+        "ids:description" : [ {
+          "@value" : "permission description",
+          "@type" : "http://www.w3.org/2001/XMLSchema#string"
+        } ],
+        "ids:title" : [ {
+          "@value" : "permission title",
+          "@type" : "http://www.w3.org/2001/XMLSchema#string"
+        } ],
+        "ids:assignee" : [ {
+          "@id" : "https://w3id.org/idsa/autogen/participant/86550873-1119-4776-8b67-6e97998887b1"
+        } ],
+        "ids:assigner" : [ {
+          "@id" : "https://w3id.org/idsa/autogen/participant/bccc0b7e-cb0c-4838-bbf4-0d28121b4515"
+        } ],
+        "ids:action" : [ {
+          "@id" : "idsc:READ"
+        } ],
+        "ids:constraint" : [ {
+          "@type" : "ids:Constraint",
+          "@id" : "https://w3id.org/idsa/autogen/constraint/8cf08dc4-3335-4b8c-8abe-33977685b73a",
+          "ids:rightOperand" : {
+            "@value" : "200"
+          },
+          "ids:unit" : {
+            "@id" : "http://example.org/unit"
+          },
+          "ids:leftOperand" : {
+            "@id" : "idsc:PAY_AMOUNT"
+          },
+          "ids:operator" : {
+            "@id" : "idsc:EQUALS"
+          }
+        } ],
+        "ids:preDuty" : [ {
+          "@type" : "ids:Duty",
+          "@id" : "https://w3id.org/idsa/autogen/duty/31932ee4-427f-4556-9cb8-6960006e555f",
+          "ids:description" : [ {
+            "@value" : "Description of the pre-duty",
+            "@type" : "http://www.w3.org/2001/XMLSchema#string"
+          } ],
+          "ids:title" : [ {
+            "@value" : "Title Pre-Duty",
+            "@type" : "http://www.w3.org/2001/XMLSchema#string"
+          } ],
+          "ids:assignee" : [ {
+            "@id" : "http://example.org/preDutyAssignee"
+          } ],
+          "ids:assigner" : [ {
+            "@id" : "http://example.org/preDutyAssigner"
+          } ],
+          "ids:action" : [ {
+            "@id" : "idsc:ANONYMIZE"
+          } ],
+          "ids:constraint" : [ {
+            "@type" : "ids:Constraint",
+            "@id" : "https://w3id.org/idsa/autogen/constraint/024f755b-e0f6-4eb3-961f-f37267480925",
+            "ids:rightOperand" : {
+              "@value" : "5"
+            },
+            "ids:unit" : {
+              "@id" : "http://example.org/unit"
+            },
+            "ids:leftOperand" : {
+              "@id" : "idsc:QUANTITY"
+            },
+            "ids:operator" : {
+              "@id" : "idsc:EQUALS"
+            }
+          } ]
+        } ]
+      } ],
+      "ids:provider" : {
+        "@id" : "http://provider.org"
+      },
+      "ids:contractDocument" : {
+        "@type" : "ids:TextResource",
+        "@id" : "https://w3id.org/idsa/autogen/textResource/b2622ab9-412b-45e8-950d-65ec91b1a703",
+        "ids:description" : [ {
+          "@value" : "Description of the textual contract document",
+          "@type" : "http://www.w3.org/2001/XMLSchema#string"
+        } ],
+        "ids:title" : [ {
+          "@value" : "Title of the textual contract document",
+          "@type" : "http://www.w3.org/2001/XMLSchema#string"
+        } ]
+      },
+      "ids:contractEnd" : {
+        "@value" : "2001-06-19T00:00:00.000Z",
+        "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+      },
+      "ids:contractStart" : {
+        "@value" : "2000-10-20T00:00:00.000Z",
+        "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+      },
+      "ids:contractDate" : {
+        "@value" : "2000-07-30T00:00:00.000Z",
+        "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+      },
+      "ids:prohibition" : [ {
+        "@type" : "ids:Prohibition",
+        "@id" : "https://w3id.org/idsa/autogen/prohibition/78d7f167-7f92-454d-89d8-ea713c11e496",
+        "ids:description" : [ {
+          "@value" : "prohibition description",
+          "@type" : "http://www.w3.org/2001/XMLSchema#string"
+        } ],
+        "ids:title" : [ {
+          "@value" : "prohibition title",
+          "@type" : "http://www.w3.org/2001/XMLSchema#string"
+        } ],
+        "ids:assignee" : [ {
+          "@id" : "http://example.org/assignee1"
+        }, {
+          "@id" : "http://example.org/assignee2"
+        } ],
+        "ids:assigner" : [ {
+          "@id" : "http://example.org/assigner1"
+        }, {
+          "@id" : "http://example.org/assigner2"
+        } ],
+        "ids:action" : [ {
+          "@id" : "idsc:DISTRIBUTE"
+        } ],
+        "ids:constraint" : [ {
+          "@type" : "ids:Constraint",
+          "@id" : "https://w3id.org/idsa/autogen/constraint/dc44fb6c-c63c-41db-8d5b-e07f16f46772",
+          "ids:rightOperand" : {
+            "@value" : "24 months"
+          },
+          "ids:unit" : {
+            "@id" : "http://example.org/unit"
+          },
+          "ids:leftOperand" : {
+            "@id" : "idsc:POLICY_EVALUATION_TIME"
+          },
+          "ids:operator" : {
+            "@id" : "idsc:DEFINES_AS"
+          }
+        } ]
+      } ],
+      "ids:consumer" : {
+        "@id" : "http://consumer.org"
+      }
+    } ],
+    "ids:contentStandard" : {
+      "@id" : "http://contentstandard.org"
+    },
+    "ids:title" : [ {
+      "@value" : "Title of the resource offered by the Connector",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    } ],
+    "ids:representation" : [ {
+      "@type" : "ids:TextRepresentation",
+      "@id" : "https://w3id.org/idsa/autogen/textRepresentation/9b2567a8-c2b5-42c5-a032-e35c701f32b7",
+      "ids:instance" : [ {
+        "@type" : "ids:Artifact",
+        "@id" : "https://w3id.org/idsa/autogen/artifact/b3445cba-ff17-43d4-a9c6-a7eca9c2ec3a",
+        "ids:fileName" : "data.pdf",
+        "ids:byteSize" : 2678,
+        "ids:creationDate" : {
+          "@value" : "2015-10-15T00:00:00.000Z",
+          "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
+        }
+      } ],
+      "ids:mediaType" : {
+        "@type" : "ids:IANAMediaType",
+        "@id" : "https://w3id.org/idsa/autogen/iANAMediaType/34904564-9122-4e6c-97b0-ac71775f285d",
+        "ids:filenameExtension" : "pdf"
+      },
+      "ids:representationStandard" : {
+        "@id" : "http://textRepresentation.org"
+      }
+    } ],
+    "ids:keyword" : [ {
+      "@value" : "demo",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    }, {
+      "@value" : "test",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    } ]
+  }, {
+    "@type" : "ids:Resource",
+    "@id" : "https://w3id.org/idsa/autogen/resource/05677e57-439d-41d2-b7e5-4a7312da7c5c",
+    "ids:language" : [ {
+      "@id" : "idsc:FR"
+    }, {
+      "@id" : "idsc:EN"
+    } ],
+    "ids:description" : [ {
+      "@value" : "Multiple number of resources could be offered by the connectors",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    }, {
+      "@value" : "provide more description of this resource",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    } ],
+    "ids:version" : "1.1",
+    "ids:contentType" : {
+      "@id" : "idsc:SCHEMA_DEFINITION"
+    },
+    "ids:title" : [ {
+      "@value" : "Title of another resource offered by the Connector",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    }, {
+      "@value" : "Extending title",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    } ],
+    "ids:keyword" : [ {
+      "@value" : "broker",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    }, {
+      "@value" : "metadata",
+      "@type" : "http://www.w3.org/2001/XMLSchema#string"
+    } ]
+  } ]
 }
