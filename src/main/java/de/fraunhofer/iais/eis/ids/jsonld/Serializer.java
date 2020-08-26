@@ -104,11 +104,17 @@ public class Serializer {
      * @return an object representing the provided JSON(-LD) structure
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
-        mapper.registerModule(new JsonLDModule());
-        for (JsonPreprocessor preprocessor : preprocessors) {
-            serialization = preprocessor.preprocess(serialization);
-        }
-        return mapper.readValue(serialization, valueType);
+        return new Parser().parseMessage(serialization, valueType);
+    }
+
+    /**
+     * Allows to add further known namespaces to the message parser. Allows parsing to Java objects with JsonSubTypes annotations with other prefixes than "ids:".
+     * @param prefix Prefix to be added
+     * @param namespaceUrl URL of the prefix
+     */
+    public static void addKnownNamespace(String prefix, String namespaceUrl)
+    {
+        Parser.knownNamespaces.put(prefix, namespaceUrl);
     }
 
     /**
