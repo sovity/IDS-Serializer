@@ -616,7 +616,6 @@ class Parser {
     private Object handlePrimitive(Class<?> currentType, Literal literal, String currentSparqlBinding) throws URISyntaxException, DatatypeConfigurationException, IOException {
         //Java way of checking for primitives, i.e. int, char, float, double, ...
         if (currentType.isPrimitive()) {
-            //System.out.println(currentType.getName() + " is a Java primitive");
             if (literal == null) {
                 throw new IOException("Trying to handle Java primitive, but got no literal value");
             }
@@ -639,8 +638,6 @@ class Parser {
             }
         }
 
-        //System.out.println(currentType.getName() + " is some other (rather) primitive value");
-
         //Check for the more complex literals
 
         //URI
@@ -660,12 +657,11 @@ class Parser {
 
         //TypedLiteral
         if (TypedLiteral.class.isAssignableFrom(currentType)) {
+            //Either a language tagged string OR literal with type. Only one allowed
             if (!literal.getLanguage().equals("")) {
-                //System.out.println("Creating language tagged typed literal");
                 return new TypedLiteral(literal.getValue().toString(), literal.getLanguage());
             }
             if (literal.getDatatypeURI() != null) {
-                //System.out.println("Creating literal with type");
                 return new TypedLiteral(literal.getValue().toString(), new URI(literal.getDatatypeURI()));
             }
             return new TypedLiteral(currentSparqlBinding);
@@ -712,7 +708,6 @@ class Parser {
 
     private boolean isArrayListTypePrimitive(Type t) throws IOException {
         String typeName = extractTypeNameFromArrayList(t);
-        //System.out.println("Extracted type name from ArrayList: " + typeName);
 
         try {
             //Do not try to call Class.forName(primitive) -- that would throw an exception
@@ -764,15 +759,9 @@ class Parser {
         Model model = readMessage(message);
 
         ArrayList<Class<?>> implementingClasses = getImplementingClasses(targetClass);
-        /*System.out.println("Implementing classes of " + targetClass + " are: ");
-        for(Class<?> c : implementingClasses)
-        {
-            System.out.println(c.getName());
-        }
-         */
 
-        // Query to retrieve all instances in the input graph that have a class assignement
-        // Assumption: if the classname (?type) is equal to the target class, this should be
+        // Query to retrieve all instances in the input graph that have a class assignment
+        // Assumption: if the class name (?type) is equal to the target class, this should be the
         // instance we actually want to parse
         String queryString = "SELECT ?id ?type { ?id a ?type . }";
         Query query = QueryFactory.create(queryString);
@@ -797,11 +786,9 @@ class Parser {
             }
 
             for (Class<?> currentClass : implementingClasses) {
-                //System.out.println(className + " == " + currentClass.getSimpleName() + "Impl ? " +  currentClass.getSimpleName().equals(className + "Impl"));
                 if (currentClass.getSimpleName().equals(className + "Impl")) {
                     returnId = solution.get("id").toString();
                     returnClass = currentClass;
-                    //System.out.println("Found implementing class: " + currentClass.getSimpleName());
                     break;
                 }
             }

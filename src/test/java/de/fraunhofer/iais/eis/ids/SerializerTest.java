@@ -277,6 +277,13 @@ public class SerializerTest {
 	}
 
 	@Test
+	public void calendarSerialization() throws IOException {
+		XMLGregorianCalendar calendar;
+		String time = serializer.serialize(now);
+		System.out.println(time);
+	}
+
+	@Test
 	@Ignore // TODO enable this test as soon as we can work with unknown namespaces
 	public void serializeForeignProperties() throws Exception {
 		serializer.addPreprocessor(new TypeNamePreprocessor());
