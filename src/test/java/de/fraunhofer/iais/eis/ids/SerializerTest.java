@@ -8,14 +8,10 @@ import de.fraunhofer.iais.eis.util.PlainLiteral;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.model.impl.LinkedHashModel;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFParseException;
-import org.eclipse.rdf4j.rio.RDFParser;
-import org.eclipse.rdf4j.rio.Rio;
-import org.eclipse.rdf4j.rio.UnsupportedRDFormatException;
-import org.eclipse.rdf4j.rio.helpers.StatementCollector;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -46,6 +42,12 @@ public class SerializerTest {
 	private static Connector securityProfileInstance;
 	private static Serializer serializer;
 	private static XMLGregorianCalendar now;
+
+
+	private void readToModel(Model targetModel, String rdfInput)
+	{
+		RDFDataMgr.read(targetModel, new ByteArrayInputStream(rdfInput.getBytes()), RDFLanguages.JSONLD);
+	}
 
 	@BeforeClass
 	public static void setUp() throws ConstraintViolationException, DatatypeConfigurationException, URISyntaxException, MalformedURLException {
@@ -101,15 +103,12 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void jsonldSerialize_Basic() throws IOException, NoSuchFieldException, IllegalAccessException {
+	public void jsonldSerialize_Basic() throws IOException {
 		String connectorAvailableMessage = serializer.serialize(basicInstance);
 		Assert.assertNotNull(connectorAvailableMessage);
-		Model model = null;
-		try {
-			model = Rio.parse(new StringReader(connectorAvailableMessage), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, connectorAvailableMessage);
+
 		Assert.assertNotNull(model);
 
 		ConnectorUpdateMessage deserializedConnectorAvailableMessage = serializer.deserialize(connectorAvailableMessage, ConnectorUpdateMessageImpl.class);
@@ -130,15 +129,11 @@ public class SerializerTest {
 	@Test
 	@Ignore //TODO
 	public void jsonldSerialize_Nested() throws IOException, NoSuchFieldException, IllegalAccessException {
-		String connector = serializer.serialize(nestedInstance, RDFFormat.JSONLD);
+		String connector = serializer.serialize(nestedInstance, RDFLanguages.JSONLD);
 		Assert.assertNotNull(connector);
 
-		Model model = null;
-		try {
-			model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, connector);
 		Assert.assertNotNull(model);
 
 		Connector deserializedConnector = serializer.deserialize(connector, BaseConnectorImpl.class);
@@ -152,16 +147,12 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void jsonldSerialize_Enum() throws IOException, NoSuchFieldException, IllegalAccessException {
-		String rejectionMessage = serializer.serialize(enumInstance, RDFFormat.JSONLD);
+	public void jsonldSerialize_Enum() throws IOException {
+		String rejectionMessage = serializer.serialize(enumInstance, RDFLanguages.JSONLD);
 		Assert.assertNotNull(rejectionMessage);
 
-		Model model = null;
-		try {
-			model = Rio.parse(new StringReader(rejectionMessage), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, rejectionMessage);
 		Assert.assertNotNull(model);
 
 		RejectionMessage deserializedRejectionMessage = serializer.deserialize(rejectionMessage, RejectionMessage.class);
@@ -178,15 +169,11 @@ public class SerializerTest {
 
 	@Test
 	public void jsonldSerialize_SecurityProfile() throws IOException {
-		String connector = serializer.serialize(securityProfileInstance, RDFFormat.JSONLD);
+		String connector = serializer.serialize(securityProfileInstance, RDFLanguages.JSONLD);
 		Assert.assertNotNull(connector);
 
-		Model model = null;
-		try {
-			model = Rio.parse(new StringReader(connector), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, connector);
 		Assert.assertNotNull(model);
 	}
 
@@ -199,12 +186,8 @@ public class SerializerTest {
 		String serialized = serializer.serialize(resource);
 		Assert.assertNotNull(serialized);
 
-		Model model = null;
-		try {
-			model = Rio.parse(new StringReader(serialized), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, serialized);
 		Assert.assertNotNull(model);
 
 		// do not use reflective equals here as ArrayList comparison fails due to different modCount
@@ -245,7 +228,7 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void legacySerializationsJsonld_validate() {
+	public void legacySerializationsJsonld_validate() throws IOException {
 		Connector connector = null;
 		Connector connector2 = null;
 		try {
@@ -259,26 +242,18 @@ public class SerializerTest {
 		Assert.assertNotNull(connector2);
 
 
-		Model model = null;
-		try {
-			model = Rio.parse(new StringReader(SerializerUtil.readResourceToString("Connector1.jsonld")), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, SerializerUtil.readResourceToString("Connector1.jsonld"));
+
 		Assert.assertNotNull(model);
 
-		model = null;
-		try {
-			model = Rio.parse(new StringReader(SerializerUtil.readResourceToString("Connector2.jsonld")), null, RDFFormat.JSONLD);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		model = ModelFactory.createDefaultModel();
+		readToModel(model, SerializerUtil.readResourceToString("Connector2.jsonld"));
 		Assert.assertNotNull(model);
 	}
 
 	@Test
 	public void calendarSerialization() throws IOException {
-		XMLGregorianCalendar calendar;
 		String time = serializer.serialize(now);
 		System.out.println(time);
 	}
@@ -297,7 +272,7 @@ public class SerializerTest {
 				"}";
 		Broker broker = serializer.deserialize(serialized, Broker.class);
 		String originalSimplified = SerializerUtil.stripWhitespaces(serialized);
-		String reserializedSimplified = SerializerUtil.stripWhitespaces(serializer.serialize(broker, RDFFormat.JSONLD));
+		String reserializedSimplified = SerializerUtil.stripWhitespaces(serializer.serialize(broker, RDFLanguages.JSONLD));
 		Assert.assertEquals(originalSimplified, reserializedSimplified);
 	}
 
@@ -313,7 +288,21 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void deserializeThroughInheritanceChain() throws IOException, NoSuchFieldException, IllegalAccessException {
+	public void serializePlainJson() throws IOException {
+		DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
+				._contentVersion_("test")
+				._issued_(now)
+				._modelVersion_("3.1.0")
+				._issuerConnector_(URI.create("http://iais.fraunhofer.de/connectorIssuer"))
+				._senderAgent_(URI.create("http://example.org/senderAgent"))
+				._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("test1234").build())
+				.build();
+		Serializer s = new Serializer();
+		s.serialize(sdr);
+	}
+
+	@Test
+	public void deserializeThroughInheritanceChain() throws IOException {
 
 		DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
 				._contentVersion_("test")
@@ -414,10 +403,11 @@ public class SerializerTest {
 		//TODO: This test is rather minimalistic now. Used to be more complex
 		String serializedList = serializer.serialize(Util.asList(contractOffer1, contractOffer2));
 
-		Model model = Rio.parse(new StringReader(serializedList), null, RDFFormat.JSONLD);
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, serializedList);
 		Assert.assertEquals(2, model.size());
 
-		String ttl = serializer.convertJsonLdToOtherRdfFormat(serializedList, RDFFormat.TURTLE);
+		String ttl = serializer.convertJsonLdToOtherRdfFormat(serializedList, RDFLanguages.TURTLE);
 		Assert.assertFalse(ttl.isEmpty());
 	}
 
@@ -431,8 +421,9 @@ public class SerializerTest {
 
 		String serialized = serializer.serialize(datPayload);
 
-
-		Rio.parse(new StringReader(serialized), "http://example.org/rdf#", RDFFormat.JSONLD); // ensure that valid JSON-LD is serialized
+		Model model = ModelFactory.createDefaultModel();
+		readToModel(model, serialized);
+		//Rio.parse(new StringReader(serialized), "http://example.org/rdf#", RDFFormat.JSONLD); // ensure that valid JSON-LD is serialized
 		Assert.assertTrue(serialized.contains("\"exp\" : \"ids:exp\"")); // ensure DatPayload fields are added to the context
 	}
 
@@ -497,7 +488,7 @@ public class SerializerTest {
 
 		String s = serializer.serialize(message);
 		//System.out.println(s);
-		ResponseMessage msg = serializer.deserialize(s, ResponseMessage.class);
+		serializer.deserialize(s, ResponseMessage.class);
 	}
 
 
@@ -615,11 +606,10 @@ public class SerializerTest {
 		}
 	}
 
-	
 
+	@SuppressWarnings("deprecation")
 	@Test
 	public void typedLiteralSerialiseTest() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException, URISyntaxException {
-		
 		Resource resource1 = new ResourceBuilder()
 				._description_(Util.asList(new PlainLiteral("a description 1")))
 				._keyword_(Util.asList(new PlainLiteral("keyword1")))
@@ -673,8 +663,9 @@ public class SerializerTest {
 	}
 
 
+	/* trash?
 	@Test
-	public void testRio() throws RDFParseException, UnsupportedRDFormatException, IOException {
+	public void testRio() throws IOException {
 		String jsonld = SerializerUtil.readResourceToString("ContractOfferValueForArray.jsonld");
 
 		Serializer localSerializer = new Serializer();
@@ -687,6 +678,7 @@ public class SerializerTest {
 		rdfParser.parse(new StringReader(jsonld), "http://example.org/rdf#");
 
 	}
+	 */
 	
 	/**
 	 * This test is based on a ticket and bugfix received on 15.05.2020
@@ -724,7 +716,7 @@ public class SerializerTest {
 	 *
 	 */
 	@Test
-	public void testDateTimeStamp() throws RDFParseException, UnsupportedRDFormatException, IOException, ConstraintViolationException, URISyntaxException {
+	public void testDateTimeStamp() throws IOException, ConstraintViolationException {
 		String jsonld1 = "{\n" +
 				"  \"@context\" : {\n" +
 				"    \"ids\" : \"https://w3id.org/idsa/core/\",\n" +
@@ -833,12 +825,8 @@ public class SerializerTest {
 
 		for (String jsonld : jsonlds) {
 			// validate JSON-LD
-			RDFParser rdfParser = Rio.createParser(RDFFormat.JSONLD);
-			Model model = new LinkedHashModel();
-			rdfParser.setRDFHandler(new StatementCollector(model));
-			rdfParser.parse(new StringReader(jsonld), "http://example.org/rdf#");
-			Rio.parse(new StringReader(jsonld), "http://example.org/rdf#", RDFFormat.JSONLD);
-
+			Model model = ModelFactory.createDefaultModel();
+			readToModel(model, jsonld);
 
 			// parse JSON-LD
 			ConnectorUpdateMessage msg = serializer.deserialize(jsonld, ConnectorUpdateMessage.class);

@@ -6,15 +6,13 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
 
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFWriter;
-import org.eclipse.rdf4j.rio.Rio;
-
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -41,18 +39,18 @@ public class Serializer {
      * @return RDF serialization of the provided object graph
      */
     public String serialize(Object instance) throws IOException {
-        return serialize(instance, RDFFormat.JSONLD);
+        return serialize(instance, RDFLanguages.JSONLD);
     }
 
-    public String serialize(Object instance, RDFFormat format) throws IOException {
-        if (format != RDFFormat.JSONLD && format != RDFFormat.TURTLE && format != RDFFormat.RDFXML) {
+    public String serialize(Object instance, Lang format) throws IOException {
+        if (format != RDFLanguages.JSONLD && format != RDFLanguages.TURTLE && format != RDFLanguages.RDFXML) {
             throw new IOException("RDFFormat " + format + " is currently not supported by the serializer.");
         }
         mapper.registerModule(new JsonLDModule());
         String jsonLD = (instance instanceof Collection)
                 ? serializeCollection((Collection) instance)
                 : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
-        if (format == RDFFormat.JSONLD) return jsonLD;
+        if (format == RDFLanguages.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
     }
 
@@ -80,15 +78,13 @@ public class Serializer {
         return jsonLDBuilder.toString();
     }
 
-    public String convertJsonLdToOtherRdfFormat(String jsonLd, RDFFormat format) throws IOException {
-        Model model = Rio.parse(new StringReader(jsonLd), null, RDFFormat.JSONLD);
+    public String convertJsonLdToOtherRdfFormat(String jsonLd, Lang format) {
+        Model model = ModelFactory.createDefaultModel();
+        RDFDataMgr.read(model, new ByteArrayInputStream(jsonLd.getBytes()), RDFLanguages.JSONLD);
 
-        StringWriter rdfOutput = new StringWriter();
-        RDFWriter writer = Rio.createWriter(format, rdfOutput);
-        writer.startRDF();
-        model.forEach(writer::handleStatement);
-        writer.endRDF();
-        return rdfOutput.toString();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        RDFDataMgr.write(os, model, format);
+        return new String(os.toByteArray());
     }
 
     public String serializePlainJson(Object instance) throws JsonProcessingException {

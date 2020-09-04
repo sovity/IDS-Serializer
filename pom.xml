@@ -94,31 +94,6 @@
 		</dependency>
 
 
-		<!-- RDF4J RIO format libs -->
-
-		<!--<dependency> <groupId>org.eclipse.rdf4j</groupId> <artifactId>rdf4j-rio-api</artifactId> 
-			<version>${rdfj4.version}</version> </dependency> -->
-
-		<dependency>
-			<groupId>org.eclipse.rdf4j</groupId>
-			<artifactId>rdf4j-rio-jsonld</artifactId>
-			<version>${rdfj4.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.rdf4j</groupId>
-			<artifactId>rdf4j-rio-turtle</artifactId>
-			<version>${rdfj4.version}</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.eclipse.rdf4j</groupId>
-			<artifactId>rdf4j-rio-rdfxml</artifactId>
-			<version>${rdfj4.version}</version>
-		</dependency>
-
-		<!-- end RDF4J RIO format libs -->
-
 	</dependencies>
 
 	<build>
