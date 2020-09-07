@@ -65,6 +65,7 @@ class Parser {
                 ResultSet resultSet = queryExecution.execSelect();
 
                 if (!resultSet.hasNext()) {
+                    queryExecution.close();
                     throw new IOException("Could not extract class of child object. ID: " + objectUri);
                 }
 
@@ -94,6 +95,7 @@ class Parser {
                         }
                     }
                 }
+                queryExecution.close();
                 //Did we find "the" class, i.e. instantiable and name matches?
                 if (targetClass.isInterface() || Modifier.isAbstract(targetClass.getModifiers())) {
                     //No, the current targetClass cannot be instantiated. Do we have a candidate class?
@@ -290,6 +292,7 @@ class Parser {
 
 
             if (!resultSet.hasNext()) {
+                queryExecution.close();
                 //no content... ONLY allowed, if the class has optional fields only (i.e. no mandatory fields)!
                 if (containsNotNullableField) {
                     //There is at least one mandatory field. Hence, incoming message was illegal. Preparing some error message to be returned
@@ -368,6 +371,7 @@ class Parser {
                     }
                 }
             }
+            externalPropertiesQueryExecution.close();
 
             //SPARQL binding present, iterate over result and construct return object
             while (resultSet.hasNext()) {
@@ -474,6 +478,7 @@ class Parser {
 
                 }
             }
+            queryExecution.close();
 
             return returnObject;
         } catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException | ClassNotFoundException e) {
@@ -559,6 +564,7 @@ class Parser {
                 }
             }
         }
+        queryExecution.close();
         return map;
     }
 
