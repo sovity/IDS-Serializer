@@ -1,10 +1,14 @@
 package de.fraunhofer.iais.eis.ids.jsonld.preprocessing;
 
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.Rio;
 
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
+
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.StringReader;
 
 /**
  * basic implementation of {@code JsonPreprocessor} that encapsulates validation.
@@ -19,7 +23,8 @@ public abstract class BasePreprocessor implements JsonPreprocessor {
     public final String preprocess(String input) throws IOException {
         String result = preprocess_impl(input);
         if(validate) {
-            Rio.parse(new StringReader(result), null, RDFFormat.JSONLD); // try to parse transformed result
+            Model m = ModelFactory.createDefaultModel();
+            RDFDataMgr.read(m, new ByteArrayInputStream(result.getBytes()), RDFLanguages.JSONLD);
         }
         return result;
     }
