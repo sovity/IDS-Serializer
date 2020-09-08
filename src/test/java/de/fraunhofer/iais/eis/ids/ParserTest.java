@@ -16,12 +16,8 @@ public class ParserTest {
 
 	/**
 	 * Main purpose: test for ids and idsc in the context
-<<<<<<< HEAD
-	 *
-=======
 	 *
 	 * @throws IOException if source file cannot be read or if parsing fails
->>>>>>> ce2fcfb42c47d7234335d31472efe03c97f80f9c
 	 */
 	@Test
 	public void testBaseConnector() throws IOException {
@@ -39,12 +35,8 @@ public class ParserTest {
 
 	/**
 	 * Main purpose: test for JSON Arrays
-<<<<<<< HEAD
-	 *
-=======
 	 *
 	 * @throws IOException if source file cannot be read or if parsing fails
->>>>>>> ce2fcfb42c47d7234335d31472efe03c97f80f9c
 	 */
 	@Test
 	public void testCatalog() throws IOException {
@@ -76,12 +68,8 @@ public class ParserTest {
 	 * Main purpose: test for RDF Objects at JSON value position (reference by URI, not by xsd:anyURI or xsd:string Literals):
 	 * for instance "ids:correlationMessage" : {"@id": "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"} vs.
 	 * "ids:correlationMessage" : "https://52d2c3e4-88de-42ee-9261-dfd239ccb863"
-<<<<<<< HEAD
-	 *
-=======
 	 * @throws IOException if source file cannot be read or if parsing fails
 	 *
->>>>>>> ce2fcfb42c47d7234335d31472efe03c97f80f9c
 	 */
 	@Test
 	public void testMessage() throws IOException {
