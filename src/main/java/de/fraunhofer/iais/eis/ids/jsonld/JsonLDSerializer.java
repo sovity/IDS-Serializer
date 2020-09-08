@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.BeanSerializer;
 import com.fasterxml.jackson.databind.ser.std.BeanSerializerBase;
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 
 
 
@@ -80,7 +79,7 @@ public class JsonLDSerializer extends BeanSerializer {
      * @param context
      */
     private void addJwtFieldsToContext(Object bean, Map<String, String> context) {
-        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class || bean.getClass() == BigInteger.class) return;
+        if(bean == null || bean.getClass().getName().equals("com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass().getName().equals("org.apache.jena.ext.xerces.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass() == BigInteger.class) return;
         if(bean.getClass().getSimpleName().contains("DatPayload")) {
             Stream.of("referringConnector", "aud", "iss", "sub", "nbf", "exp", "iat")
                     .forEach(k -> context.put(k, "ids:".concat(k)));
@@ -104,7 +103,7 @@ public class JsonLDSerializer extends BeanSerializer {
     }
 
     private void filterContextWrtBean(Object bean, Map<String, String> filteredContext) {
-        if(bean == null || bean.getClass() == XMLGregorianCalendarImpl.class || bean.getClass() == BigInteger.class) return; // XMLGregorianCalendarImpl causes infinite recursion
+        if(bean == null || bean.getClass().getName().equals("com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass().getName().equals("org.apache.jena.ext.xerces.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass() == BigInteger.class) return; // XMLGregorianCalendarImpl causes infinite recursion
         contextItems.forEach((p, u) -> {
             JsonTypeName typeNameAnnotation = bean.getClass().getAnnotation(JsonTypeName.class);
             if(typeNameAnnotation != null && typeNameAnnotation.value().contains(p)) {
