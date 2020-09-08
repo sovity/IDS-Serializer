@@ -26,5 +26,6 @@
   },
   "ids:correlationMessage" : {
     "@id" : "https://lastmessage"
-  }
+  },
+  "ids:contractRejectionReason" : "Somebody could write a proper, human readable rejection reason here"
 }
