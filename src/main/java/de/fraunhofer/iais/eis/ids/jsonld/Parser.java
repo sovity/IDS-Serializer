@@ -106,6 +106,11 @@ class Parser {
                 }
             }
 
+            //Enums have no constructors
+            if(targetClass.isEnum())
+            {
+                return handleEnum(targetClass, objectUri);
+            }
 
             //Get constructor (which is package private for our classes) and make it accessible
             Constructor<T> constructor = targetClass.getDeclaredConstructor();
