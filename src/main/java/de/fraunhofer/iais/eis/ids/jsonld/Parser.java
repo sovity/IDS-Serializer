@@ -422,7 +422,9 @@ class Parser {
                                 }
                                 ArrayList<Object> list = new ArrayList<>();
                                 //Two pipes were used as delimiter above
-                                for (String s : currentSparqlBinding.split("\\|\\|")) {
+                                //Introduce set to deduplicate
+                                Set<String> allElements = new HashSet<>(Arrays.asList(currentSparqlBinding.split("\\|\\|")));
+                                for (String s : allElements) {
                                     Literal literal;
                                     //querySolution.get(sparqlParameterName).
                                     if (s.endsWith("@")) {
@@ -450,7 +452,8 @@ class Parser {
                             } else {
                                 //List of complex sub-objects, such as a list of Resources in a ResourceCatalog
                                 ArrayList<Object> list = new ArrayList<>();
-                                for (String s : currentSparqlBinding.split("\\|\\|")) {
+                                Set<String> allElements = new HashSet<>(Arrays.asList(currentSparqlBinding.split("\\|\\|")));
+                                for (String s : allElements) {
                                     if (Class.forName(typeName).isEnum()) {
                                         list.add(handleEnum(Class.forName(typeName), s));
                                     } else {
