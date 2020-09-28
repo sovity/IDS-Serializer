@@ -143,6 +143,16 @@ public class ParserTest {
 		System.out.println(message.toRdf()); //at this stage, it does nothing. Debug to look into variables
 	}
 
+	@Test
+	public void avoidDuplicates() throws IOException {
+		String infrastructureComponentString = SerializerUtil.readResourceToString("Connector2.jsonld");
+		Connector connector = new Serializer().deserialize(infrastructureComponentString, Connector.class);
+		assertNotNull(connector.getResourceCatalog());
+		assertEquals(1, connector.getResourceCatalog().size());
+		assertTrue(connector.getResourceCatalog().get(0).getOfferedResource().get(0).getKeyword().size() < 3);
+
+	}
+
 
 
 	/**
