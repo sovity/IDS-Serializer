@@ -5,15 +5,11 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.apache.jena.query.*;
-import org.apache.jena.rdf.model.Literal;
-import org.apache.jena.rdf.model.Model;
-import org.apache.jena.rdf.model.RDFNode;
-import org.apache.jena.rdf.model.ResourceFactory;
+import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.topbraid.spin.util.JenaUtil;
 
 import javax.validation.constraints.NotNull;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -828,7 +824,7 @@ class Parser {
      */
     private Model readMessage(String message) {
 
-        Model targetModel = JenaUtil.createMemoryModel();
+        Model targetModel = ModelFactory.createDefaultModel();
 
         //Read incoming message to the same model
 
