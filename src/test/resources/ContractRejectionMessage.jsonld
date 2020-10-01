@@ -11,7 +11,7 @@
     "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
   },
   "ids:issuerConnector" : {
-    "@id" : "www.issuerconnector.de"
+    "@id" : "http://issuerconnector.org"
   },
   "ids:securityToken" : {
     "@type" : "ids:DynamicAttributeToken",
@@ -22,10 +22,10 @@
     }
   },
   "ids:senderAgent" : {
-    "@id" : "www.senderagent.de"
+    "@id" : "http://senderagent.org"
   },
   "ids:correlationMessage" : {
-    "@id" : "https://lastmessage"
+    "@id" : "https://lastmessage.org/"
   },
   "ids:contractRejectionReason" : "Somebody could write a proper, human readable rejection reason here"
 }

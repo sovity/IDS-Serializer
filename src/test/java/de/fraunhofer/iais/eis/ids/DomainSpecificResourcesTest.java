@@ -35,7 +35,7 @@ public class DomainSpecificResourcesTest {
 		Resource res = serializer.deserialize(resource, DataResource.class);
 
 		String serialized_resource = serializer.serialize(res);
-		System.out.println(serialized_resource);
+		//System.out.println(serialized_resource);
 		assertTrue(serialized_resource.contains("\"http://rdfs.org/ns/void#distinctObjects\" :"));
 		assertTrue(res.getProperties().containsKey("http://rdfs.org/ns/void#distinctObjects"));
 		Object o = res.getProperties().get("http://rdfs.org/ns/void#distinctObjects");
