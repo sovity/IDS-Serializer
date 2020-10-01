@@ -7,6 +7,7 @@ While serializing, these annotations are used to determine the name of objects a
 An illustration of the parsing workflow (not illustrating foreign namespace objects) is shown below.
 
 ![Parser Workflow](documentation/workflow/Parser_Workflow.png)
+[source](https://jira.iais.fraunhofer.de/wiki/display/EIS/Parsing+IDS+Messages)
 
 Note that during the parsing stage, there are some implicit dependencies on certain naming conventions.
 1) We parse many literals to the class TypedLiteral, which is defined in the CodeGen tool. At one point, we are forced to reference this class by name. Renaming this class requires appropriate adaptions in the parser class.
@@ -15,4 +16,6 @@ Note that during the parsing stage, there are some implicit dependencies on cert
 4) We expect that the setter methods set a field matching the same name with leading underscore, e.g. "setCatalog" sets a field "_catalog".
 
 
-Authors and Contributors (alphabetical order): Sebastian Bader, Matthias Böckmann, Benedikt Tobias Imbusch, Christian Mader
+Authors and Contributors: Matthias Böckmann, Sebastian Bader, Benedikt Tobias Imbusch, Christian Mader
+
+Contact and bug reports: [contact@ids.frauhofer.de](mailto:contact@ids.frauhofer.de)
