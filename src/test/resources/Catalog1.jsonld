@@ -1,5 +1,5 @@
 { 
-	"@context" : "https://w3id.org/idsa/contexts/3.0.0/context.jsonld", 
+	"@context" : "https://w3id.org/idsa/contexts/4.0.0/context.jsonld",
 	"@type" : "ids:ResourceCatalog",
 	"@id" : "https://iais.fraunhofer.de/eis/ids/someBroker/catalog", 
 	"offeredResource" : [ {

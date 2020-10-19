@@ -5,7 +5,7 @@
   },
   "@type" : "ids:BaseConnector",
   "@id" : "http://example.com/lifecycleConnector",
-  "ids:outboundModelVersion" : "3.0.0",
+  "ids:outboundModelVersion" : "4.0.0",
   "ids:securityProfile" : {
     "@id" : "idsc:BASE_SECURITY_PROFILE"
   },
@@ -292,5 +292,5 @@
     "@value" : "More titles for testing",
     "@type" : "http://www.w3.org/2001/XMLSchema#string"
   } ],
-  "ids:inboundModelVersion" : [ "1.2.3", "3.0.0" ]
+  "ids:inboundModelVersion" : [ "4.0.1", "4.0.0" ]
 }

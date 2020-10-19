@@ -43,6 +43,8 @@ public class SerializerTest {
 	private static Serializer serializer;
 	private static XMLGregorianCalendar now;
 
+	private static final String imVersion = "4.0.1";
+
 
 	private void readToModel(Model targetModel, String rdfInput)
 	{
@@ -60,7 +62,7 @@ public class SerializerTest {
 
 		basicInstance = new ConnectorUpdateMessageBuilder()
 				._issued_(now)
-				._modelVersion_("3.1.0")
+				._modelVersion_(imVersion)
 				._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
 				._senderAgent_(URI.create("http://example.org/senderAgent"))
 				._affectedConnector_(URI.create("http://example.org/someConnector"))
@@ -68,8 +70,8 @@ public class SerializerTest {
 				.build();
 
 		ArrayList<Resource> resources = new ArrayList<>();
-		resources.add(new ResourceBuilder()._version_("3.1.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
-		resources.add(new ResourceBuilder()._version_("3.1.0")._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
+		resources.add(new ResourceBuilder()._version_(imVersion)._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard1").toURI()).build());
+		resources.add(new ResourceBuilder()._version_(imVersion)._contentStandard_(new URL("http://iais.fraunhofer.de/contentStandard2").toURI()).build());
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
@@ -78,14 +80,14 @@ public class SerializerTest {
 
 		nestedInstance = new BaseConnectorBuilder()
 				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-				._version_("3.1.0")
+				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				.build();
 
 		// object with enum
 		enumInstance = new RejectionMessageBuilder()
 				._issuerConnector_(new URL("http://iais.fraunhofer.de/connectorIssuer").toURI())
-				._modelVersion_("3.0.0")
+				._modelVersion_(imVersion)
 				._rejectionReason_(RejectionReason.METHOD_NOT_SUPPORTED)
 				._senderAgent_(URI.create("http://example.org/senderAgent"))
 				._correlationMessage_(URI.create("http://example.org/theMessageYouJustSent"))
@@ -95,7 +97,7 @@ public class SerializerTest {
 
 		securityProfileInstance = new BaseConnectorBuilder()
 				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
-				._version_("1.0.0")
+				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
 				.build();
@@ -265,7 +267,7 @@ public class SerializerTest {
 		String serialized = "{\n" +
 				"  \"@context\" : \"https://w3id.org/idsa/contexts/3.0.0/context.jsonld\",\n" +
 				"  \"@type\" : \"ids:Broker\",\n" +
-				"  \"inboundModelVersion\" : [ \"3.0.0\" ],\n" +
+				"  \"inboundModelVersion\" : [ \"" + imVersion+ "\" ],\n" +
 				"  \"@id\" : \"https://w3id.org/idsa/autogen/broker/5b9170a7-73fd-466e-89e4-83cedfe805aa\",\n" +
 				"  \"http://xmlns.com/foaf/0.1/name\" : \"https://iais.fraunhofer.de/eis/ids/broker1/frontend\",\n" +
 				"  \"http://xmlns.com/foaf/0.1/homepage\" : {\n  \"https://example.de/key\" : \"https://example.de/value\"\n}" +
@@ -292,7 +294,7 @@ public class SerializerTest {
 		DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
 				._contentVersion_("test")
 				._issued_(now)
-				._modelVersion_("3.1.0")
+				._modelVersion_(imVersion)
 				._issuerConnector_(URI.create("http://iais.fraunhofer.de/connectorIssuer"))
 				._senderAgent_(URI.create("http://example.org/senderAgent"))
 				._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("test1234").build())
@@ -307,7 +309,7 @@ public class SerializerTest {
 		DescriptionRequestMessage sdr = new DescriptionRequestMessageBuilder()
 				._contentVersion_("test")
 				._issued_(now)
-				._modelVersion_("3.1.0")
+				._modelVersion_(imVersion)
 				._issuerConnector_(URI.create("http://iais.fraunhofer.de/connectorIssuer"))
 				._senderAgent_(URI.create("http://example.org/senderAgent"))
 				._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("test1234").build())
@@ -480,7 +482,7 @@ public class SerializerTest {
 				._correlationMessage_(URI.create("http://example.com"))
 				._issued_(now)
 				._issuerConnector_(URI.create("http://example.com"))
-				._modelVersion_("3.1.0")
+				._modelVersion_(imVersion)
 				._senderAgent_(URI.create("http://example.com"))
 				._recipientConnector_(Util.asList(URI.create("http://example.com"), URI.create("http://anotherExample.com")))
 				//._recipientAgent_(Util.asList(URI.create("example.com")))
@@ -701,7 +703,7 @@ public class SerializerTest {
 	            ._correlationMessage_(URI.create("http://example.com"))
 	            ._issued_(now)
 	            ._issuerConnector_(URI.create("http://example.com"))
-	            ._modelVersion_("3.1.0")
+	            ._modelVersion_(imVersion)
 	            ._senderAgent_(URI.create("http://example.com"))
 	            ._recipientAgent_(new ArrayList<>(Util.asList(URI.create("http://example.com"))))
 	            ._recipientConnector_(new ArrayList<>(Util.asList(URI.create("http://example.com"))))
@@ -727,7 +729,7 @@ public class SerializerTest {
 				"  \"ids:issuerConnector\" : {\n" +
 				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\n" +
 				"  },\n" +
-				"  \"ids:modelVersion\" : \"4.0.0\",\n" +
+				"  \"ids:modelVersion\" : \"" + imVersion + "\",\n" +
 				"  \"ids:issued\" : {\n" +
 				"      \"@value\" : \"2020-03-18T12:45:11.682Z\",\n" +
 				"      \"@type\" : \"http://www.w3.org/2001/XMLSchema#dateTimeStamp\"\n" +
@@ -752,7 +754,7 @@ public class SerializerTest {
 				"  \"ids:issuerConnector\" : {\n" +
 				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\n" +
 				"  },\n" +
-				"  \"ids:modelVersion\" : \"4.0.0\",\n" +
+				"  \"ids:modelVersion\" : \"" + imVersion + "\",\n" +
 				"  \"ids:issued\" : {\n" +
 				"      \"@value\" : \"2020-03-18T12:45:11.682Z\",\n" +
 				"      \"@type\" : \"http://www.w3.org/2001/XMLSchema#dateTimeStamp\"\n" +
@@ -792,7 +794,7 @@ public class SerializerTest {
 				"  \"ids:issuerConnector\" : {\r\n" + 
 				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\r\n" + 
 				"  },\r\n" + 
-				"  \"ids:modelVersion\" : \"4.0.0\",\r\n" +
+				"  \"ids:modelVersion\" : \"" + imVersion + "\",\r\n" +
 				"  \"ids:issued\" : {\r\n" + 
 				"    \"@value\" : \"2020-03-31T04:04:04.004+04:00\",\r\n" + 
 				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#dateTimeStamp\"\r\n" + 
@@ -812,7 +814,7 @@ public class SerializerTest {
 
 		ConnectorUpdateMessage basicInstance = new ConnectorUpdateMessageBuilder()
 				._issued_(now)
-				._modelVersion_("4.0.0")
+				._modelVersion_(imVersion)
 				._issuerConnector_(URI.create("http://iais.fraunhofer.de/connectorIssuer"))
 				._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("test1234").build())
 				._senderAgent_(URI.create("http://someSenderAgent.org/"))

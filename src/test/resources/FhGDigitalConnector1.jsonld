@@ -1391,10 +1391,10 @@
       "@value" : "This is a dummy title from the Interaction Library",
       "@type" : "http://www.w3.org/2001/XMLSchema#string"
     } ],
-    "ids:outboundModelVersion" : "3.0.0",
+    "ids:outboundModelVersion" : "4.0.0",
     "ids:description" : [ {
       "@value" : "This is a dummy description from the Interaction Library",
       "@type" : "http://www.w3.org/2001/XMLSchema#string"
     } ],
-    "ids:inboundModelVersion" : [ "3.0.0" ]
+    "ids:inboundModelVersion" : [ "4.0.0" ]
   }

@@ -5,7 +5,7 @@
   },
   "@type" : "ids:ArtifactRequestMessage",
   "@id" : "https://w3id.org/idsa/autogen/artifactRequestMessage/6a3e54d3-d51e-47c4-8582-21ce42266203",
-  "ids:modelVersion" : "3.1.0",
+  "ids:modelVersion" : "4.0.1",
   "ids:requestedArtifact" : {
     "@id" : "https://w3id.org/idsa/autogen/dataResource/1d161790-523a-46c5-820b-e632e7ff5ec5"
   },
