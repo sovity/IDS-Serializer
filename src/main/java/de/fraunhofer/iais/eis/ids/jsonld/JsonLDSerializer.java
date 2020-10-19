@@ -16,9 +16,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Stream;
 
 
@@ -28,16 +28,17 @@ public class JsonLDSerializer extends BeanSerializer {
 	
     private static int currentRecursionDepth = 0;
 
-    private static final Map<String, String> contextItems;
+    static final Map<String, String> contextItems;
 
     static {
         contextItems = new HashMap<>();
         contextItems.put("ids", "https://w3id.org/idsa/core/");
         contextItems.put("idsc", "https://w3id.org/idsa/code/");
-        contextItems.put("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell#");
+        contextItems.put("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell/");
         contextItems.put("kdsf", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
     }
 
+    private Set<Class<?>> handledClasses;
 
     JsonLDSerializer(BeanSerializerBase src) {
         super(src);
@@ -45,6 +46,7 @@ public class JsonLDSerializer extends BeanSerializer {
 
     @Override
     public void serializeWithType(Object bean, JsonGenerator gen, SerializerProvider provider, TypeSerializer typeSer) throws IOException {
+        handledClasses = new HashSet<>();
         gen.setCurrentValue(bean);
 
         currentRecursionDepth++;
@@ -114,7 +116,6 @@ public class JsonLDSerializer extends BeanSerializer {
             {
                 filteredContext.put("idsc", "https://w3id.org/idsa/code/");
             }
-            //TODO: This is not sufficient. Example: ids:Catalog does not have any direct property referring to idsc. Still, a catalog can contain a Resource, which can refer to an idsc object!
             Stream.of(bean.getClass().getMethods()).forEach(m -> {
                 JsonProperty propertyAnnotation = m.getAnnotation(JsonProperty.class);
                 if(propertyAnnotation != null && propertyAnnotation.value().contains(p)) {
@@ -123,28 +124,79 @@ public class JsonLDSerializer extends BeanSerializer {
             });
         });
         Stream.of(bean.getClass().getMethods()).forEach(m -> {
-            // once more run through all properties to check if to add IDSC to context
+            // run though all properties and check annotations. These annotations should contain the prefixes
+            JsonProperty prop = m.getAnnotation(JsonProperty.class);
+            if(prop != null)
+            {
+                for(Map.Entry<String, String> entry : contextItems.entrySet())
+                {
+                    if(prop.value().startsWith(entry.getKey()))
+                    {
+                        filteredContext.put(entry.getKey(), entry.getValue());
+                        break;
+                    }
+                }
+            }
             if(m.getReturnType().isEnum() && m.getReturnType().getCanonicalName().contains("fraunhofer")) { // TODO this query is really hacky and dangerous as implicit assumptions about the idsc usage are used.
                 filteredContext.put("idsc", contextItems.get("idsc"));
             }
         });
         // run through fields recursively
-        Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
-            if(f.getType().isPrimitive() || f.getType().isEnum() 
-            		|| f.getType().toString().contains("java.") 
-            		|| f.getType().toString().contains("javax.")) return;
-            
-            
-            boolean wasAccessible = f.isAccessible();
-            f.setAccessible(true);
-            try {
-                filterContextWrtBean(f.get(bean), filteredContext);
-            } catch (IllegalAccessException e) {
-                logger.error("setting accessible failed"); //TODO can we really simply catch it here?
+        for(Field f : getAllFields(new HashSet<>(), bean.getClass())) {
+
+            if(Collection.class.isAssignableFrom(f.getType()))
+            {
+                try {
+                    if(f.getType().getName().startsWith("java.") && !f.getType().getName().startsWith("java.util")) continue;
+                    boolean accessible = f.isAccessible();
+                    f.setAccessible(true);
+                    Collection<?> c = (Collection<?>) f.get(bean);
+                    if(c == null) {
+                        continue;
+                    }
+                    for(Object o : c)
+                    {
+                        filterContextWrtBean(o, filteredContext);
+                    }
+                    f.setAccessible(accessible);
+                }
+                catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             }
-            
-            f.setAccessible(wasAccessible);
-            
-        });
+
+            if (f.getType().isPrimitive() || f.getType().isEnum() || f.getType().isArray()
+                    || f.getType().getName().contains("java.")
+                    || f.getType().getName().contains("javax.")) continue;
+
+            try {
+                boolean wasAccessible = f.isAccessible();
+                f.setAccessible(true);
+                filterContextWrtBean(f.get(bean), filteredContext);
+                f.setAccessible(wasAccessible);
+            } catch (IllegalAccessException ignored) {
+                //logger.error("setting accessible failed"); //We can catch that here, as IllegalReflectiveAccess cannot occur on our own packages
+            }
+
+            //f.trySetAccessible(wasAccessible);
+
+        }
+
+    }
+
+    /**
+     * This function retrieves a set of all available fields of a class, including inherited fields
+     * @param fields Set to which discovered fields will be added. An empty HashSet should do the trick
+     * @param type The class for which fields should be discovered
+     * @return set of all available fields
+     */
+    private static Set<Field> getAllFields(Set<Field> fields, Class<?> type) {
+        fields.addAll(Arrays.asList(type.getDeclaredFields()));
+
+        if (type.getSuperclass() != null) {
+            getAllFields(fields, type.getSuperclass());
+        }
+
+        return fields;
     }
 }

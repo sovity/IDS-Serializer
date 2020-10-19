@@ -8,14 +8,14 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Map;
 
+
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.junit.Test;
 
 import de.fraunhofer.iais.eis.DataResource;
 import de.fraunhofer.iais.eis.Resource;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 
 public class DomainSpecificResourcesTest {
@@ -82,4 +82,23 @@ public class DomainSpecificResourcesTest {
 
 		//assertTrue(serialized1.equalsIgnoreCase(serialized2));
 	}
+
+	/* This test requires to switch the information model to the FhG version (which is commented out in the pom.xml file)
+	@Test
+	public void implClassesFhgDigital() throws IOException {
+		Serializer s = new Serializer();
+		Serializer.addKnownNamespace("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell/");
+		Serializer.addKnownNamespace("kdsf", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
+		Serializer.addKnownNamespace("foaf", "http://xmlns.com/foaf/0.1/");
+
+		String fhgDigitalConnectorAsString = SerializerUtil.readResourceToString("FhGDigitalConnector1.jsonld");
+		Connector conn = s.deserialize(fhgDigitalConnectorAsString, Connector.class);
+		for(Class<?> c : allClasses)
+		{
+			System.out.println(c.getName());
+		}
+
+	}
+	 */
+
 }
