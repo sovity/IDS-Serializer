@@ -157,10 +157,10 @@
 			<name>maven-snapshots</name>
 			<url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-snapshot</url>
 		</repository>
-		<repository>
+		<!--<repository>
 			<id>fhg-snapshots</id>
 			<url>http://maven.iais.fraunhofer.de/artifactory/eis-fhdigital-release-local</url>
-		</repository>
+		</repository>-->
 	</repositories>
 
 </project>
