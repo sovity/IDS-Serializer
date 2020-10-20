@@ -23,7 +23,7 @@
       } ]
     } ]
   },
-  "inboundModelVersion" : [ "3.0.0" ],
-  "outboundModelVersion" : "3.0.0",
+  "inboundModelVersion" : [ "4.0.0" ],
+  "outboundModelVersion" : "4.0.0",
   "maintainer" : "http://companyA.com/ids/participant"
 }

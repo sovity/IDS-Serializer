@@ -21,5 +21,5 @@
     "@value" : "2020-03-18T12:45:11.682Z",
     "@type" : "http://www.w3.org/2001/XMLSchema#dateTimeStamp"
   },
-  "ids:modelVersion" : "3.0.0"
+  "ids:modelVersion" : "4.0.0"
 }

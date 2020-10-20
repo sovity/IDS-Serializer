@@ -1,7 +1,7 @@
-{"@context": "https://w3id.org/idsa/contexts/3.0.0/context.jsonld",
+{"@context": "https://w3id.org/idsa/contexts/4.0.0/context.jsonld",
   "@type" : "ids:BaseConnector",
   "@id" : "https://companyA.com/connector",
-  "outboundModelVersion" : "3.0.0",
+  "outboundModelVersion" : "4.0.0",
   "curator" : "http://companyA.com/ids/participant",
   "securityProfile" : {
     "@type" : "ids:SecurityProfile",
@@ -24,5 +24,5 @@
       } ]
     } ]
   },
-  "inboundModelVersion" : [ "3.0.0", "3.0.0-SNAPSHOT" ]
+  "inboundModelVersion" : [ "4.0.0", "4.0.1-SNAPSHOT" ]
 }

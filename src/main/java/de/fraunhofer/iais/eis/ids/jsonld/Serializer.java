@@ -111,6 +111,7 @@ public class Serializer {
     public static void addKnownNamespace(String prefix, String namespaceUrl)
     {
         Parser.knownNamespaces.put(prefix, namespaceUrl);
+        JsonLDSerializer.contextItems.put(prefix, namespaceUrl);
     }
 
     /**
