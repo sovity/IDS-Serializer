@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
+import org.apache.jena.datatypes.DatatypeFormatException;
 import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
@@ -23,6 +24,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -738,7 +741,25 @@ class Parser {
 
         //XMLGregorianCalendar
         if (XMLGregorianCalendar.class.isAssignableFrom(currentType)) {
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(literal.getValue().toString())));
+            //Try parsing this as dateTimeStamp (most specific). If seconds / timezone is missing, DatatypeFormatException will be thrown
+            try {
+                return DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(literal.getValue().toString())));
+            }
+            catch (DatatypeFormatException ignored)
+            {
+                //Not a valid dateTimeStamp. Try parsing just to Date
+                try {
+                    Date date = new SimpleDateFormat().parse(literal.getValue().toString());
+                    GregorianCalendar calendar = new GregorianCalendar();
+                    calendar.setTime(date);
+                    return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
+                }
+                catch (ParseException | DatatypeFormatException e2)
+                {
+                    //Do NOT use literal.getValue(), as that can already cause yet another DatatypeFormatException
+                    throw new IOException("Could not turn " + literal.getString() + " into " + literal.getDatatypeURI(), e2);
+                }
+            }
         }
 
         //TypedLiteral

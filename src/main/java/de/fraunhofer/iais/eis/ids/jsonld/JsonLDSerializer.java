@@ -36,6 +36,7 @@ public class JsonLDSerializer extends BeanSerializer {
         contextItems.put("idsc", "https://w3id.org/idsa/code/");
         contextItems.put("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell/");
         contextItems.put("kdsf", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
+        //TODO: We should probably add some other common namespaces, such as foaf or xsd
     }
 
     private Set<Class<?>> handledClasses;
