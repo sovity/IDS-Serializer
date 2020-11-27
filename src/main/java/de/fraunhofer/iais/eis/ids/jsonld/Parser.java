@@ -27,6 +27,7 @@ import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 
@@ -745,7 +746,7 @@ class Parser {
             try {
                 return DatatypeFactory.newInstance().newXMLGregorianCalendar(GregorianCalendar.from(ZonedDateTime.parse(literal.getValue().toString())));
             }
-            catch (DatatypeFormatException ignored)
+            catch (DatatypeFormatException | DateTimeParseException ignored)
             {
                 //Not a valid dateTimeStamp. Try parsing just to Date
                 try {
@@ -754,7 +755,7 @@ class Parser {
                     calendar.setTime(date);
                     return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
                 }
-                catch (ParseException | DatatypeFormatException e2)
+                catch (ParseException | DateTimeParseException | DatatypeFormatException e2)
                 {
                     //Do NOT use literal.getValue(), as that can already cause yet another DatatypeFormatException
                     throw new IOException("Could not turn " + literal.getString() + " into " + literal.getDatatypeURI(), e2);
