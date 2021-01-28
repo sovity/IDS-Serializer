@@ -104,6 +104,18 @@ public class Serializer {
     }
 
     /**
+     * Inverse method of "serialize"
+     *
+     * @param rdfModel Input RDF Model to be turned into an Instance of the IDS Java classes
+     * @param valueType     class of top level type
+     * @param <T>           deserialized type
+     * @return an object representing the provided JSON(-LD) structure
+     */
+    public <T> T deserialize(Model rdfModel, Class<T> valueType) throws IOException {
+        return new Parser().parseMessage(rdfModel, valueType);
+    }
+
+    /**
      * Allows to add further known namespaces to the message parser. Allows parsing to Java objects with JsonSubTypes annotations with other prefixes than "ids:".
      * @param prefix Prefix to be added
      * @param namespaceUrl URL of the prefix

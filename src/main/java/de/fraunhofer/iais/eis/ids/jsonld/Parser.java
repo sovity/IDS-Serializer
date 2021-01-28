@@ -862,16 +862,14 @@ class Parser {
     }
 
     /**
-     * Entry point to this class. Takes a message and a desired target class (can be an interface)
-     * @param message Message to be parsed
+     * Entry point to this class. Takes an RDF Model and a desired target class (can be an interface)
+     * @param rdfModel RDF input to be parsed
      * @param targetClass Desired target class (something as abstract as "Message.class" is allowed)
      * @param <T> Desired target class
      * @return Object of desired target class, representing the values contained in input message
      * @throws IOException if the parsing of the message fails
      */
-    <T> T parseMessage(String message, Class<T> targetClass) throws IOException {
-        Model model = readMessage(message);
-
+    <T> T parseMessage(Model rdfModel, Class<T> targetClass) throws IOException {
         ArrayList<Class<?>> implementingClasses = getImplementingClasses(targetClass);
 
         // Query to retrieve all instances in the input graph that have a class assignment
@@ -879,7 +877,7 @@ class Parser {
         // instance we actually want to parse
         String queryString = "SELECT ?id ?type { ?id a ?type . }";
         Query query = QueryFactory.create(queryString);
-        QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
+        QueryExecution queryExecution = QueryExecutionFactory.create(query, rdfModel);
         ResultSet resultSet = queryExecution.execSelect();
 
         if (!resultSet.hasNext()) {
@@ -916,8 +914,22 @@ class Parser {
         //At this point, we parsed the model and know to which implementing class we want to parse
 
 
-        return (T) handleObject(model, returnId, returnClass);
+        return (T) handleObject(rdfModel, returnId, returnClass);
 
+    }
+
+
+    /**
+     * Entry point to this class. Takes a message and a desired target class (can be an interface)
+     * @param message Object to be parsed. Note that the name is misleading: One can also parse non-message IDS objects with this function
+     * @param targetClass Desired target class (something as abstract as "Message.class" is allowed)
+     * @param <T> Desired target class
+     * @return Object of desired target class, representing the values contained in input message
+     * @throws IOException if the parsing of the message fails
+     */
+    <T> T parseMessage(String message, Class<T> targetClass) throws IOException {
+        Model model = readMessage(message);
+        return parseMessage(model, targetClass);
     }
 
     /**
