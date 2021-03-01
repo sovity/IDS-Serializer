@@ -20,7 +20,7 @@ import java.util.List;
 public class Serializer {
 
     private static ObjectMapper mapper;
-    private final List<JsonPreprocessor> preprocessors;
+    private final List<JsonPreprocessor> preprocessors; //TODO: It seems like this list is never used...
 
     public Serializer() {
         mapper = new ObjectMapper();
@@ -48,19 +48,18 @@ public class Serializer {
         }
         mapper.registerModule(new JsonLDModule());
         String jsonLD = (instance instanceof Collection)
-                ? serializeCollection((Collection) instance)
+                ? serializeCollection((Collection<?>) instance)
                 : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
         if (format == RDFLanguages.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
     }
 
-    private String serializeCollection(Collection collection) throws IOException {
+    private String serializeCollection(Collection<?> collection) throws IOException {
         String lineSep = System.lineSeparator();
         StringBuilder jsonLDBuilder = new StringBuilder();
 
         if (collection.isEmpty()) {
             jsonLDBuilder.append("[]");
-            jsonLDBuilder.append(lineSep);
         } else {
             jsonLDBuilder.append("[");
             jsonLDBuilder.append(lineSep);
@@ -72,8 +71,8 @@ public class Serializer {
             int lastComma = jsonLDBuilder.lastIndexOf(",");
             jsonLDBuilder.replace(lastComma, lastComma + 1, "");
             jsonLDBuilder.append("]");
-            jsonLDBuilder.append(lineSep);
         }
+        jsonLDBuilder.append(lineSep);
 
         return jsonLDBuilder.toString();
     }
@@ -84,7 +83,7 @@ public class Serializer {
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         RDFDataMgr.write(os, model, format);
-        return new String(os.toByteArray());
+        return os.toString();
     }
 
     public String serializePlainJson(Object instance) throws JsonProcessingException {

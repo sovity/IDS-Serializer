@@ -2,14 +2,12 @@ package de.fraunhofer.iais.eis.ids.jsonld.preprocessing;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.awt.RenderingHints.Key;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class TypeNamePreprocessor extends BasePreprocessor {
