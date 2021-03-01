@@ -26,7 +26,7 @@ public class JsonLDSerializer extends BeanSerializer {
 
 	Logger logger = LoggerFactory.getLogger(JsonLDSerializer.class);
 	
-    private static int currentRecursionDepth = 0;
+    private int currentRecursionDepth = 0;
 
     static final Map<String, String> contextItems;
 
@@ -39,7 +39,6 @@ public class JsonLDSerializer extends BeanSerializer {
         //TODO: We should probably add some other common namespaces, such as foaf or xsd
     }
 
-    private Set<Class<?>> handledClasses;
 
     JsonLDSerializer(BeanSerializerBase src) {
         super(src);
@@ -47,7 +46,6 @@ public class JsonLDSerializer extends BeanSerializer {
 
     @Override
     public void serializeWithType(Object bean, JsonGenerator gen, SerializerProvider provider, TypeSerializer typeSer) throws IOException {
-        handledClasses = new HashSet<>();
         gen.setCurrentValue(bean);
 
         currentRecursionDepth++;
@@ -78,8 +76,8 @@ public class JsonLDSerializer extends BeanSerializer {
     /**
      * We need to add the fields of DatPayload to the context manually (if DatPayload present)
      * as RFC 7519 requires the exact field names specified below without any prefix for JWTs.
-     * @param bean
-     * @param context
+     * @param bean The object to be serialized
+     * @param context The context map (with key: prefix, value: URI) to be filled
      */
     private void addJwtFieldsToContext(Object bean, Map<String, String> context) {
         if(bean == null || bean.getClass().getName().equals("com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass().getName().equals("org.apache.jena.ext.xerces.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass() == BigInteger.class) return;
@@ -93,7 +91,7 @@ public class JsonLDSerializer extends BeanSerializer {
                 		|| f.getType().toString().contains("java.") 
                 		|| f.getType().toString().contains("javax.")) return;
                 
-                boolean wasAccessible = f.isAccessible();
+                boolean wasAccessible = f.canAccess(bean);
                 f.setAccessible(true);
                 try {
                     addJwtFieldsToContext(f.get(bean), context);
@@ -149,7 +147,7 @@ public class JsonLDSerializer extends BeanSerializer {
             {
                 try {
                     if(f.getType().getName().startsWith("java.") && !f.getType().getName().startsWith("java.util")) continue;
-                    boolean accessible = f.isAccessible();
+                    boolean accessible = f.canAccess(bean);
                     f.setAccessible(true);
                     Collection<?> c = (Collection<?>) f.get(bean);
                     if(c == null) {
@@ -171,7 +169,7 @@ public class JsonLDSerializer extends BeanSerializer {
                     || f.getType().getName().contains("javax.")) continue;
 
             try {
-                boolean wasAccessible = f.isAccessible();
+                boolean wasAccessible = f.canAccess(bean);
                 f.setAccessible(true);
                 filterContextWrtBean(f.get(bean), filteredContext);
                 f.setAccessible(wasAccessible);

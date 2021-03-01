@@ -1,5 +1,6 @@
 package de.fraunhofer.iais.eis.ids;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
@@ -833,6 +834,19 @@ public class SerializerTest {
 			// parse JSON-LD
 			ConnectorUpdateMessage msg = serializer.deserialize(jsonld, ConnectorUpdateMessage.class);
 			serializer.serialize(msg);
+		}
+	}
+
+	@Test
+	public void SerializeConfigModelTest() throws IOException {
+		String configModelAsString = SerializerUtil.readResourceToString("ConfigModel.json");
+		ObjectMapper mapper = new ObjectMapper();
+		Serializer serializer = new Serializer();
+		ConfigurationModel configurationModel = mapper.readValue(configModelAsString, ConfigurationModelImpl.class);
+		for(int i = 0; i < 10; i++) //TODO: Some bug appeared (missing context) when the serializer was used in a multi threaded approach. Do this in multiple threads
+		{
+			String reSerialized = serializer.serialize(configurationModel);
+			Assert.assertTrue(reSerialized.contains("@context"));
 		}
 	}
 

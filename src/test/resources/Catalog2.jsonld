@@ -27,6 +27,7 @@
       "ids:path" : "a Static endpoint path",
       "ids:inboundPath" : "a static inbound path",
       "ids:outboundPath" : "a static outbound path",
+      "ids:accessURL" : "https://example.org/resourceEndpointAccessUrl",
       "ids:endpointArtifact" : {
         "@type" : "ids:Artifact",
         "@id" : "https://w3id.org/idsa/autogen/artifact/994e61af-1a23-4eb7-b4b3-0468a49ea1d4",

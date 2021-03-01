@@ -229,6 +229,7 @@
         "@type" : "ids:ConnectorEndpoint",
         "@id" : "https://w3id.org/idsa/autogen/connectorEndpoint/ddbb0299-64f5-4e93-86e8-ca47792e7f75",
         "ids:path" : "a Static endpoint path",
+        "ids:accessURL" : "https://example.org/resourceEndpointAccessUrl",
         "ids:endpointArtifact" : {
           "@type" : "ids:Artifact",
           "@id" : "https://w3id.org/idsa/autogen/artifact/7c45b618-b536-4886-b4e1-4dab3daf5f41",
