@@ -6,11 +6,11 @@
 
 	<groupId>de.fraunhofer.iais.eis.ids</groupId>
 	<artifactId>infomodel-serializer</artifactId>
-	<version>4.0.2-SNAPSHOT</version>
+	<version>4.0.2</version>
 
 	<properties>
 		<!--<java.version>11</java.version>-->
-		<infomodel.version>4.0.2-SNAPSHOT</infomodel.version>
+		<infomodel.version>4.0.2</infomodel.version>
 		<jackson.version>2.11.2</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
