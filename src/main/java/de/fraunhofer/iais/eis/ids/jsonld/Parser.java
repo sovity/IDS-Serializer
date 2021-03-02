@@ -450,6 +450,27 @@ class Parser {
                 QuerySolution querySolution = resultSet.next();
 
                 if (resultSet.hasNext()) {
+                    String value1 = "", value2 = "", parameterName = "";
+                    QuerySolution querySolution2 = resultSet.next();
+                    Iterator<String> varNamesIt = querySolution2.varNames();
+                    while(varNamesIt.hasNext())
+                    {
+                        String varName = varNamesIt.next();
+                        if(querySolution.contains(varName))
+                        {
+                            if(!querySolution.get(varName).equals(querySolution2.get(varName)))
+                            {
+                                parameterName = varName;
+                                value1 = querySolution.get(varName).toString();
+                                value2 = querySolution2.get(varName).toString();
+                                break;
+                            }
+                        }
+                    }
+                    if(!value1.isEmpty())
+                    {
+                        throw new IOException(objectUri + " has multiple values for " + parameterName + ", which is not allowed. Values are: " + value1 + " and " + value2);
+                    }
                     throw new IOException("Multiple bindings for SPARQL query which should only have one binding. Input contains multiple values for a field which may occur only once.");
                 }
 

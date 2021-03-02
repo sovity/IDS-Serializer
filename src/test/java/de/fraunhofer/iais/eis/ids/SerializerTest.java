@@ -850,6 +850,27 @@ public class SerializerTest {
 		}
 	}
 
+	/**
+	 * This test makes sure that, in case one violates the "at most once" constraint, an appropriate exception is thrown
+	 * @throws IOException thrown in case the loading of the resource fails
+	 */
+	@Test
+	public void SerializeConnectorMultipleResources() throws IOException {
+		String connectorAsString = SerializerUtil.readResourceToString("Connector4.jsonld");
+		try {
+			//This connector has two resources, which link to the same representation (same URI). However, the representation has different mediaTypes
+			//In summary, one ends up with one representation with two mediaTypes, which is illegal and throws an Exception
+			Connector baseConnector = new Serializer().deserialize(connectorAsString, Connector.class);
+		}
+		catch (IOException e)
+		{
+			//Make sure that the exception indicates that the mediaType is the violating constraint
+			Assert.assertTrue(e.getMessage().contains("has multiple values for mediaType"));
+			return;
+		}
+		Assert.fail();
+	}
+
 
 
 
