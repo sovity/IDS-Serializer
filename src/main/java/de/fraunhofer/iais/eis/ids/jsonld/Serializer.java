@@ -5,14 +5,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
-import org.eclipse.rdf4j.model.Model;
-import org.eclipse.rdf4j.rio.RDFFormat;
-import org.eclipse.rdf4j.rio.RDFWriter;
-import org.eclipse.rdf4j.rio.Rio;
+import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
+import org.apache.jena.rdf.model.Model;
+import org.apache.jena.rdf.model.ModelFactory;
+import org.apache.jena.riot.Lang;
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
 
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Serializer {
 
     private static ObjectMapper mapper;
-    private final List<JsonPreprocessor> preprocessors;
+    private final List<JsonPreprocessor> preprocessors; //TODO: It seems like this list is never used...
 
     public Serializer() {
         mapper = new ObjectMapper();
@@ -28,6 +28,7 @@ public class Serializer {
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
         preprocessors = new ArrayList<>();
+        this.addPreprocessor(new TypeNamePreprocessor());
     }
 
     /**
@@ -38,28 +39,27 @@ public class Serializer {
      * @return RDF serialization of the provided object graph
      */
     public String serialize(Object instance) throws IOException {
-        return serialize(instance, RDFFormat.JSONLD);
+        return serialize(instance, RDFLanguages.JSONLD);
     }
 
-    public String serialize(Object instance, RDFFormat format) throws IOException {
-        if (format != RDFFormat.JSONLD && format != RDFFormat.TURTLE && format != RDFFormat.RDFXML) {
+    public String serialize(Object instance, Lang format) throws IOException {
+        if (format != RDFLanguages.JSONLD && format != RDFLanguages.TURTLE && format != RDFLanguages.RDFXML) {
             throw new IOException("RDFFormat " + format + " is currently not supported by the serializer.");
         }
         mapper.registerModule(new JsonLDModule());
         String jsonLD = (instance instanceof Collection)
-                ? serializeCollection((Collection) instance)
+                ? serializeCollection((Collection<?>) instance)
                 : mapper.writerWithDefaultPrettyPrinter().writeValueAsString(instance);
-        if (format == RDFFormat.JSONLD) return jsonLD;
+        if (format == RDFLanguages.JSONLD) return jsonLD;
         else return convertJsonLdToOtherRdfFormat(jsonLD, format);
     }
 
-    private String serializeCollection(Collection collection) throws IOException {
+    private String serializeCollection(Collection<?> collection) throws IOException {
         String lineSep = System.lineSeparator();
         StringBuilder jsonLDBuilder = new StringBuilder();
 
         if (collection.isEmpty()) {
             jsonLDBuilder.append("[]");
-            jsonLDBuilder.append(lineSep);
         } else {
             jsonLDBuilder.append("[");
             jsonLDBuilder.append(lineSep);
@@ -71,21 +71,19 @@ public class Serializer {
             int lastComma = jsonLDBuilder.lastIndexOf(",");
             jsonLDBuilder.replace(lastComma, lastComma + 1, "");
             jsonLDBuilder.append("]");
-            jsonLDBuilder.append(lineSep);
         }
+        jsonLDBuilder.append(lineSep);
 
         return jsonLDBuilder.toString();
     }
 
-    public String convertJsonLdToOtherRdfFormat(String jsonLd, RDFFormat format) throws IOException {
-        Model model = Rio.parse(new StringReader(jsonLd), null, RDFFormat.JSONLD);
+    public String convertJsonLdToOtherRdfFormat(String jsonLd, Lang format) {
+        Model model = ModelFactory.createDefaultModel();
+        RDFDataMgr.read(model, new ByteArrayInputStream(jsonLd.getBytes()), RDFLanguages.JSONLD);
 
-        StringWriter rdfOutput = new StringWriter();
-        RDFWriter writer = Rio.createWriter(format, rdfOutput);
-        writer.startRDF();
-        model.forEach(writer::handleStatement);
-        writer.endRDF();
-        return rdfOutput.toString();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        RDFDataMgr.write(os, model, format);
+        return os.toString();
     }
 
     public String serializePlainJson(Object instance) throws JsonProcessingException {
@@ -101,11 +99,30 @@ public class Serializer {
      * @return an object representing the provided JSON(-LD) structure
      */
     public <T> T deserialize(String serialization, Class<T> valueType) throws IOException {
-        mapper.registerModule(new JsonLDModule());
-        for (JsonPreprocessor preprocessor : preprocessors) {
-            serialization = preprocessor.preprocess(serialization);
-        }
-        return mapper.readValue(serialization, valueType);
+        return new Parser().parseMessage(serialization, valueType);
+    }
+
+    /**
+     * Inverse method of "serialize"
+     *
+     * @param rdfModel Input RDF Model to be turned into an Instance of the IDS Java classes
+     * @param valueType     class of top level type
+     * @param <T>           deserialized type
+     * @return an object representing the provided JSON(-LD) structure
+     */
+    public <T> T deserialize(Model rdfModel, Class<T> valueType) throws IOException {
+        return new Parser().parseMessage(rdfModel, valueType);
+    }
+
+    /**
+     * Allows to add further known namespaces to the message parser. Allows parsing to Java objects with JsonSubTypes annotations with other prefixes than "ids:".
+     * @param prefix Prefix to be added
+     * @param namespaceUrl URL of the prefix
+     */
+    public static void addKnownNamespace(String prefix, String namespaceUrl)
+    {
+        Parser.knownNamespaces.put(prefix, namespaceUrl);
+        JsonLDSerializer.contextItems.put(prefix, namespaceUrl);
     }
 
     /**
@@ -125,7 +142,7 @@ public class Serializer {
      * Important note: The preprocessors are executed in the same order they were added.
      *
      * @param preprocessor the preprocessor to add
-     * @param validate     set wether the preprocessors output should be checked by RDF4j
+     * @param validate     set whether the preprocessors output should be checked by RDF4j
      */
     public void addPreprocessor(JsonPreprocessor preprocessor, boolean validate) {
         preprocessor.enableRDFValidation(validate);

@@ -1,82 +1,28 @@
-{"@context": {
-"spatialCoverages": "ids:spatialCoverage",
-"customLicense": "ids:customLicense",
-"keywords": "ids:keyword",
-"catalog": "ids:catalog",
-"contentRefinements": "ids:contentRefinement",
-"standardLicense": "ids:standardLicense",
-"temporalCoverages": "ids:temporalCoverage",
-"requests": "ids:request",
-"integrityProtectionAndVerificationSupport": "ids:integrityProtectionAndVerificationSupport",
-"representations": "ids:representation",
-"defaultRepresentation": "ids:defaultRepresentation",
-"descriptions": "ids:description",
-"maintainer": "ids:maintainer",
-"themes": "ids:theme",
-"lifecycleActivities": "ids:lifecycleActivity",
-"securityProfile": "ids:securityProfile",
-"appExecutionResources": "ids:appExecutionResources",
-"variant": "ids:variant",
-"outboundModelVersion": "ids:outboundModelVersion",
-"sovereign": "ids:sovereign",
-"contentType": "ids:contentType",
-"basedOn": "ids:basedOn",
-"publher": "ids:publisher",
-"contentParts": "ids:contentPart",
-"offers": "ids:offer",
-"serviceIsolationSupport": "ids:serviceIsolationSupport",
-"physicalLocation": "ids:physicalLocation",
-"integrityProtectionScope": "ids:integrityProtectionScope",
-"languages": "ids:language",
-"contentStandard": "ids:contentStandard",
-"hosts": "ids:host",
-"localDataConfidentiality": "ids:localDataConfidentiality",
-"titles": "ids:title",
-"dataUsageControlSupport": "ids:dataUsageControlSupport",
-"version": "ids:version",
-"samples": "ids:sample",
-"authInfo": "ids:authInfo",
-"curator": "ids:curator",
-"resourceEndpoints": "ids:resourceEndpoint",
-"resourceParts": "ids:resourcePart",
-"resourceInterface": "ids:resourceInterface",
-"ids": "https://w3id.org/idsa/core/",
-"inboundModelVersions": "ids:inboundModelVersion",
-"contractOffers": "ids:contractOffer",
-"authenticationSupport": "ids:authenticationSupport",
-"auditLogging": "ids:auditLogging",
-"accrualPeriodicity": "ids:accrualPeriodicity",
-"componentCertification": "ids:componentCertification"
-},
+{"@context": "https://w3id.org/idsa/contexts/4.0.0/context.jsonld",
   "@type" : "ids:BaseConnector",
   "@id" : "https://companyA.com/connector",
-  "id" : "https://companyA.com/connector",
-  "outboundModelVersion" : "1.0.1-SNAPSHOT",
+  "outboundModelVersion" : "4.0.0",
   "curator" : "http://companyA.com/ids/participant",
   "securityProfile" : {
     "@type" : "ids:SecurityProfile",
-    "@id" : "http://industrialdataspace.org/securityProfile/5d7f7dc6-9005-43dd-88f1-dd8c51698c8f",
-    "id" : "http://industrialdataspace.org/securityProfile/5d7f7dc6-9005-43dd-88f1-dd8c51698c8f",
-    "basedOn" : [ "ids:PredefinedSecurityProfile", "https://w3id.org/idsa/core/Level0SecurityProfile" ]
+    "@id" : "idsc:BASE_SECURITY_PROFILE"
   },
   "maintainer" : "http://companyA.com/ids/participant",
-  "catalog" : {
-    "@type" : "ids:Catalog",
+  "resourceCatalog" : {
+    "@type" : "ids:ResourceCatalog",
     "@id" : "http://industrialdataspace.org/catalog/85050e7c-1530-4980-93bc-87d94a831af9",
-    "id" : "http://industrialdataspace.org/catalog/85050e7c-1530-4980-93bc-87d94a831af9",
-    "offers" : [ {
+    "offeredResource" : [ {
       "@type" : "ids:Resource",
       "@id" : "http://industrialdataspace.org/resource/516eb953-c789-4bc4-a989-264e3755698a",
-      "id" : "http://industrialdataspace.org/resource/516eb953-c789-4bc4-a989-264e3755698a",
-      "descriptions" : [ {
+      "description" : [ {
         "@value" : "Dataset without retrieval interface and further description.",
         "@language" : "en"
       } ],
-      "titles" : [ {
+      "title" : [ {
         "@value" : "Quarterly Business Report",
         "@language" : "en"
       } ]
     } ]
   },
-  "inboundModelVersions" : [ "1.0.1-SNAPSHOT" ]
+  "inboundModelVersion" : [ "4.0.0", "4.0.1-SNAPSHOT" ]
 }

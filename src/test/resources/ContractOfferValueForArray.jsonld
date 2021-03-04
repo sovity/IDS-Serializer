@@ -1,17 +1,17 @@
 {
-    "@context" : "https://w3id.org/idsa/contexts/1.0.2/context.jsonld",
+    "@context" : "https://w3id.org/idsa/contexts/4.0.0/context.json",
 
     "@type" : "ids:ContractOffer",
     "@id" : "https://mdm-connector.ids.isst.fraunhofer.de/examplecontract/bab-bayern-sample/",
 
-    "permissions" : [ {
+    "permission" : [ {
       "@type" : "ids:Permission",
 
-      "actions" : {
+      "action" : {
         "@id" : "https://w3id.org/idsa/code/action/USE"
       },
 
-      "constraints" : [ {
+      "constraint" : [ {
         "@type" : "ids:Constraint",
 
         "operator" : {
