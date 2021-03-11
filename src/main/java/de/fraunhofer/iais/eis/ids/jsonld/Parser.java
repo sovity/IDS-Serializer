@@ -608,7 +608,7 @@ class Parser {
         }
 
         //Run SPARQL query retrieving all information (only one hop!) about this node
-        String queryString = "SELECT ?p ?o { BIND(<" + node.asNode().getURI() + "> AS ?s) . ?s ?p ?o . } ";
+        String queryString = "SELECT ?s ?p ?o { BIND(<" + node.asNode().getURI() + "> AS ?s) . ?s ?p ?o . } ";
         Query query = QueryFactory.create(queryString);
         QueryExecution queryExecution = QueryExecutionFactory.create(query, model);
         ResultSet resultSet = queryExecution.execSelect();
@@ -649,6 +649,12 @@ class Parser {
             //If it is not a literal, we need to call this function recursively. Create new map for sub object
             else
             {
+                //logger.info("Calling handleForeignNode for " + querySolution.getResource("o").toString());
+                if(querySolution.getResource("s").toString().equals(querySolution.getResource("o").toString()))
+                {
+                    logger.warn("Found self-reference on " + querySolution.getResource("s").toString() + " via predicate " + querySolution.getResource("p").toString() + " .");
+                    continue;
+                }
                 HashMap<String, Object> subMap = handleForeignNode(querySolution.getResource("o"), new HashMap<>(), model);
                 subMap.put("@id", querySolution.getResource("o").getURI());
                 if(map.containsKey(propertyUri))
