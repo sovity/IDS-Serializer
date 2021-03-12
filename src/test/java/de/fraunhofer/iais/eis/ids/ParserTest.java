@@ -158,7 +158,7 @@ public class ParserTest {
 	/**
 	 * This one tests whether the serializer can work with relative URIs.
 	 *
-	 * @throws IOException
+	 * @throws IOException if parsing fails
 	 */
 	@Test
 	public void relativeUriTest() throws IOException {
@@ -170,4 +170,15 @@ public class ParserTest {
 		String serializedConnector = new Serializer().serialize(connector);
 		assertTrue(serializedConnector.contains("/ids/participant"));
 	}
+
+	/**
+	 * This test consumes a connector which has a loop inside the RDF (a connector with owl:sameAs reference to itself)
+	 * @throws IOException if parsing fails
+	 */
+	@Test
+	public void avoidStackOverflowTest() throws IOException {
+		String illegalBaseConnector = SerializerUtil.readResourceToString("Connector5.jsonld");
+		new Serializer().deserialize(illegalBaseConnector, BaseConnector.class);
+	}
+
 }
