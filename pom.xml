@@ -6,7 +6,7 @@
 
 	<groupId>de.fraunhofer.iais.eis.ids</groupId>
 	<artifactId>infomodel-serializer</artifactId>
-	<version>4.0.3-SNAPSHOT</version>
+	<version>${revision}</version>
 
 	<properties>
 		<!--<java.version>11</java.version>-->
@@ -14,6 +14,7 @@
 		<jackson.version>2.11.2</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
+		<revision>4.0.3-SNAPSHOT</revision>
 	</properties>
 
 	<dependencies>
@@ -111,15 +112,15 @@
 
 	<build>
 
-                <!-- Including the LICENSE file -->
-                <resources>
-                    <resource>
-                        <directory>.</directory>
-                        <includes>
-                            <include>LICENSE</include>
-                        </includes>
-                    </resource>
-                </resources>
+		<!-- Including the LICENSE file -->
+		<resources>
+			<resource>
+				<directory>.</directory>
+				<includes>
+					<include>LICENSE</include>
+				</includes>
+			</resource>
+		</resources>
 
 		<plugins>
 			<plugin>
@@ -131,6 +132,32 @@
 						<id>attach-sources</id>
 						<goals>
 							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- This plugin replaces the revision variable in the version by the actual variable value. Only required if submodules exist -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>flatten-maven-plugin</artifactId>
+				<version>1.2.2</version>
+				<configuration>
+					<updatePomFile>true</updatePomFile>
+				</configuration>
+				<executions>
+					<execution>
+						<id>flatten</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>flatten</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>flatten.clean</id>
+						<phase>clean</phase>
+						<goals>
+							<goal>clean</goal>
 						</goals>
 					</execution>
 				</executions>
