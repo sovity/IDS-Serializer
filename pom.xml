@@ -14,7 +14,7 @@
 		<jackson.version>2.11.2</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
-		<revision>4.0.3-SNAPSHOT</revision>
+		<revision>4.0.4-SNAPSHOT</revision>
 	</properties>
 
 	<dependencies>
@@ -183,28 +183,14 @@
 			<name>maven-public</name>
 			<url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
 		</repository>
-		<snapshotRepository>
-			<id>eis-snapshot-repo</id>
-			<name>maven-snapshots</name>
-			<url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-snapshot</url>
-		</snapshotRepository>
 	</distributionManagement>
 
 	<repositories>
 		<repository>
 			<id>eis-public-repo</id>
-			<name>maven-snapshots</name>
+			<name>maven-public</name>
 			<url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-public</url>
 		</repository>
-		<repository>
-			<id>eis-snapshot-repo</id>
-			<name>maven-snapshots</name>
-			<url>http://maven.iais.fraunhofer.de/artifactory/eis-ids-snapshot</url>
-		</repository>
-		<!--<repository>
-			<id>fhg-snapshots</id>
-			<url>http://maven.iais.fraunhofer.de/artifactory/eis-fhdigital-release-local</url>
-		</repository>-->
 	</repositories>
 
 </project>
