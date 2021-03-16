@@ -26,7 +26,7 @@ public class JsonLDSerializer extends BeanSerializer {
 
 	Logger logger = LoggerFactory.getLogger(JsonLDSerializer.class);
 	
-    private int currentRecursionDepth = 0;
+    private static int currentRecursionDepth = 0;
 
     static final Map<String, String> contextItems;
 
