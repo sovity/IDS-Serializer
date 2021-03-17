@@ -181,4 +181,10 @@ public class ParserTest {
 		new Serializer().deserialize(illegalBaseConnector, BaseConnector.class);
 	}
 
+	@Test
+	public void parseResourceTest() throws IOException {
+		String resourceString = SerializerUtil.readResourceToString("Resource1.jsonld");
+		new Serializer().deserialize(resourceString, Resource.class);
+	}
+
 }
