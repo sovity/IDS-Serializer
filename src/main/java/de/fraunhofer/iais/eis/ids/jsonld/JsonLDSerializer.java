@@ -87,7 +87,7 @@ public class JsonLDSerializer extends BeanSerializer {
         } else {
             Stream.of(bean.getClass().getDeclaredFields()).forEach(f -> {
             	
-                if(f.getType().isPrimitive() || f.getType().isEnum() 
+                if(f.isSynthetic() || f.getType().isPrimitive() || f.getType().isEnum()
                 		|| f.getType().toString().contains("java.") 
                 		|| f.getType().toString().contains("javax.")) return;
                 
