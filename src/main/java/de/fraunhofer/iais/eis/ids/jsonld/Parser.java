@@ -2,6 +2,7 @@ package de.fraunhofer.iais.eis.ids.jsonld;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import org.apache.jena.datatypes.DatatypeFormatException;
@@ -70,26 +71,26 @@ class Parser {
                     throw new IOException("Could not extract class of child object. ID: " + objectUri);
                 }
 
-                Class<?> candidateClass = null;
+                //Class<?> candidateClass = null;
 
-
+                String fullName = "No triple present indicating type.";
                 while (resultSet.hasNext()) {
                     QuerySolution solution = resultSet.nextSolution();
-                    String fullName = solution.get("type").toString();
+                    fullName = solution.get("type").toString();
 
                     //Expected URI is something like https://w3id.org/idsa/core/ClassName (and we want ClassName)
                     String className = fullName.substring(fullName.lastIndexOf('/') + 1);
 
                     //Some namespaces use "#" instead of "/"
                     if (className.contains("#")) {
-                        className = className.substring(className.lastIndexOf("#"));
+                        className = className.substring(className.lastIndexOf("#") + 1);
                     }
 
                     for (Class<?> currentClass : implementingClasses) {
                         //Is this class instantiable?
                         if (!currentClass.isInterface() && !Modifier.isAbstract(currentClass.getModifiers())) {
-                            candidateClass = currentClass;
-                            if (currentClass.getSimpleName().equals(className) || candidateClass.getSimpleName().equals(className + "Impl")) {
+                            //candidateClass = currentClass;
+                            if (currentClass.getSimpleName().equals(className) || currentClass.getSimpleName().equals(className + "Impl")) {
                                 targetClass = (Class<T>) currentClass;
                                 break;
                             }
@@ -100,10 +101,10 @@ class Parser {
                 //Did we find "the" class, i.e. instantiable and name matches?
                 if (targetClass.isInterface() || Modifier.isAbstract(targetClass.getModifiers())) {
                     //No, the current targetClass cannot be instantiated. Do we have a candidate class?
-                    if (candidateClass != null) {
-                        logger.warn("Did not find an instantiable class for " + objectUri + " matching expected class name. Guessing " + candidateClass.getSimpleName());
-                        targetClass = (Class<T>) candidateClass;
-                    }
+                    //if (candidateClass != null) {
+                        throw new IOException("Did not find an instantiable class for " + objectUri + " matching expected class name (" + targetClass.getSimpleName() + "). Object has type: " + fullName);
+                        //targetClass = (Class<T>) candidateClass;
+                    //}
                 }
             }
 
@@ -204,6 +205,10 @@ class Parser {
             });
             //Start the "WHERE" part - Fuseki does not expect the "WHERE" keyword, but just an "{"
             queryStringBuilder.append(" { ");
+
+            //Make sure that the object is of the correct type
+            //This is particularly relevant in case of all fields being optional -- then one could simply parse a random object
+            queryStringBuilder.append(" <").append(objectUri).append("> a ").append(targetClass.getAnnotation(JsonTypeName.class).value()).append(". ");
 
             //In case we get an empty result set, we want to know whether or not the query failed (i.e. mandatory field missing)
             boolean containsNotNullableField = false;

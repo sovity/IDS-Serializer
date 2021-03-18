@@ -8,10 +8,12 @@ import de.fraunhofer.iais.eis.*;
 import org.junit.Test;
 
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ParserTest {
 
-	//Logger logger = LoggerFactory.getLogger(ParserTest.class);
+	Logger logger = LoggerFactory.getLogger(ParserTest.class);
 
 
 	/**
@@ -185,6 +187,14 @@ public class ParserTest {
 	public void parseResourceTest() throws IOException {
 		String resourceString = SerializerUtil.readResourceToString("Resource1.jsonld");
 		new Serializer().deserialize(resourceString, Resource.class);
+	}
+
+	@Test(expected = IOException.class)
+	public void parseUtterRubbishResourceTest() throws IOException {
+		String connectorAsString = SerializerUtil.readResourceToString("ConnectorWithRubbishResource.jsonld");
+		//This MUST throw an exception. The "resource" in the catalog is NOT an ids Resource, but some AAS stuff
+		Connector c = new Serializer().deserialize(connectorAsString, Connector.class);
+		logger.info(new Serializer().serialize(c));
 	}
 
 }
