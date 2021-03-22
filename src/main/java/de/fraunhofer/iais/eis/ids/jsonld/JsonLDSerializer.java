@@ -136,8 +136,11 @@ public class JsonLDSerializer extends BeanSerializer {
                     }
                 }
             }
-            if(m.getReturnType().isEnum() && m.getReturnType().getCanonicalName().contains("fraunhofer")) { // TODO this query is really hacky and dangerous as implicit assumptions about the idsc usage are used.
-                filteredContext.put("idsc", contextItems.get("idsc"));
+            if(m.getReturnType().isEnum()) {
+                //Is there any enum constant starting with the IDSC namespace?
+                if (Arrays.stream(m.getReturnType().getEnumConstants()).anyMatch(constant -> constant.toString().startsWith(contextItems.get("idsc")))) {
+                    filteredContext.put("idsc", contextItems.get("idsc"));
+                }
             }
         });
         // run through fields recursively
