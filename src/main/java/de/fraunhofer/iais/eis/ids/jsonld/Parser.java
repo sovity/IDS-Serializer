@@ -208,7 +208,7 @@ class Parser {
 
             //Make sure that the object is of the correct type
             //This is particularly relevant in case of all fields being optional -- then one could simply parse a random object
-            queryStringBuilder.append(" <").append(objectUri).append("> a ").append(targetClass.getAnnotation(JsonTypeName.class).value()).append(". ");
+            queryStringBuilder.append(" <").append(objectUri).append("> a ").append(wrapIfUri(targetClass.getAnnotation(JsonTypeName.class).value())).append(". ");
 
             //In case we get an empty result set, we want to know whether or not the query failed (i.e. mandatory field missing)
             boolean containsNotNullableField = false;
@@ -233,7 +233,7 @@ class Parser {
                         //Find the annotation value containing a colon and interpret this as "prefix:predicate"
                 boolean foundAnnotation = false;
                 if(field.getAnnotation(JsonAlias.class) != null) {
-                    Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).filter(annotation -> annotation.contains(":")).findFirst();
+                    Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).map(this::wrapIfUri).filter(annotation -> annotation.contains(":")).findFirst();
                     currentAnnotation.ifPresent(queryStringBuilder::append);
                     foundAnnotation = true;
                 }
@@ -293,7 +293,7 @@ class Parser {
                 Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).filter(annotation -> annotation.contains(":")).filter(s -> s.length() > 1).findFirst();
                 if(currentAnnotation.isPresent())
                 {
-                    queryForOtherProperties.append(currentAnnotation.get());
+                    queryForOtherProperties.append(wrapIfUri(currentAnnotation.get()));
                 }
                 else
                 {
@@ -584,6 +584,22 @@ class Parser {
             return returnObject;
         } catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchFieldException | URISyntaxException | DatatypeConfigurationException | ClassNotFoundException e) {
             throw new IOException("Failed to instantiate desired class (" + targetClass.getName() + ")", e);
+        }
+    }
+
+    /**
+     * This function wraps a URI with "<" ">", if needed, to avoid errors about "unknown namespace http(s):"
+     * @param input Input URI, possibly a prefixed value
+     * @return If this is a full URI, starting with http or https, the URI will be encapsulated in "<" ">"
+     */
+    private String wrapIfUri(String input)
+    {
+        if(input.startsWith("http://") || input.startsWith("https://"))
+        {
+            return "<" + input + ">";
+        }
+        else {
+            return input;
         }
     }
 
