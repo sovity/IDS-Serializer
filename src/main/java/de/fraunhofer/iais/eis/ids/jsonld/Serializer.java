@@ -11,8 +11,12 @@ import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +25,7 @@ public class Serializer {
 
     private static ObjectMapper mapper;
     private final List<JsonPreprocessor> preprocessors; //TODO: It seems like this list is never used...
+    private final Logger logger = LoggerFactory.getLogger(Serializer.class);
 
     public Serializer() {
         mapper = new ObjectMapper();
@@ -29,6 +34,11 @@ public class Serializer {
 
         preprocessors = new ArrayList<>();
         this.addPreprocessor(new TypeNamePreprocessor());
+
+        if(!Charset.defaultCharset().equals(StandardCharsets.UTF_8))
+        {
+            logger.warn("Standard Charset is set to " + Charset.defaultCharset() + " - expecting " + StandardCharsets.UTF_8 + ". Some characters might not be displayed correctly.");
+        }
 
     }
 

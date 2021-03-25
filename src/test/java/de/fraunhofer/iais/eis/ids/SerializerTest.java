@@ -871,6 +871,25 @@ public class SerializerTest {
 		Assert.fail();
 	}
 
+	@Test
+	public void serializeAndParseConnectorWithUmlautDescription() throws IOException {
+		Connector c = new BaseConnectorBuilder(URI.create("http://übung.de"))
+				._description_(Util.asList(new TypedLiteral("Dies ist ein Übungsconnector mit Umlauten. ÄäÖöÜüß\"", "en")))
+				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
+				._maintainer_(URI.create("http://exampe.org/maintainer"))
+				._curator_(URI.create("http://exampe.org/curator"))
+				._securityProfile_(SecurityProfile.TRUST_SECURITY_PROFILE)
+				._outboundModelVersion_("1.2.3")
+				._inboundModelVersion_(Util.asList("1.2.3", "1.5.9"))
+				.build();
+		String connectorAsString = new Serializer().serialize(c);
+
+		//System.out.println(connectorAsString);
+		Assert.assertTrue(connectorAsString.contains("ÄäÖöÜüß+-*/%#123"));
+		Connector c2 = new Serializer().deserialize(connectorAsString, Connector.class);
+		Assert.assertTrue(c2.getDescription().get(0).getValue().contains("Ä"));
+		//System.out.println(c2.getDescription().get(0).getValue());
+	}
 
 
 
