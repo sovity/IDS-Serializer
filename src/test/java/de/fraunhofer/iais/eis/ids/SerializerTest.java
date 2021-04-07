@@ -34,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SerializerTest { 
 
@@ -316,6 +317,7 @@ public class SerializerTest {
 				._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("test1234").build())
 				.build();
 		String serialized = serializer.serialize(sdr);
+		System.out.println(serialized);
 		Message m = serializer.deserialize(serialized, Message.class);
 
 		Assert.assertEquals(sdr.getContentVersion(), m.getContentVersion());
@@ -838,15 +840,41 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void SerializeConfigModelTest() throws IOException {
+	public void SerializeConfigModelTest() throws IOException, InterruptedException {
 		String configModelAsString = SerializerUtil.readResourceToString("ConfigModel.json");
 		ObjectMapper mapper = new ObjectMapper();
 		Serializer serializer = new Serializer();
 		ConfigurationModel configurationModel = mapper.readValue(configModelAsString, ConfigurationModelImpl.class);
-		for(int i = 0; i < 10; i++) //TODO: Some bug appeared (missing context) when the serializer was used in a multi threaded approach. Do this in multiple threads
+		ArrayList<Thread> threads = new ArrayList<>();
+		AtomicBoolean brokenContextFound = new AtomicBoolean(false);
+		//Do 50 parallel serialization calls
+		for(int i = 0; i < 50; i++)
 		{
-			String reSerialized = serializer.serialize(configurationModel);
-			Assert.assertTrue(reSerialized.contains("@context"));
+			threads.add(new Thread(() -> {
+				try {
+					String reSerialized = serializer.serialize(configurationModel);
+					//Make sure context is present at least once
+					Assert.assertTrue(reSerialized.contains("@context"));
+					//Make sure it is contained at most once
+					Assert.assertEquals(reSerialized.indexOf("@context"), reSerialized.lastIndexOf("@context"));
+				} catch (IOException | AssertionError e) {
+					brokenContextFound.set(true);
+					e.printStackTrace();
+				}
+
+			}));
+		}
+		for(Thread t : threads)
+		{
+			t.start();
+		}
+		for (Thread t : threads)
+		{
+			t.join();
+		}
+		if(brokenContextFound.get())
+		{
+			Assert.fail();
 		}
 	}
 
