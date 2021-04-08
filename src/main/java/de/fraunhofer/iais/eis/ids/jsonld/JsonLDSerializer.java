@@ -24,7 +24,7 @@ import java.util.stream.Stream;
 
 public class JsonLDSerializer extends BeanSerializer {
 
-	Logger logger = LoggerFactory.getLogger(JsonLDSerializer.class);
+	private final Logger logger = LoggerFactory.getLogger(JsonLDSerializer.class);
 	
     private static int currentRecursionDepth = 0;
 

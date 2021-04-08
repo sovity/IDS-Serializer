@@ -23,12 +23,11 @@ import java.util.List;
 
 public class Serializer {
 
-    private static ObjectMapper mapper;
+    private static final ObjectMapper mapper = new ObjectMapper();
     private final List<JsonPreprocessor> preprocessors; //TODO: It seems like this list is never used...
     private final Logger logger = LoggerFactory.getLogger(Serializer.class);
 
     public Serializer() {
-        mapper = new ObjectMapper();
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
@@ -53,7 +52,8 @@ public class Serializer {
         return serialize(instance, RDFLanguages.JSONLD);
     }
 
-    public String serialize(Object instance, Lang format) throws IOException {
+    //Synchronized is required for thread safety. Without it, context elements might be missing in case of multiple simultaneous calls to this function
+    public synchronized String serialize(Object instance, Lang format) throws IOException {
         if (format != RDFLanguages.JSONLD && format != RDFLanguages.TURTLE && format != RDFLanguages.RDFXML) {
             throw new IOException("RDFFormat " + format + " is currently not supported by the serializer.");
         }
