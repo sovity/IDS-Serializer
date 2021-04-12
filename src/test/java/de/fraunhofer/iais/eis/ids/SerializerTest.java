@@ -317,6 +317,7 @@ public class SerializerTest {
 				._securityToken_(new DynamicAttributeTokenBuilder()._tokenFormat_(TokenFormat.JWT)._tokenValue_("test1234").build())
 				.build();
 		String serialized = serializer.serialize(sdr);
+		System.out.println(serialized);
 		Message m = serializer.deserialize(serialized, Message.class);
 
 		Assert.assertEquals(sdr.getContentVersion(), m.getContentVersion());
