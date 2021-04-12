@@ -24,5 +24,12 @@
       } ]
     } ]
   },
+  "hasDefaultEndpoint" : {
+    "@type" : "ids:ConnectorEndpoint",
+    "@id" : "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+    "accessURL" : {
+      "@id" : "https://localhost:8080/api/ids/data"
+    }
+  },
   "inboundModelVersion" : [ "4.0.0", "4.0.1-SNAPSHOT" ]
 }

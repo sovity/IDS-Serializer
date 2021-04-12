@@ -15,6 +15,13 @@
   "ids:maintainer" : {
     "@id" : "https://example.org/"
   },
+    "ids:hasDefaultEndpoint" : {
+      "@type" : "ids:ConnectorEndpoint",
+      "@id" : "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+      "ids:accessURL" : {
+        "@id" : "https://localhost:8080/api/ids/data"
+      }
+    },
   "ids:resourceCatalog" : [ {
     "@type" : "ids:ResourceCatalog",
     "@id" : "https://w3id.org/idsa/autogen/resourceCatalog/e1bb26bf-369a-418a-a08f-420810498345",

@@ -145,7 +145,14 @@
     "outboundModelVersion" : "4.0.0",
     "resourceCatalog" : "http://localhost:8080/connectors/541260824/202120622",
     "securityProfile" : "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
-    "title" : "This is a dummy title from the Interaction Library"
+    "title" : "This is a dummy title from the Interaction Library",
+    "hasDefaultEndpoint" : "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf"
+  }, {
+    "@type" : "ids:ConnectorEndpoint",
+    "@id" : "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+    "accessURL" : {
+      "@id" : "https://localhost:8080/api/ids/data"
+    }
   }, {
     "@id" : "https://w3id.org/idsa/autogen/iANAMediaType/bf91e77f-8019-4716-b873-16f6232fa9b7",
     "@type" : "ids:IANAMediaType",
@@ -154,6 +161,14 @@
   "@context" : {
     "sameAs" : {
       "@id" : "http://www.w3.org/2002/07/owl#sameAs",
+      "@type" : "@id"
+    },
+    "hasDefaultEndpoint" : {
+      "@id" : "https://w3id.org/idsa/core/hasDefaultEndpoint",
+      "@type" : "@id"
+    },
+    "ConnectorEndpoint" : {
+      "@id" : "https://w3id.org/idsa/core/ConnectorEndpoint",
       "@type" : "@id"
     },
     "representationStandard" : {

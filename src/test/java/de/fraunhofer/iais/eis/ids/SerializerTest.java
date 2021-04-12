@@ -34,6 +34,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SerializerTest { 
 
@@ -838,15 +839,41 @@ public class SerializerTest {
 	}
 
 	@Test
-	public void SerializeConfigModelTest() throws IOException {
+	public void SerializeConfigModelTest() throws IOException, InterruptedException {
 		String configModelAsString = SerializerUtil.readResourceToString("ConfigModel.json");
 		ObjectMapper mapper = new ObjectMapper();
 		Serializer serializer = new Serializer();
 		ConfigurationModel configurationModel = mapper.readValue(configModelAsString, ConfigurationModelImpl.class);
-		for(int i = 0; i < 10; i++) //TODO: Some bug appeared (missing context) when the serializer was used in a multi threaded approach. Do this in multiple threads
+		ArrayList<Thread> threads = new ArrayList<>();
+		AtomicBoolean brokenContextFound = new AtomicBoolean(false);
+		//Do 50 parallel serialization calls
+		for(int i = 0; i < 50; i++)
 		{
-			String reSerialized = serializer.serialize(configurationModel);
-			Assert.assertTrue(reSerialized.contains("@context"));
+			threads.add(new Thread(() -> {
+				try {
+					String reSerialized = serializer.serialize(configurationModel);
+					//Make sure context is present at least once
+					Assert.assertTrue(reSerialized.contains("@context"));
+					//Make sure it is contained at most once
+					Assert.assertEquals(reSerialized.indexOf("@context"), reSerialized.lastIndexOf("@context"));
+				} catch (IOException | AssertionError e) {
+					brokenContextFound.set(true);
+					e.printStackTrace();
+				}
+
+			}));
+		}
+		for(Thread t : threads)
+		{
+			t.start();
+		}
+		for (Thread t : threads)
+		{
+			t.join();
+		}
+		if(brokenContextFound.get())
+		{
+			Assert.fail();
 		}
 	}
 
@@ -881,6 +908,7 @@ public class SerializerTest {
 				._securityProfile_(SecurityProfile.TRUST_SECURITY_PROFILE)
 				._outboundModelVersion_("1.2.3")
 				._inboundModelVersion_(Util.asList("1.2.3", "1.5.9"))
+				._hasDefaultEndpoint_(new ConnectorEndpointBuilder()._accessURL_(URI.create("https://example.org/myEndpoint")).build())
 				.build();
 		String connectorAsString = new Serializer().serialize(c);
 
