@@ -14,7 +14,7 @@
 		<jackson.version>2.11.2</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
-		<revision>4.0.5-SNAPSHOT</revision>
+		<revision>4.0.6-SNAPSHOT</revision>
 	</properties>
 
 	<dependencies>
@@ -179,7 +179,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.7.0</version>
 					<configuration>
-						<release>11</release>
+						<source>1.8</source>
+						<target>1.8</target>
 					</configuration>
 				</plugin>
 			</plugins>

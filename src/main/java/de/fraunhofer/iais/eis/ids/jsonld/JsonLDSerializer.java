@@ -90,8 +90,7 @@ public class JsonLDSerializer extends BeanSerializer {
                 if(f.isSynthetic() || f.getType().isPrimitive() || f.getType().isEnum()
                 		|| f.getType().toString().contains("java.") 
                 		|| f.getType().toString().contains("javax.")) return;
-                
-                boolean wasAccessible = f.canAccess(bean);
+                boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 try {
                     addJwtFieldsToContext(f.get(bean), context);
@@ -150,7 +149,7 @@ public class JsonLDSerializer extends BeanSerializer {
             {
                 try {
                     if(f.getType().getName().startsWith("java.") && !f.getType().getName().startsWith("java.util")) continue;
-                    boolean accessible = f.canAccess(bean);
+                    boolean accessible = f.isAccessible();
                     f.setAccessible(true);
                     Collection<?> c = (Collection<?>) f.get(bean);
                     if(c == null) {
@@ -172,7 +171,7 @@ public class JsonLDSerializer extends BeanSerializer {
                     || f.getType().getName().contains("javax.")) continue;
 
             try {
-                boolean wasAccessible = f.canAccess(bean);
+                boolean wasAccessible = f.isAccessible();
                 f.setAccessible(true);
                 filterContextWrtBean(f.get(bean), filteredContext);
                 f.setAccessible(wasAccessible);
