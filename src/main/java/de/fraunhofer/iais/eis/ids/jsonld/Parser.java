@@ -10,6 +10,7 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.RiotException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.ZonedDateTime;
@@ -986,13 +988,18 @@ class Parser {
      * @param message Message to be read
      * @return The model of the message
      */
-    private Model readMessage(String message) {
+    private Model readMessage(String message) throws IOException {
 
         Model targetModel = ModelFactory.createDefaultModel();
 
         //Read incoming message to the same model
-
-        RDFDataMgr.read(targetModel, new ByteArrayInputStream(message.getBytes()), RDFLanguages.JSONLD);
+        try {
+            RDFDataMgr.read(targetModel, new ByteArrayInputStream(message.getBytes()), RDFLanguages.JSONLD);
+        }
+        catch (RiotException e)
+        {
+            throw new IOException("The message is no valid JSON-LD and therefore could not be parsed.", e);
+        }
 
         return targetModel;
     }
