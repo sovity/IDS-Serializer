@@ -186,7 +186,7 @@ class Parser {
                     //Yes, it is assignable multiple times. Concatenate multiple values together using some delimiter
                     try {
                         //ArrayLists are generics. We need to extract the name of the generic parameter as string and interpret that
-                        String typeName = extractTypeNameFromArrayList(value.getGenericParameterTypes()[0]);
+                        String typeName = extractTypeNameFromList(value.getGenericParameterTypes()[0]);
 
                         if (typeName.endsWith("TypedLiteral")) isTypedLiteral = true;
                     } catch (IOException e) {
@@ -505,7 +505,7 @@ class Parser {
                         if (Collection.class.isAssignableFrom(currentType)) {
                             //We are working with ArrayLists.
                             //Here, we need to work with the GenericParameterTypes instead to find out what kind of ArrayList we are dealing with
-                            String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
+                            String typeName = extractTypeNameFromList(entry.getValue().getGenericParameterTypes()[0]);
                             if (isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0])) {
                                 if (typeName.endsWith("TypedLiteral")) {
                                     try {
@@ -869,7 +869,7 @@ class Parser {
     }
 
     private boolean isArrayListTypePrimitive(Type t) throws IOException {
-        String typeName = extractTypeNameFromArrayList(t);
+        String typeName = extractTypeNameFromList(t);
 
         try {
             //Do not try to call Class.forName(primitive) -- that would throw an exception
@@ -880,13 +880,22 @@ class Parser {
         }
     }
 
-    private String extractTypeNameFromArrayList(Type t) throws IOException {
+    private String extractTypeNameFromList(Type t) throws IOException {
         String typeName = t.getTypeName();
-        if (!typeName.startsWith("java.util.ArrayList<? extends ")) {
+        if (!typeName.startsWith("java.util.ArrayList<") && !typeName.startsWith("java.util.List<")) {
             throw new IOException("Illegal argument encountered while interpreting type parameter");
         }
-        //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
-        return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
+        //"<? extends XYZ>" or super instead of extends
+        if(typeName.contains("?"))
+        {
+            //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
+            return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
+        }
+        //No extends
+        else
+        {
+            return typeName.substring(typeName.indexOf("<") + 1, typeName.indexOf(">"));
+        }
     }
 
     private boolean isPrimitive(Class<?> input) throws IOException {

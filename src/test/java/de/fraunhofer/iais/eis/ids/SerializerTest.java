@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -918,6 +919,34 @@ public class SerializerTest {
 		Connector c2 = new Serializer().deserialize(connectorAsString, Connector.class);
 		Assert.assertTrue(c2.getDescription().get(0).getValue().contains("Ä"));
 		//System.out.println(c2.getDescription().get(0).getValue());
+	}
+
+	@Test
+	public void RdfResourceCorrectTypeTest() throws IOException {
+		ContractOffer contractOffer = new ContractOfferBuilder()
+				._permission_(Util.asList(new PermissionBuilder()
+						._title_(Util.asList(new TypedLiteral("Usage Policy")))
+						._description_(Util.asList(new TypedLiteral("duration-usage")))
+						._action_(Util.asList(Action.USE))
+						._constraint_(Util.asList(new ConstraintBuilder()
+								._leftOperand_(LeftOperand.ELAPSED_TIME)
+								._operator_(BinaryOperator.SHORTER_EQ)
+								._rightOperand_(new RdfResource("P20M", URI.create("xsd:duration")))
+								.build()))
+						.build()))
+				.build();
+		RdfResource contractResource = ((Constraint)(contractOffer.getPermission().get(0).getConstraint().get(0))).getRightOperand();
+		Assert.assertNotNull(contractResource.getType());
+		Assert.assertEquals("xsd:duration", contractResource.getType());
+
+		String contractOfferAsString = new Serializer().serialize(contractOffer);
+
+		System.out.println(contractOfferAsString);
+
+		ContractOffer contractOffer1 = new Serializer().deserialize(contractOfferAsString, ContractOffer.class);
+		contractResource = ((Constraint)(contractOffer1.getPermission().get(0).getConstraint().get(0))).getRightOperand();
+		Assert.assertNotNull(contractResource.getType());
+		Assert.assertTrue(contractResource.getType().equals("xsd:duration") || contractResource.getType().equals("http://www.w3.org/2001/XMLSchema#duration"));
 	}
 
 
