@@ -27,6 +27,8 @@ public class Serializer {
     private final List<JsonPreprocessor> preprocessors; //TODO: It seems like this list is never used...
     private final Logger logger = LoggerFactory.getLogger(Serializer.class);
 
+    private static boolean charsetWarningPrinted = false;
+
     public Serializer() {
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
@@ -34,9 +36,10 @@ public class Serializer {
         preprocessors = new ArrayList<>();
         this.addPreprocessor(new TypeNamePreprocessor());
 
-        if(!Charset.defaultCharset().equals(StandardCharsets.UTF_8))
+        if(!Charset.defaultCharset().equals(StandardCharsets.UTF_8) && !charsetWarningPrinted)
         {
-            logger.warn("Standard Charset is set to " + Charset.defaultCharset() + " - expecting " + StandardCharsets.UTF_8 + ". Some characters might not be displayed correctly.");
+            charsetWarningPrinted = true;
+            logger.warn("Standard Charset is set to " + Charset.defaultCharset() + " - expecting " + StandardCharsets.UTF_8 + ". Some characters might not be displayed correctly.\nThis warning is only printed once");
         }
 
     }

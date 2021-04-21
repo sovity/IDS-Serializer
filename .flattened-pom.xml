@@ -4,12 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.fraunhofer.iais.eis.ids</groupId>
   <artifactId>infomodel-serializer</artifactId>
-  <version>4.0.5-SNAPSHOT</version>
+  <version>4.0.6-SNAPSHOT</version>
   <dependencies>
     <dependency>
       <groupId>de.fraunhofer.iais.eis.infomodel</groupId>
       <artifactId>util</artifactId>
-      <version>4.0.5-SNAPSHOT</version>
+      <version>4.0.6-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
