@@ -941,14 +941,37 @@ public class SerializerTest {
 
 		String contractOfferAsString = new Serializer().serialize(contractOffer);
 
-		System.out.println(contractOfferAsString);
-
 		ContractOffer contractOffer1 = new Serializer().deserialize(contractOfferAsString, ContractOffer.class);
 		contractResource = ((Constraint)(contractOffer1.getPermission().get(0).getConstraint().get(0))).getRightOperand();
 		Assert.assertNotNull(contractResource.getType());
 		Assert.assertTrue(contractResource.getType().equals("xsd:duration") || contractResource.getType().equals("http://www.w3.org/2001/XMLSchema#duration"));
 	}
 
+	@Test
+	public void testPayloadInputs() throws IOException {
+		String string1 = "This contains @context but is not JSON-LD";
+		String string2 = "This {\"Hi\": hello} is not a valid JSON-LD";
+		String string3 = "This is just words";
 
+		boolean ex1 = false, ex2 = false, ex3 = false;
+		try {
+			new Serializer().deserialize(string1, Message.class);
+		} catch (IOException e) {
+			ex1 = true;
+		}
+		try {
+			new Serializer().deserialize(string2, Message.class);
+		} catch (IOException e) {
+			ex2 = true;
+		}
+		try {
+			new Serializer().deserialize(string3, Message.class);
+		} catch (IOException e) {
+			ex3 = true;
+		}
+		Assert.assertTrue(ex1);
+		Assert.assertTrue(ex2);
+		Assert.assertTrue(ex3);
+	}
 
 }
