@@ -29,6 +29,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -972,6 +973,21 @@ public class SerializerTest {
 		Assert.assertTrue(ex1);
 		Assert.assertTrue(ex2);
 		Assert.assertTrue(ex3);
+	}
+
+	@Test
+	public void decimalSerializationTest() throws IOException, DatatypeConfigurationException {
+		Representation representation = new AudioRepresentationBuilder()
+				._mediaType_(new IANAMediaTypeBuilder()._filenameExtension_("pdf").build())
+				._instance_(Util.asList(new ArtifactBuilder()._fileName_("data.pdf")._byteSize_(BigInteger.valueOf(2678))._creationDate_(DatatypeFactory.newInstance().newXMLGregorianCalendarDate(2015, 10, 15, 0)).build()))
+				._representationStandard_(URI.create("http://textRepresentation.org"))
+				._modified_(now)
+				._language_(Language.DE)
+				._samplingRate_(new BigDecimal(1754646))
+				.build();
+		String representationAsString = new Serializer().serialize(representation);
+		System.out.println(representationAsString);
+		Assert.assertTrue(representationAsString.contains("xsd:decimal") || representationAsString.contains("http://www.w3.org/2001/XMLSchema#decimal"));
 	}
 
 }
