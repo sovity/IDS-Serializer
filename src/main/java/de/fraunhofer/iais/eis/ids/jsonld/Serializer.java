@@ -27,6 +27,9 @@ public class Serializer {
     private final List<JsonPreprocessor> preprocessors; //TODO: It seems like this list is never used...
     private final Logger logger = LoggerFactory.getLogger(Serializer.class);
 
+    public static String implementingClassesNamePrefix = "";
+    public static String implementingClassesNameSuffix = "Impl";
+
     private static boolean charsetWarningPrinted = false;
 
     public Serializer() {

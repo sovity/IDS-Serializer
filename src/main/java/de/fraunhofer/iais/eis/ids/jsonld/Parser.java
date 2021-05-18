@@ -91,7 +91,7 @@ class Parser {
                         //Is this class instantiable?
                         if (!currentClass.isInterface() && !Modifier.isAbstract(currentClass.getModifiers())) {
                             //candidateClass = currentClass;
-                            if (currentClass.getSimpleName().equals(className) || currentClass.getSimpleName().equals(className + "Impl")) {
+                            if (currentClass.getSimpleName().equals(className) || currentClass.getSimpleName().equals(Serializer.implementingClassesNamePrefix + className + Serializer.implementingClassesNameSuffix)) {
                                 targetClass = (Class<T>) currentClass;
                                 break;
                             }
@@ -355,7 +355,7 @@ class Parser {
                             Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).filter(annotation -> annotation.contains(":")).findFirst();
                             if(currentAnnotation.isPresent()) {
                                 //Query for this field (we know already that it is mandatory)
-                                String checkIfMandatoryFieldPresent = diagnosticString.toString() + currentAnnotation.get() + " ?o }";
+                                String checkIfMandatoryFieldPresent = diagnosticString + currentAnnotation.get() + " ?o }";
                                 Query checkExistsQuery = QueryFactory.create(checkIfMandatoryFieldPresent);
 
                                 QueryExecution checkExistsQueryExecution = QueryExecutionFactory.create(checkExistsQuery, inputModel);
@@ -371,16 +371,16 @@ class Parser {
                     logger.info("Executed query: " + queryString);
                     if(missingElements.size() > 0)
                     {
-                        String errorMessage = "The following mandatory field(s) of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " are not filled or invalid: ";
+                        StringBuilder errorMessage = new StringBuilder("The following mandatory field(s) of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " are not filled or invalid: ");
                         for(int i = 0; i < missingElements.size(); i++)
                         {
                             if(i == 0)
                             {
-                                errorMessage += missingElements.get(i);
+                                errorMessage.append(missingElements.get(i));
                             }
                             else
                             {
-                                errorMessage += ", " + missingElements.get(i);
+                                errorMessage.append(", ").append(missingElements.get(i));
                             }
                         }
                         throw new IOException(errorMessage + ". Note that the value of \"@id\" fields MUST be a valid URI (e.g. emails preceded by \"mailto:\"). Mandatory fields are: " + notNullableFieldNames.toString());
@@ -394,62 +394,67 @@ class Parser {
 
             // now as all declared instances and classes are treated, which are also represented in the respective java
             // dependency, take care about the ones within foreign namespaces and add those to the 'properties' field
-            Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
-            Method getProperties = returnObject.getClass().getDeclaredMethod("getProperties");
+            // note that not all models (e.g. AAS) have such methods. In case they do not exist, skip adding external properties
 
-            while (externalPropertiesResultSet.hasNext()) {
-                QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
+            try {
+                Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
+                Method getProperties = returnObject.getClass().getDeclaredMethod("getProperties");
 
-                HashMap<String, Object> currentProperties = (HashMap<String, Object>) getProperties.invoke(returnObject);
+                while (externalPropertiesResultSet.hasNext()) {
+                    QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
 
-                //Avoid NullPointerException
-                if(currentProperties == null)
-                {
-                    currentProperties = new HashMap<>();
-                }
+                    HashMap<String, Object> currentProperties = (HashMap<String, Object>) getProperties.invoke(returnObject);
 
-                String propertyUri = externalPropertySolution.get("p").toString();
-
-                //Does this key already exist? If yes, we need to store the value as array to not override them
-                if(currentProperties.containsKey(propertyUri)) {
-                    //If it is not an array list yet, turn it into one
-                    if (!(currentProperties.get(propertyUri) instanceof ArrayList)) {
-                        ArrayList<Object> newList = new ArrayList<>();
-                        newList.add(currentProperties.get(propertyUri));
-                        currentProperties.put(propertyUri, newList);
+                    //Avoid NullPointerException
+                    if (currentProperties == null) {
+                        currentProperties = new HashMap<>();
                     }
-                }
 
-                //Literals and complex objects need to be handled differently
-                //Literals can be treated as flat values, whereas complex objects require recursive calls
-                if(externalPropertySolution.get("o").isLiteral())
-                {
-                    Object o = handleForeignLiteral(externalPropertySolution.getLiteral("o"));
-                    //If it is already an ArrayList, add new value to it
-                    if(currentProperties.containsKey(propertyUri)) {
-                        ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
-                        currentPropertyArray.add(o);
-                        setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
-                    }
-                    //Otherwise save as new plain value
-                    else {
-                        setProperty.invoke(returnObject, propertyUri, o);
-                    }
-                }
-                else {
-                    //It is a complex object. Distinguish whether or not we need to store as array
-                    HashMap<String, Object> subMap = handleForeignNode(externalPropertySolution.getResource("o"), new HashMap<>(), inputModel);
-                    subMap.put("@id", externalPropertySolution.getResource("o").getURI());
+                    String propertyUri = externalPropertySolution.get("p").toString();
+
+                    //Does this key already exist? If yes, we need to store the value as array to not override them
                     if (currentProperties.containsKey(propertyUri)) {
-                        ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
-                        currentPropertyArray.add(subMap);
-                        setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                        //If it is not an array list yet, turn it into one
+                        if (!(currentProperties.get(propertyUri) instanceof ArrayList)) {
+                            ArrayList<Object> newList = new ArrayList<>();
+                            newList.add(currentProperties.get(propertyUri));
+                            currentProperties.put(propertyUri, newList);
+                        }
+                    }
+
+                    //Literals and complex objects need to be handled differently
+                    //Literals can be treated as flat values, whereas complex objects require recursive calls
+                    if (externalPropertySolution.get("o").isLiteral()) {
+                        Object o = handleForeignLiteral(externalPropertySolution.getLiteral("o"));
+                        //If it is already an ArrayList, add new value to it
+                        if (currentProperties.containsKey(propertyUri)) {
+                            ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
+                            currentPropertyArray.add(o);
+                            setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                        }
+                        //Otherwise save as new plain value
+                        else {
+                            setProperty.invoke(returnObject, propertyUri, o);
+                        }
                     } else {
-                        setProperty.invoke(returnObject, propertyUri, subMap);
+                        //It is a complex object. Distinguish whether or not we need to store as array
+                        HashMap<String, Object> subMap = handleForeignNode(externalPropertySolution.getResource("o"), new HashMap<>(), inputModel);
+                        subMap.put("@id", externalPropertySolution.getResource("o").getURI());
+                        if (currentProperties.containsKey(propertyUri)) {
+                            ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
+                            currentPropertyArray.add(subMap);
+                            setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                        } else {
+                            setProperty.invoke(returnObject, propertyUri, subMap);
+                        }
                     }
                 }
+                externalPropertiesQueryExecution.close();
             }
-            externalPropertiesQueryExecution.close();
+            catch (NoSuchMethodException ignored)
+            {
+                //Method does not exist, skip
+            }
 
             //SPARQL binding present, iterate over result and construct return object
             while (resultSet.hasNext()) {
@@ -956,7 +961,7 @@ class Parser {
             }
 
             for (Class<?> currentClass : implementingClasses) {
-                if (currentClass.getSimpleName().equals(className + "Impl")) {
+                if (currentClass.getSimpleName().equals(Serializer.implementingClassesNamePrefix + className + Serializer.implementingClassesNameSuffix)) {
                     returnId = solution.get("id").toString();
                     returnClass = currentClass;
                     break;
