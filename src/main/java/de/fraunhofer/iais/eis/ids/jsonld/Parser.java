@@ -185,7 +185,7 @@ class Parser {
                     //Yes, it is assignable multiple times. Concatenate multiple values together using some delimiter
                     try {
                         //ArrayLists are generics. We need to extract the name of the generic parameter as string and interpret that
-                        String typeName = extractTypeNameFromArrayList(value.getGenericParameterTypes()[0]);
+                        String typeName = extractTypeNameFromList(value.getGenericParameterTypes()[0]);
 
                         if (typeName.endsWith("TypedLiteral")) isTypedLiteral = true;
                     } catch (IOException e) {
@@ -354,7 +354,7 @@ class Parser {
                             Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).filter(annotation -> annotation.contains(":")).findFirst();
                             if(currentAnnotation.isPresent()) {
                                 //Query for this field (we know already that it is mandatory)
-                                String checkIfMandatoryFieldPresent = diagnosticString.toString() + currentAnnotation.get() + " ?o }";
+                                String checkIfMandatoryFieldPresent = diagnosticString + currentAnnotation.get() + " ?o }";
                                 Query checkExistsQuery = QueryFactory.create(checkIfMandatoryFieldPresent);
 
                                 QueryExecution checkExistsQueryExecution = QueryExecutionFactory.create(checkExistsQuery, inputModel);
@@ -370,21 +370,21 @@ class Parser {
                     logger.info("Executed query: " + queryString);
                     if(missingElements.size() > 0)
                     {
-                        String errorMessage = "The following mandatory field(s) of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " are not filled or invalid: ";
+                        StringBuilder errorMessage = new StringBuilder("The following mandatory field(s) of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " are not filled or invalid: ");
                         for(int i = 0; i < missingElements.size(); i++)
                         {
                             if(i == 0)
                             {
-                                errorMessage += missingElements.get(i);
+                                errorMessage.append(missingElements.get(i));
                             }
                             else
                             {
-                                errorMessage += ", " + missingElements.get(i);
+                                errorMessage.append(", ").append(missingElements.get(i));
                             }
                         }
-                        throw new IOException(errorMessage + ". Note that the value of \"@id\" fields MUST be a valid URI (e.g. emails preceded by \"mailto:\"). Mandatory fields are: " + notNullableFieldNames.toString());
+                        throw new IOException(errorMessage + ". Note that the value of \"@id\" fields MUST be a valid URI (e.g. emails preceded by \"mailto:\"). Mandatory fields are: " + notNullableFieldNames);
                     }
-                    throw new IOException("Mandatory field of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " not filled or invalid. Note that the value of \"@id\" fields MUST be a valid URI (e.g. emails preceded by \"mailto:\"). Mandatory fields are: " + notNullableFieldNames.toString());
+                    throw new IOException("Mandatory field of " + returnObject.getClass().getSimpleName().replace("Impl", "") + " not filled or invalid. Note that the value of \"@id\" fields MUST be a valid URI (e.g. emails preceded by \"mailto:\"). Mandatory fields are: " + notNullableFieldNames);
                 }
 
                 return returnObject;
@@ -504,7 +504,7 @@ class Parser {
                         if (Collection.class.isAssignableFrom(currentType)) {
                             //We are working with ArrayLists.
                             //Here, we need to work with the GenericParameterTypes instead to find out what kind of ArrayList we are dealing with
-                            String typeName = extractTypeNameFromArrayList(entry.getValue().getGenericParameterTypes()[0]);
+                            String typeName = extractTypeNameFromList(entry.getValue().getGenericParameterTypes()[0]);
                             if (isArrayListTypePrimitive(entry.getValue().getGenericParameterTypes()[0])) {
                                 if (typeName.endsWith("TypedLiteral")) {
                                     try {
@@ -868,7 +868,7 @@ class Parser {
     }
 
     private boolean isArrayListTypePrimitive(Type t) throws IOException {
-        String typeName = extractTypeNameFromArrayList(t);
+        String typeName = extractTypeNameFromList(t);
 
         try {
             //Do not try to call Class.forName(primitive) -- that would throw an exception
@@ -879,13 +879,16 @@ class Parser {
         }
     }
 
-    private String extractTypeNameFromArrayList(Type t) throws IOException {
+    private String extractTypeNameFromList(Type t) throws IOException {
         String typeName = t.getTypeName();
-        if (!typeName.startsWith("java.util.ArrayList<? extends ")) {
+        if (!typeName.startsWith("java.util.ArrayList<") && !typeName.startsWith("java.util.List<")) {
             throw new IOException("Illegal argument encountered while interpreting type parameter");
         }
-        //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
-        return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
+        if (typeName.contains("? extends") || typeName.contains("? super")) {
+            //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
+            return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
+        }
+        return typeName.substring(typeName.lastIndexOf("<") + 1, typeName.lastIndexOf(">"));
     }
 
     private boolean isPrimitive(Class<?> input) throws IOException {

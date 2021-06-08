@@ -197,4 +197,12 @@ public class ParserTest {
 		logger.info(new Serializer().serialize(c));
 	}
 
+	@Test
+	public void parsePermissionTest() throws IOException
+	{
+		String permissionAsString = SerializerUtil.readResourceToString("Permission.jsonld");
+		Permission p = new Serializer().deserialize(permissionAsString, Permission.class);
+		assertFalse(p.getTitle().isEmpty());
+	}
+
 }

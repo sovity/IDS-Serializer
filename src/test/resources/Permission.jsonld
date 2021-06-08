@@ -1,0 +1,24 @@
+{
+  "@context" : {
+    "ids" : "https://w3id.org/idsa/core/"
+  },
+  "@type": "ids:Permission",
+  "@id": "https://w3id.org/idsa/autogen/permission/885c4512-8031-42d3-a9c0-d50594dad37f",
+  "ids:description": [
+    {
+      "@value": "provide-access",
+      "@type": "http://www.w3.org/2001/XMLSchema#string"
+    }
+  ],
+  "ids:title": [
+    {
+      "@value": "Allow Data Usage",
+      "@type": "http://www.w3.org/2001/XMLSchema#string"
+    }
+  ],
+  "ids:action": [
+    {
+      "@id": "https://w3id.org/idsa/code/USE"
+    }
+  ]
+}
