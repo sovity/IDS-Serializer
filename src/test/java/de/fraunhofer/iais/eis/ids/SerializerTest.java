@@ -6,6 +6,7 @@ import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.util.PlainLiteral;
+import de.fraunhofer.iais.eis.util.RdfResource;
 import de.fraunhofer.iais.eis.util.TypedLiteral;
 import de.fraunhofer.iais.eis.util.Util;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.*;
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -920,6 +922,72 @@ public class SerializerTest {
 		//System.out.println(c2.getDescription().get(0).getValue());
 	}
 
+	@Test
+	public void RdfResourceCorrectTypeTest() throws IOException {
+		ContractOffer contractOffer = new ContractOfferBuilder()
+				._permission_(Util.asList(new PermissionBuilder()
+						._title_(Util.asList(new TypedLiteral("Usage Policy")))
+						._description_(Util.asList(new TypedLiteral("duration-usage")))
+						._action_(Util.asList(Action.USE))
+						._constraint_(Util.asList(new ConstraintBuilder()
+								._leftOperand_(LeftOperand.ELAPSED_TIME)
+								._operator_(BinaryOperator.SHORTER_EQ)
+								._rightOperand_(new RdfResource("P20M", URI.create("xsd:duration")))
+								.build()))
+						.build()))
+				.build();
+		RdfResource contractResource = ((Constraint)(contractOffer.getPermission().get(0).getConstraint().get(0))).getRightOperand();
+		Assert.assertNotNull(contractResource.getType());
+		Assert.assertEquals("xsd:duration", contractResource.getType());
 
+		String contractOfferAsString = new Serializer().serialize(contractOffer);
+
+		ContractOffer contractOffer1 = new Serializer().deserialize(contractOfferAsString, ContractOffer.class);
+		contractResource = ((Constraint)(contractOffer1.getPermission().get(0).getConstraint().get(0))).getRightOperand();
+		Assert.assertNotNull(contractResource.getType());
+		Assert.assertTrue(contractResource.getType().equals("xsd:duration") || contractResource.getType().equals("http://www.w3.org/2001/XMLSchema#duration"));
+	}
+
+	@Test
+	public void testPayloadInputs() throws IOException {
+		String string1 = "This contains @context but is not JSON-LD";
+		String string2 = "This {\"Hi\": hello} is not a valid JSON-LD";
+		String string3 = "This is just words";
+
+		boolean ex1 = false, ex2 = false, ex3 = false;
+		try {
+			new Serializer().deserialize(string1, Message.class);
+		} catch (IOException e) {
+			ex1 = true;
+		}
+		try {
+			new Serializer().deserialize(string2, Message.class);
+		} catch (IOException e) {
+			ex2 = true;
+		}
+		try {
+			new Serializer().deserialize(string3, Message.class);
+		} catch (IOException e) {
+			ex3 = true;
+		}
+		Assert.assertTrue(ex1);
+		Assert.assertTrue(ex2);
+		Assert.assertTrue(ex3);
+	}
+
+	@Test
+	public void decimalSerializationTest() throws IOException, DatatypeConfigurationException {
+		Representation representation = new AudioRepresentationBuilder()
+				._mediaType_(new IANAMediaTypeBuilder()._filenameExtension_("pdf").build())
+				._instance_(Util.asList(new ArtifactBuilder()._fileName_("data.pdf")._byteSize_(BigInteger.valueOf(2678))._creationDate_(DatatypeFactory.newInstance().newXMLGregorianCalendarDate(2015, 10, 15, 0)).build()))
+				._representationStandard_(URI.create("http://textRepresentation.org"))
+				._modified_(now)
+				._language_(Language.DE)
+				._samplingRate_(new BigDecimal(1754646))
+				.build();
+		String representationAsString = new Serializer().serialize(representation);
+		System.out.println(representationAsString);
+		Assert.assertTrue(representationAsString.contains("xsd:decimal") || representationAsString.contains("http://www.w3.org/2001/XMLSchema#decimal"));
+	}
 
 }

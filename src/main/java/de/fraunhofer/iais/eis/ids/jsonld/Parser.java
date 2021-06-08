@@ -10,6 +10,7 @@ import org.apache.jena.query.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
+import org.apache.jena.riot.RiotException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +91,7 @@ class Parser {
                         //Is this class instantiable?
                         if (!currentClass.isInterface() && !Modifier.isAbstract(currentClass.getModifiers())) {
                             //candidateClass = currentClass;
-                            if (currentClass.getSimpleName().equals(className) || currentClass.getSimpleName().equals(className + "Impl")) {
+                            if (currentClass.getSimpleName().equals(className) || currentClass.getSimpleName().equals(Serializer.implementingClassesNamePrefix + className + Serializer.implementingClassesNameSuffix)) {
                                 targetClass = (Class<T>) currentClass;
                                 break;
                             }
@@ -393,62 +394,67 @@ class Parser {
 
             // now as all declared instances and classes are treated, which are also represented in the respective java
             // dependency, take care about the ones within foreign namespaces and add those to the 'properties' field
-            Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
-            Method getProperties = returnObject.getClass().getDeclaredMethod("getProperties");
+            // note that not all models (e.g. AAS) have such methods. In case they do not exist, skip adding external properties
 
-            while (externalPropertiesResultSet.hasNext()) {
-                QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
+            try {
+                Method setProperty = returnObject.getClass().getDeclaredMethod("setProperty", String.class, Object.class);
+                Method getProperties = returnObject.getClass().getDeclaredMethod("getProperties");
 
-                HashMap<String, Object> currentProperties = (HashMap<String, Object>) getProperties.invoke(returnObject);
+                while (externalPropertiesResultSet.hasNext()) {
+                    QuerySolution externalPropertySolution = externalPropertiesResultSet.next();
 
-                //Avoid NullPointerException
-                if(currentProperties == null)
-                {
-                    currentProperties = new HashMap<>();
-                }
+                    HashMap<String, Object> currentProperties = (HashMap<String, Object>) getProperties.invoke(returnObject);
 
-                String propertyUri = externalPropertySolution.get("p").toString();
-
-                //Does this key already exist? If yes, we need to store the value as array to not override them
-                if(currentProperties.containsKey(propertyUri)) {
-                    //If it is not an array list yet, turn it into one
-                    if (!(currentProperties.get(propertyUri) instanceof ArrayList)) {
-                        ArrayList<Object> newList = new ArrayList<>();
-                        newList.add(currentProperties.get(propertyUri));
-                        currentProperties.put(propertyUri, newList);
+                    //Avoid NullPointerException
+                    if (currentProperties == null) {
+                        currentProperties = new HashMap<>();
                     }
-                }
 
-                //Literals and complex objects need to be handled differently
-                //Literals can be treated as flat values, whereas complex objects require recursive calls
-                if(externalPropertySolution.get("o").isLiteral())
-                {
-                    Object o = handleForeignLiteral(externalPropertySolution.getLiteral("o"));
-                    //If it is already an ArrayList, add new value to it
-                    if(currentProperties.containsKey(propertyUri)) {
-                        ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
-                        currentPropertyArray.add(o);
-                        setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
-                    }
-                    //Otherwise save as new plain value
-                    else {
-                        setProperty.invoke(returnObject, propertyUri, o);
-                    }
-                }
-                else {
-                    //It is a complex object. Distinguish whether or not we need to store as array
-                    HashMap<String, Object> subMap = handleForeignNode(externalPropertySolution.getResource("o"), new HashMap<>(), inputModel);
-                    subMap.put("@id", externalPropertySolution.getResource("o").getURI());
+                    String propertyUri = externalPropertySolution.get("p").toString();
+
+                    //Does this key already exist? If yes, we need to store the value as array to not override them
                     if (currentProperties.containsKey(propertyUri)) {
-                        ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
-                        currentPropertyArray.add(subMap);
-                        setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                        //If it is not an array list yet, turn it into one
+                        if (!(currentProperties.get(propertyUri) instanceof ArrayList)) {
+                            ArrayList<Object> newList = new ArrayList<>();
+                            newList.add(currentProperties.get(propertyUri));
+                            currentProperties.put(propertyUri, newList);
+                        }
+                    }
+
+                    //Literals and complex objects need to be handled differently
+                    //Literals can be treated as flat values, whereas complex objects require recursive calls
+                    if (externalPropertySolution.get("o").isLiteral()) {
+                        Object o = handleForeignLiteral(externalPropertySolution.getLiteral("o"));
+                        //If it is already an ArrayList, add new value to it
+                        if (currentProperties.containsKey(propertyUri)) {
+                            ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
+                            currentPropertyArray.add(o);
+                            setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                        }
+                        //Otherwise save as new plain value
+                        else {
+                            setProperty.invoke(returnObject, propertyUri, o);
+                        }
                     } else {
-                        setProperty.invoke(returnObject, propertyUri, subMap);
+                        //It is a complex object. Distinguish whether or not we need to store as array
+                        HashMap<String, Object> subMap = handleForeignNode(externalPropertySolution.getResource("o"), new HashMap<>(), inputModel);
+                        subMap.put("@id", externalPropertySolution.getResource("o").getURI());
+                        if (currentProperties.containsKey(propertyUri)) {
+                            ArrayList<Object> currentPropertyArray = ((ArrayList<Object>) currentProperties.get(propertyUri));
+                            currentPropertyArray.add(subMap);
+                            setProperty.invoke(returnObject, propertyUri, currentPropertyArray);
+                        } else {
+                            setProperty.invoke(returnObject, propertyUri, subMap);
+                        }
                     }
                 }
+                externalPropertiesQueryExecution.close();
             }
-            externalPropertiesQueryExecution.close();
+            catch (NoSuchMethodException ignored)
+            {
+                //Method does not exist, skip
+            }
 
             //SPARQL binding present, iterate over result and construct return object
             while (resultSet.hasNext()) {
@@ -884,11 +890,17 @@ class Parser {
         if (!typeName.startsWith("java.util.ArrayList<") && !typeName.startsWith("java.util.List<")) {
             throw new IOException("Illegal argument encountered while interpreting type parameter");
         }
-        if (typeName.contains("? extends") || typeName.contains("? super")) {
+        //"<? extends XYZ>" or super instead of extends
+        if(typeName.contains("?"))
+        {
             //last space is where we want to cut off (right after the "extends"), as well as removing the last closing braces
             return typeName.substring(typeName.lastIndexOf(" ") + 1, typeName.length() - 1);
         }
-        return typeName.substring(typeName.lastIndexOf("<") + 1, typeName.lastIndexOf(">"));
+        //No extends
+        else
+        {
+            return typeName.substring(typeName.indexOf("<") + 1, typeName.indexOf(">"));
+        }
     }
 
     private boolean isPrimitive(Class<?> input) throws IOException {
@@ -949,7 +961,7 @@ class Parser {
             }
 
             for (Class<?> currentClass : implementingClasses) {
-                if (currentClass.getSimpleName().equals(className + "Impl")) {
+                if (currentClass.getSimpleName().equals(Serializer.implementingClassesNamePrefix + className + Serializer.implementingClassesNameSuffix)) {
                     returnId = solution.get("id").toString();
                     returnClass = currentClass;
                     break;
@@ -989,13 +1001,18 @@ class Parser {
      * @param message Message to be read
      * @return The model of the message
      */
-    private Model readMessage(String message) {
+    private Model readMessage(String message) throws IOException {
 
         Model targetModel = ModelFactory.createDefaultModel();
 
         //Read incoming message to the same model
-
-        RDFDataMgr.read(targetModel, new ByteArrayInputStream(message.getBytes()), RDFLanguages.JSONLD);
+        try {
+            RDFDataMgr.read(targetModel, new ByteArrayInputStream(message.getBytes()), RDFLanguages.JSONLD);
+        }
+        catch (RiotException e)
+        {
+            throw new IOException("The message is no valid JSON-LD and therefore could not be parsed.", e);
+        }
 
         return targetModel;
     }

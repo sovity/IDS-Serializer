@@ -36,6 +36,8 @@ public class JsonLDSerializer extends BeanSerializer {
         contextItems.put("idsc", "https://w3id.org/idsa/code/");
         contextItems.put("info", "http://www.fraunhofer.de/fraunhofer-digital/infomodell/");
         contextItems.put("kdsf", "http://kerndatensatz-forschung.de/version1/technisches_datenmodell/owl/Basis#");
+        contextItems.put("xsd", "http://www.w3.org/2001/XMLSchema#");
+        contextItems.put("owl", "http://www.w3.org/2002/07/owl#");
         //TODO: We should probably add some other common namespaces, such as foaf or xsd
     }
 
@@ -104,6 +106,39 @@ public class JsonLDSerializer extends BeanSerializer {
 
     private void filterContextWrtBean(Object bean, Map<String, String> filteredContext) {
         if(bean == null || bean.getClass().getName().equals("com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass().getName().equals("org.apache.jena.ext.xerces.jaxp.datatype.XMLGregorianCalendarImpl") || bean.getClass() == BigInteger.class) return; // XMLGregorianCalendarImpl causes infinite recursion
+
+        //Check if RdfResource or TypedLiteral is used. They contain a field called "type" which can reference to any namespace
+        //Therefore it is vital to also check the value of the type field for prefixes that need to be included in the context
+        if(bean.getClass().getSimpleName().equals("RdfResource") || bean.getClass().getSimpleName().equals("TypedLiteral"))
+        {
+            Field typeField = null;
+            try {
+                typeField = bean.getClass().getDeclaredField("type");
+            }
+            catch (NoSuchFieldException e)
+            {
+                try {
+                    typeField = bean.getClass().getSuperclass().getDeclaredField("type");
+                }
+                catch (NoSuchFieldException ignored) {}
+            }
+            if(typeField != null) {
+                typeField.setAccessible(true);
+
+                try {
+                    String type = (String) typeField.get(bean);
+                    if(type != null && !type.isEmpty()) {
+                        contextItems.forEach((p, u) -> {
+                            if (type.contains(p))
+                                filteredContext.put(p, u);
+                        });
+                    }
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+                typeField.setAccessible(false);
+            }
+        }
         contextItems.forEach((p, u) -> {
             JsonTypeName typeNameAnnotation = bean.getClass().getAnnotation(JsonTypeName.class);
             if(typeNameAnnotation != null && typeNameAnnotation.value().contains(p)) {
