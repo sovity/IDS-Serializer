@@ -947,13 +947,17 @@ class Parser {
             throw new IOException("Could not extract class from input message");
         }
 
-        Class<?> returnClass = null;
-        String returnId = null;
+        Map<String, Class<?>> returnCandidates = new HashMap<>();
 
         while (resultSet.hasNext()) {
             QuerySolution solution = resultSet.nextSolution();
             String fullName = solution.get("type").toString();
             String className = fullName.substring(fullName.lastIndexOf('/') + 1);
+
+            //In case of hash-namespaces
+            if(className.contains("#")) {
+                className = className.substring(className.lastIndexOf("#"));
+            }
 
             //For legacy purposes...
             if (className.startsWith("ids:")) {
@@ -962,22 +966,50 @@ class Parser {
 
             for (Class<?> currentClass : implementingClasses) {
                 if (currentClass.getSimpleName().equals(Serializer.implementingClassesNamePrefix + className + Serializer.implementingClassesNameSuffix)) {
-                    returnId = solution.get("id").toString();
-                    returnClass = currentClass;
-                    break;
+                    returnCandidates.put(solution.get("id").toString(), currentClass);
                 }
             }
-            if (returnClass != null) break;
+            //if (returnCandidates.size() > 0) break;
         }
+        queryExecution.close();
 
-        if (returnClass == null) {
+        if (returnCandidates.size() == 0) {
             throw new IOException("Could not transform input to an appropriate implementing class for " + targetClass.getName());
         }
 
         //At this point, we parsed the model and know to which implementing class we want to parse
+        //Check if there are several options available
+        if(returnCandidates.size() > 1)
+        {
+            String bestCandidateId = null;
+            Class<?> bestCandidateClass = null;
+            long bestNumRelations = -1L;
+            for(Map.Entry<String, Class<?>> entry : returnCandidates.entrySet())
+            {
+                String determineBestCandidateQueryString = "CONSTRUCT { ?s ?p ?o . ?o ?p2 ?o2 . ?o2 ?p3 ?o3 . ?o3 ?p4 ?o4 . ?o4 ?p5 ?o5 . }" +
+                        " WHERE {" +
+                        " BIND(<" + entry.getKey() + "> AS ?s). ?s ?p ?o ." +
+                        " OPTIONAL {?o ?p2 ?o2 . OPTIONAL {?o2 ?p3 ?o3 . OPTIONAL {?o3 ?p4 ?o4 . OPTIONAL {?o4 ?p5 ?o5 . } } } } }";
+                Query determineBestCandidateQuery = QueryFactory.create(determineBestCandidateQueryString);
+                QueryExecution determineBestCandidateQueryExecution = QueryExecutionFactory.create(determineBestCandidateQuery, rdfModel);
+                long graphSize = determineBestCandidateQueryExecution.execConstruct().size();
+                if(graphSize > bestNumRelations)
+                {
+                    bestNumRelations = graphSize;
+                    bestCandidateId = entry.getKey();
+                    bestCandidateClass = entry.getValue();
+                }
 
+                determineBestCandidateQueryExecution.close();
 
-        return (T) handleObject(rdfModel, returnId, returnClass);
+            }
+            logger.warn("The RDF graph contains multiple objects which can be parsed to " + targetClass.getSimpleName() + ". Determined " + bestCandidateId + " as best candidate.");
+            return (T) handleObject(rdfModel, bestCandidateId, bestCandidateClass);
+        }
+
+        //We only reach this spot, if there is exactly one return candidate. Let's return it
+        Map.Entry<String, Class<?>> singularEntry = returnCandidates.entrySet().iterator().next();
+        return (T) handleObject(rdfModel, singularEntry.getKey(), singularEntry.getValue());
 
     }
 

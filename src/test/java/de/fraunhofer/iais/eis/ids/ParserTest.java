@@ -205,4 +205,73 @@ public class ParserTest {
 		assertFalse(p.getTitle().isEmpty());
 	}
 
+
+	//https://github.com/International-Data-Spaces-Association/Java-Representation-of-IDS-Information-Model/issues/6
+	@Test
+	public void giveParserMultipleOptionsTest() throws IOException {
+		/* ARRANGE */
+		final Serializer serializer = new Serializer();
+		final String input = "{\n"
+				+ "        \"@context\" : {\n"
+				+ "            \"ids\" : \"https://w3id.org/idsa/core/\",\n"
+				+ "            \"idsc\" : \"https://w3id.org/idsa/code/\"\n"
+				+ "        },\n"
+				+ "      \"@type\": \"ids:Permission\",\n"
+				+ "      \"@id\": \"https://w3id"
+				+ ".org/idsa/autogen/permission/c0bdb9d5-e86a-4bb3-86d2-2b1dc9d226f5\",\n"
+				+ "      \"ids:description\": [\n"
+				+ "        {\n"
+				+ "          \"@value\": \"usage-notification\",\n"
+				+ "          \"@type\": \"http://www.w3.org/2001/XMLSchema#string\"\n"
+				+ "        }\n"
+				+ "      ],\n"
+				+ "      \"ids:title\": [\n"
+				+ "        {\n"
+				+ "          \"@value\": \"Example Usage Policy\",\n"
+				+ "          \"@type\": \"http://www.w3.org/2001/XMLSchema#string\"\n"
+				+ "        }\n"
+				+ "      ],\n"
+				+ "      \"ids:action\": [\n"
+				+ "        {\n"
+				+ "          \"@id\": \"idsc:USE\"\n"
+				+ "        }\n"
+				+ "      ],\n"
+				+ "      \"ids:postDuty\": [\n"
+				+ "        {\n"
+				+ "          \"@type\": \"ids:Duty\",\n"
+				+ "          \"@id\": \"https://w3id"
+				+ ".org/idsa/autogen/duty/863d2fac-1072-476d-b504-9d6347fe4b6f\",\n"
+				+ "          \"ids:action\": [\n"
+				+ "            {\n"
+				+ "              \"@id\": \"idsc:NOTIFY\"\n"
+				+ "            }\n"
+				+ "          ],\n"
+				+ "          \"ids:constraint\": [\n"
+				+ "            {\n"
+				+ "              \"@type\": \"ids:Constraint\",\n"
+				+ "              \"@id\": \"https://w3id"
+				+ ".org/idsa/autogen/constraint/c91e64ce-1fc1-44fd-bec1-6c6778603919\",\n"
+				+ "              \"ids:rightOperand\": {\n"
+				+ "                \"@value\": \"https://localhost:8080/api/ids/data\",\n"
+				+ "                \"@type\": \"xsd:anyURI\"\n"
+				+ "              },\n"
+				+ "              \"ids:leftOperand\": {\n"
+				+ "                \"@id\": \"idsc:ENDPOINT\"\n"
+				+ "              },\n"
+				+ "              \"ids:operator\": {\n"
+				+ "                \"@id\": \"idsc:DEFINES_AS\"\n"
+				+ "              }\n"
+				+ "            }\n"
+				+ "          ]\n"
+				+ "        }\n"
+				+ "      ]\n"
+				+ "    }";
+
+		/* ACT */
+		final Rule result = serializer.deserialize(input, Rule.class);
+
+		/* ASSERT */
+		assertEquals(Action.USE, result.getAction().get(0));
+	}
+
 }
