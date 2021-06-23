@@ -19,7 +19,6 @@ public class BigDecimalSerializer extends StdSerializer<BigDecimal> {
 
     @Override
     public void serialize(BigDecimal value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        System.out.println("Serialize of BigDecimal called");
         gen.writeStartObject();
         gen.writeStringField("@value", value.toString());
         gen.writeStringField("@type", "http://www.w3.org/2001/XMLSchema#decimal");
