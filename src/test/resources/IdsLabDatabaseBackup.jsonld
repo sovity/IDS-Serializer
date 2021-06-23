@@ -1,0 +1,2272 @@
+{
+    "@graph": [
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/",
+            "@type": "ids:ConnectorCatalog",
+            "listedConnector": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/1687522527",
+                "https://broker.ids.isst.fraunhofer.de/catalog/2145279871",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-636973515",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-2075060707",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399",
+                "https://broker.ids.isst.fraunhofer.de/connectors/341591915",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891",
+                "https://broker.ids.isst.fraunhofer.de/catalog/1687522527",
+                "https://broker.ids.isst.fraunhofer.de/connectors/538105420",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-108230220",
+                "https://broker.ids.isst.fraunhofer.de/connectors/346699066",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-511499617",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-2038069312",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-295976805",
+                "https://broker.ids.isst.fraunhofer.de/connectors/2118218015",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-2038069312",
+                "https://broker.ids.isst.fraunhofer.de/catalog/1757908614"
+            ]
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/7b934432-a85e-41c5-9f65-669219dde4ea",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.10",
+                "4.0.0"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.10",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": [
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-915820550",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974"
+            ],
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "5.1.2"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/7b934432-a85e-41c5-9f65-669219dde4ea/api/catalogs/8a50b786-0fb1-4dfa-9dee-ba1b05ccc2df",
+            "offeredResource": [
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123"
+            ]
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/5ef66d83-d69f-4c3d-9b75-ae0f569576e8",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-1919686926",
+            "description": {
+                "@language": "en",
+                "@value": "This is an example resource"
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "DOCUMENT"
+                },
+                {
+                    "@language": "en",
+                    "@value": "EXAMPLE"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "publisher": "https://example.com",
+            "representation": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/1055270712",
+            "sovereign": "https://example.com",
+            "standardLicense": "https://example.com",
+            "title": {
+                "@language": "en",
+                "@value": "Second Example Resource"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-1919686926",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/d2232122-776c-4a5d-b2a9-c3c69fe30e83",
+            "permission": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-1919686926/-913802915"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-1919686926/-913802915",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/a3c57cd0-5022-484d-8fb0-0676351de2da",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Allow Data Usage"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/d141e149-e7d2-48cb-b5fc-aafbd191f2f6",
+            "created": "2016-10-03T15:10:40Z",
+            "instance": [
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315/1319348041",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315/-1777670320"
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/ce22d1c0-e546-4066-a0e8-4a4e7620f883",
+            "modified": "2016-10-03T15:10:40Z",
+            "representationStandard": "https://example.com",
+            "shapesGraph": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315/-1777670320",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/405aff0f-a154-4ecc-8e59-c3c942ad4ba0",
+            "ids:byteSize": 64167,
+            "checkSum": "120EA8A25E5D487BF6AB2684DD440019",
+            "creationDate": "2016-10-03T15:10:40Z",
+            "duration": "127899",
+            "fileName": "exampleFile.pdf"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315/1319348041",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/6b9c9add-03f0-44da-b185-4f24c7f13e27",
+            "ids:byteSize": 98783,
+            "checkSum": "1E0EA8A25E2421BF68A5F7026440079",
+            "creationDate": "2016-10-03T15:10:40Z",
+            "duration": "21677",
+            "fileName": "anotherFile.pdf"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/1055270712",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/755d877e-94aa-49e0-90d8-bec2a5186b48",
+            "accessURL": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/a7d8c819-c7f7-49a1-9e0e-759fbd077a97",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/-673010672",
+            "description": {
+                "@language": "en",
+                "@value": "This is an example resource"
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "DATA"
+                },
+                {
+                    "@language": "en",
+                    "@value": "EXAMPLE"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "publisher": "https://example.com",
+            "representation": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/-916958885",
+            "sovereign": "https://example.com",
+            "standardLicense": "https://example.com",
+            "title": {
+                "@language": "en",
+                "@value": "Example Resource"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/-673010672",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/57c89dfa-1dc6-430c-a6ba-9b8d9af2d8b1",
+            "permission": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/-673010672/-913802915"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/-673010672/-913802915",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/a3c57cd0-5022-484d-8fb0-0676351de2da",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Allow Data Usage"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/-916958885",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/c02d9dd2-9ab6-41d6-80f1-1844d64ba6ff",
+            "accessURL": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/842693b1-80d1-4d24-8923-b82ce3937cf6",
+            "created": "2016-10-03T15:10:40Z",
+            "instance": [
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281/126985808",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281/-2139789786"
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/eb710d80-4a75-48ab-b34a-734ab9009af0",
+            "modified": "2017-10-03T15:10:40Z",
+            "representationStandard": "https://example.com",
+            "shapesGraph": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281/-2139789786",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/570d3831-0186-42ac-b323-d60fc207d71a",
+            "ids:byteSize": 6441,
+            "checkSum": "1E0EA8A25E5D487BF68A5F7026440079",
+            "creationDate": "2016-12-03T15:10:40Z",
+            "duration": "7552",
+            "fileName": "anotherFile.xml"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281/126985808",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/5c96b6f0-a698-4329-9f15-4913bf4e86f5",
+            "ids:byteSize": 4214,
+            "checkSum": "120EA8A25E5D487BF68B5F7096440019",
+            "creationDate": "2016-10-03T15:10:40Z",
+            "duration": "12551",
+            "fileName": "exampleFile.xml"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/e32c5397-f71c-47b5-a384-c9c4cf568117",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/2081180980",
+            "description": {
+                "@language": "en",
+                "@value": "This is an example resource"
+            },
+            "keyword": {
+                "@language": "en",
+                "@value": "EXAMPLE"
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "publisher": "https://example.com",
+            "representation": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/-709338590",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/173124239",
+            "sovereign": "https://example.com",
+            "standardLicense": "https://example.com",
+            "title": {
+                "@language": "en",
+                "@value": "Example Another Resource"
+            },
+            "version": "3"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/-709338590",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/f74ab1ad-3a1b-4508-aada-4859dcfa7349",
+            "created": "2016-10-03T15:10:40Z",
+            "instance": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/-709338590/157191830",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/07e5f54e-4e85-4df7-94d3-a7e8b225f1cb",
+            "modified": "2016-10-03T15:10:40Z",
+            "representationStandard": "https://example.com",
+            "shapesGraph": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/-709338590/157191830",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/d5b1cd4e-2a5a-47c2-86c5-003c6a11ce69",
+            "ids:byteSize": 425314,
+            "checkSum": "120ECEF25E5D487BF68B5F709644D219",
+            "creationDate": "2016-10-03T15:10:40Z",
+            "duration": "12512351",
+            "fileName": "exampleFile.xml"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/173124239",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/4458078e-c2f2-4d9f-afbe-54e9daa4c1b8",
+            "accessURL": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/2081180980",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/1d982c8a-c5ae-4c19-9a26-6815e9540fc8",
+            "permission": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/2081180980/-479061762"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/2081180980/-479061762",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/a3c12cd0-5022-484d-8fb0-0676351de2da",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Allow Data Usage"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-915820550",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/7b934432-a85e-41c5-9f65-669219dde4ea/api/catalogs/24e94f91-e65f-4497-8f6f-9f1bee2e9f48"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://test.connector.de/",
+            "curator": "https://connector.de/agent/",
+            "description": "This is a dummy description from the Interaction Library",
+            "hasDefaultEndpoint": "https://test.connector.de/data/",
+            "inboundModelVersion": "4.0.0",
+            "mainTitle": "dummy",
+            "maintainer": "https://connector.de/agent/",
+            "outboundModelVersion": "4.0.0",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "This is a dummy title from the Interaction Library"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/catalog/fa535e30-8cb0-4ede-b5a9-def664d69556",
+            "offer": "https://w3id.org/idsa/autogen/resource/f559500f-b668-4351-a1b1-50f712a6d368",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326/1870145456"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326/1870145456",
+            "@type": "ids:DataResource",
+            "sameAs": "https://w3id.org/idsa/autogen/dataResource/afaafe22-fb63-4532-a1e1-15230cb99444",
+            "representation": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326/1870145456/1691410900"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326/1870145456/1691410900",
+            "@type": "ids:DataRepresentation",
+            "sameAs": "https://w3id.org/idsa/autogen/dataRepresentation/d5b72746-2302-4685-99b8-fc2be06fd23f",
+            "instance": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326/1870145456/1691410900/-49833843"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-1818765891/-1941089326/1870145456/1691410900/-49833843",
+            "@type": "ids:Artifact",
+            "sameAs": "https://broker.ids.isst.fraunhofer.de/connectors/"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-2038069312",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/e58502da-2a52-4a2c-8dd1-3db64ecb1901",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.4",
+                "4.0.0"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.4",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "5.0.0-SNAPSHOT"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-2075060707",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://test.com",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.0",
+                "4.0.9"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.9",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": [
+                "https://broker.ids.isst.fraunhofer.de/catalog/-2075060707/-1558782629",
+                "https://broker.ids.isst.fraunhofer.de/catalog/-2075060707/1094187328"
+            ],
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector 18-06-2021",
+            "version": "5.1.2"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-2075060707/-1558782629",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://test.com/api/catalogs/f48f068e-3e4c-4e5f-bc2c-c7ad5bb49376"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-2075060707/1094187328",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://test.com/api/catalogs/50c7be2e-5c2b-4ab8-8f51-993fd1af005b"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/-295976805",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/b6c09565-d2b0-4786-8b5f-733ec79fe0ec",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.0",
+                "4.0.4"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.4",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "5.1.2"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/19550691-e15d-4854-9452-9eac51298fe2",
+            "curator": "https://eccenca.com/",
+            "description": "IDS Connector hosted by eccenca GmbH",
+            "hasDefaultEndpoint": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/1099522629",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://eccenca.com/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "eccenca Connector",
+            "version": "4.3.1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/41d64cb8-eef7-48d7-b2fe-6699c8d4a52c",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/ac07a421-6284-4917-a301-f33416fc4b34",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/871671069",
+            "created": "2021-05-20T11:01:03.969Z",
+            "description": {
+                "@language": "en",
+                "@value": "List of stations operated by Deutschebahn (DB) & Service AG"
+            },
+            "keyword": {
+                "@language": "en",
+                "@value": "stations"
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-05-20T15:43:39.063Z",
+            "publisher": "https://www.eccenca.com/",
+            "representation": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/-1308944904",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/1099522629",
+            "standardLicense": "https://www.apache.org/licenses/LICENSE-2.0",
+            "title": {
+                "@language": "en",
+                "@value": "Deutschebahn (DB) and Service AG stations"
+            },
+            "version": "1.0"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/-1308944904",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/b610eb1b-9df3-4386-bd3a-5038d52f1b9c",
+            "instance": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/-1308944904/-1835047597",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/aa3c0225-578e-45f4-b540-3b3943633612"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/-1308944904/-1835047597",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/b610eb1b-9df3-4386-bd3a-5038d52f1b9c",
+            "ids:byteSize": 39581666
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/1099522629",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "accessURL": "https://localhost:8080/api/ids/data"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/871671069",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/6d363b51-f495-48c3-b77c-04348df18c68",
+            "permission": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/871671069/-790273802",
+            "provider": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/871671069/-790273802",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/76d160a5-eb25-493a-83d2-27368be602c0",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1757908614",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/6d59844e-57be-49c4-a6e1-25ca67ef160b",
+            "curator": "https://example.com",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/endpoint/6d59444e-57be-49c4-a6e1-25ca67ef160b",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://example.com",
+            "outboundModelVersion": "4.0.0",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/catalog/1757908614/-24768970",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1757908614/-24768970",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/aed318aa-5831-4b93-8091-06bfc931b825"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://demo.iais.fraunhofer.de/postmanREST",
+            "curator": "https://example.org/",
+            "description": "This is a dummy description from the Interaction Library",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/085664aa-5365-45e9-a2cf-e3b660b2d410",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://example.org/",
+            "outboundModelVersion": "4.0.0",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "This is a dummy title from the Interaction Library"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/5696416c-2e5e-4db9-9e3e-6da210feb5e1",
+            "offeredResource": [
+                "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-4443840",
+                "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683"
+            ]
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683",
+            "@type": "ids:Resource",
+            "sameAs": "https://example.org/dummyInitialResource",
+            "contentStandard": "http://contentstandard.org",
+            "contentType": "https://w3id.org/idsa/code/SCHEMA_DEFINITION",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822",
+            "customLicense": "http://customlicense.org",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.",
+            "keyword": [
+                "demo",
+                "test"
+            ],
+            "language": [
+                "https://w3id.org/idsa/code/DE",
+                "https://w3id.org/idsa/code/ES"
+            ],
+            "representation": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/1866380074",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-310716217",
+            "standardLicense": "http://example.org/license",
+            "title": "Title of the resource offered by the Connector",
+            "version": "v0.0.1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-310716217",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/aae23e6b-3f58-4bed-9536-7c5e5d4112bf",
+            "accessURL": "http://example.org/accessURL",
+            "endpointArtifact": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-310716217/-1796995008",
+            "inboundPath": "a static inbound path",
+            "outboundPath": "a static outbound path",
+            "path": "a Static endpoint path"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-310716217/-1796995008",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/14311867-c14d-4e8d-9402-d11ce29d51af",
+            "ids:byteSize": 150,
+            "checkSum": "artifact checksum",
+            "creationDate": "2000-10-15T00:00:00Z",
+            "fileName": "staticfile.txt"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/54789dd3-2ab3-4db6-be67-2ac80a021aac",
+            "consumer": "http://consumer.org",
+            "contractDate": "2000-07-30T00:00:00Z",
+            "contractDocument": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/1396357971",
+            "contractEnd": "2001-06-19T00:00:00Z",
+            "contractStart": "2000-10-20T00:00:00Z",
+            "permission": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163",
+            "prohibition": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/279499511",
+            "provider": "http://provider.org"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/48710e40-af32-45f4-ad1f-f821958d135e",
+            "action": "https://w3id.org/idsa/code/READ",
+            "assignee": "https://example.org/someDuplicateAssignee",
+            "assigner": "https://example.org/someDuplicateAssignee",
+            "constraint": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/162118528",
+            "description": "permission description",
+            "preDuty": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/1045732549",
+            "title": "permission title"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/1045732549",
+            "@type": "ids:Duty",
+            "sameAs": "https://w3id.org/idsa/autogen/duty/c3870018-384b-422f-8c12-22e9a6486194",
+            "action": "https://w3id.org/idsa/code/ANONYMIZE",
+            "assignee": "http://example.org/preDutyAssignee",
+            "assigner": "http://example.org/preDutyAssigner",
+            "constraint": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/1045732549/1638422930",
+            "description": "Description of the pre-duty",
+            "title": "Title Pre-Duty"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/1045732549/1638422930",
+            "@type": "ids:Constraint",
+            "sameAs": "https://w3id.org/idsa/autogen/constraint/c8d71b95-8820-450b-ad9b-7fdce0d7aed6",
+            "leftOperand": "https://w3id.org/idsa/code/QUANTITY",
+            "operator": "https://w3id.org/idsa/code/EQUALS",
+            "ids:rightOperand": "5",
+            "unit": "http://example.org/unit"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/162118528",
+            "@type": "ids:Constraint",
+            "sameAs": "https://w3id.org/idsa/autogen/constraint/27727809-1c53-4eaa-9571-04e4736af6c2",
+            "leftOperand": "https://w3id.org/idsa/code/PAY_AMOUNT",
+            "operator": "https://w3id.org/idsa/code/EQUALS",
+            "ids:rightOperand": "200",
+            "unit": "http://example.org/unit"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/1396357971",
+            "@type": "ids:TextResource",
+            "sameAs": "https://w3id.org/idsa/autogen/textResource/366517fa-483c-4779-a53e-57c1453ac258",
+            "description": "Description of the textual contract document",
+            "title": "Title of the textual contract document"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/279499511",
+            "@type": "ids:Prohibition",
+            "sameAs": "https://w3id.org/idsa/autogen/prohibition/ff9f0d17-7176-4553-a43e-74bc545d6b18",
+            "action": "https://w3id.org/idsa/code/DISTRIBUTE",
+            "assignee": [
+                "http://example.org/assignee2",
+                "http://example.org/assignee1"
+            ],
+            "assigner": [
+                "http://example.org/assigner1",
+                "http://example.org/assigner2"
+            ],
+            "constraint": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/279499511/-1010707698",
+            "description": "prohibition description",
+            "title": "prohibition title"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/279499511/-1010707698",
+            "@type": "ids:Constraint",
+            "sameAs": "https://w3id.org/idsa/autogen/constraint/c0e9cc0a-5928-4e73-8e2e-7051e347ea49",
+            "leftOperand": "https://w3id.org/idsa/code/POLICY_EVALUATION_TIME",
+            "operator": "https://w3id.org/idsa/code/DEFINES_AS",
+            "ids:rightOperand": "24 months",
+            "unit": "http://example.org/unit"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/1866380074",
+            "@type": "ids:TextRepresentation",
+            "sameAs": "https://w3id.org/idsa/autogen/textRepresentation/577ff12b-ee07-48a5-a6d1-0bfda1a27819",
+            "instance": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/1866380074/1876470005",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/f61fd156-3f85-4623-b820-3c96498e7c6b",
+            "representationStandard": "http://textRepresentation.org"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/1866380074/1876470005",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/0195f0d3-0ee9-4337-a6fc-4d1e6388c06b",
+            "ids:byteSize": 2678,
+            "creationDate": "2015-10-15T00:00:00Z",
+            "fileName": "data.pdf"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-4443840",
+            "@type": "ids:Resource",
+            "sameAs": "https://example.org/dummyAdditionalResource",
+            "contentType": "https://w3id.org/idsa/code/SCHEMA_DEFINITION",
+            "description": [
+                "Multiple number of resources could be offered by the connectors",
+                "provide more description of this resource"
+            ],
+            "keyword": [
+                "metadata",
+                "broker"
+            ],
+            "language": [
+                "https://w3id.org/idsa/code/EN",
+                "https://w3id.org/idsa/code/FR"
+            ],
+            "title": [
+                "Title of another resource offered by the Connector",
+                "Extending title"
+            ],
+            "version": "1.1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/fdf70c8c-70fb-4668-9ab4-3127b048b5d1",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1099522629",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "@project.version@"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/647b0989-473e-4169-a501-5adbddc91c29",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/3040acec-90d5-4779-bd9d-dcd619de5d60",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-2052415326",
+            "created": "2021-05-06T11:34:49.74Z",
+            "description": {
+                "@language": "en",
+                "@value": "This is an example resource containing weather data."
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "weather"
+                },
+                {
+                    "@language": "en",
+                    "@value": "sample"
+                },
+                {
+                    "@language": "en",
+                    "@value": "data"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-05-06T11:40:57.78Z",
+            "publisher": "https://openweathermap.org/",
+            "representation": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1945690941",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-325787778"
+            ],
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1099522629",
+            "standardLicense": "http://opendatacommons.org/licenses/odbl/1.0/",
+            "title": {
+                "@language": "en",
+                "@value": "Sample Resource"
+            },
+            "version": "1.0"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-2052415326",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/6e7a2440-77bb-4b37-9ad6-095e3d41f4f5",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-2052415326/-1249357615",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-2052415326/-1249357615",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/afbaf535-54fb-4cb5-b589-6a884e378aff",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-325787778",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/329b12fc-6976-4aec-b202-e79bddd454d9",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-325787778/-851890471",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/f62aa28c-483e-450f-b2d2-9b847e9cc86c"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-325787778/-851890471",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/329b12fc-6976-4aec-b202-e79bddd454d9",
+            "ids:byteSize": 101,
+            "fileName": "Example Representation"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1099522629",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "accessURL": "https://localhost:8080/api/ids/data"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1945690941",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/c923aba2-9211-4918-ab68-62937155b774",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1945690941/1419588248",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/a55ae1d7-7f0a-4688-a7a3-739cc7ad0c13"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1945690941/1419588248",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/c923aba2-9211-4918-ab68-62937155b774",
+            "ids:byteSize": 101,
+            "fileName": "Example Representation"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/7b934432-a85e-41c5-9f65-669219dde4ea",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.4",
+                "4.0.0"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.4",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1448927212",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710"
+            ],
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "5.0.0-SNAPSHOT"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1448927212",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "http://test.com/api/catalogs/06d3a1e2-52c3-4a6c-9b07-ccbbd81ac157"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "http://test.com/api/catalogs/355137d8-e6d6-455a-9cba-6b0f3d3ae6d4",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/a7d8c819-c7f7-49a1-9e0e-759fbd077a97",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/-673010672",
+            "description": {
+                "@language": "en",
+                "@value": "This is an example resource"
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "EXAMPLE"
+                },
+                {
+                    "@language": "en",
+                    "@value": "DATA"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "publisher": "https://example.com",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/-916958885",
+            "sovereign": "https://example.com",
+            "standardLicense": "https://example.com",
+            "title": {
+                "@language": "en",
+                "@value": "Example Resource"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/-673010672",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/57c89dfa-1dc6-430c-a6ba-9b8d9af2d8b1",
+            "consumer": "https://example.com",
+            "contractDate": "2016-10-03T15:10:40Z",
+            "contractEnd": "2018-10-03T15:10:40Z",
+            "contractStart": "2017-10-03T15:10:40Z",
+            "provider": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/-916958885",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/c02d9dd2-9ab6-41d6-80f1-1844d64ba6ff",
+            "accessURL": "https://example.com",
+            "endpointArtifact": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/-916958885/-230449821",
+            "endpointDocumentation": "https://example.com",
+            "inboundPath": "inbound",
+            "outboundPath": "outbound"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/-916958885/-230449821",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/702c19c6-e6a8-44c5-94c0-cd8c0ca85f80",
+            "ids:byteSize": 1313,
+            "checkSum": "120EA8A25E5D487BF68B5F7096440019",
+            "creationDate": "2015-10-03T15:10:40Z",
+            "duration": "2135",
+            "fileName": "data"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/842693b1-80d1-4d24-8923-b82ce3937cf6",
+            "created": "2016-10-03T15:10:40Z",
+            "instance": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281/-2139789786",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281/126985808"
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/eb710d80-4a75-48ab-b34a-734ab9009af0",
+            "modified": "2017-10-03T15:10:40Z",
+            "representationStandard": "https://example.com",
+            "shapesGraph": "https://example.com"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281/-2139789786",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/570d3831-0186-42ac-b323-d60fc207d71a",
+            "ids:byteSize": 6441,
+            "checkSum": "1E0EA8A25E5D487BF68A5F7026440079",
+            "creationDate": "2016-12-03T15:10:40Z",
+            "duration": "7552",
+            "fileName": "anotherFile.xml"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281/126985808",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/5c96b6f0-a698-4329-9f15-4913bf4e86f5",
+            "ids:byteSize": 4214,
+            "checkSum": "120EA8A25E5D487BF68B5F7096440019",
+            "creationDate": "2016-10-03T15:10:40Z",
+            "duration": "12551",
+            "fileName": "exampleFile.xml"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/70924a01-612b-43c6-9c3b-b16e8db1f88f",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/1099522629",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "4.3.0"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/be08e24b-166a-4eb6-b9cd-6e2c3c64ed32",
+            "offeredResource": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561"
+            ]
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/4cb01652-111f-4f42-addb-f897530cd6ca",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/786496089",
+            "created": "2021-03-22T10:02:37.24Z",
+            "description": {
+                "@language": "en",
+                "@value": "dto_glue2_src DataSet from CDH DevOps Account"
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-22T10:42:14.335Z",
+            "representation": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/403755570",
+                "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/-700641483"
+            ],
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/1099522629",
+            "title": {
+                "@language": "en",
+                "@value": "CDH dto_glue2_src"
+            }
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/-700641483",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/9961a358-ea2b-4a24-93ba-f875ac1da7ca",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/-700641483/-1226744176",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/03f8b00e-7bac-4955-babd-9de00f2c7479"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/-700641483/-1226744176",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/9961a358-ea2b-4a24-93ba-f875ac1da7ca",
+            "ids:byteSize": 101,
+            "fileName": "Get Last partition"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/403755570",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/0dc02533-f445-47ac-90c2-0b75c03b710f",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/403755570/-122347123",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/1a6426e0-2d59-45d1-966d-03333e3fd965"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/403755570/-122347123",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/0dc02533-f445-47ac-90c2-0b75c03b710f",
+            "ids:byteSize": 101,
+            "fileName": "Get Last partition"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/786496089",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/ad6c71eb-eb4e-4fe7-b5b2-56459f56e4e6",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/786496089/-1189174248",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/786496089/-1189174248",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/435e30cc-7a7b-413c-83cd-77e530c5d104",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/6b273356-9b72-4aa0-9eb5-ef9d6bc085cd",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/2103791372",
+            "created": "2021-03-19T14:17:45.86Z",
+            "description": {
+                "@language": "en",
+                "@value": "ExampleResourceDescription"
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-19T14:17:45.86Z",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/-1748773969",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/1099522629",
+            "title": {
+                "@language": "en",
+                "@value": "ExampleResource"
+            }
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/-1748773969",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/94f24809-ca92-46f7-9612-a491eb3f2178",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/-1748773969/2020090634",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/44579869-4783-4df9-b50a-c5f399b7f8ec"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/-1748773969/2020090634",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/94f24809-ca92-46f7-9612-a491eb3f2178",
+            "ids:byteSize": 101,
+            "fileName": "Example Representation"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/1099522629",
+            "@type": "ids:ConnectorEndpoint",
+            "accessURL": "https://dsc2.bmwgroup.com/api/ids/data"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/2103791372",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/3e94653e-b96e-4997-b88d-c3cf8e76eeaf",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/2103791372/-1427325415",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/2103791372/-1427325415",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/76443797-e505-48a0-b36d-9347c996a50e",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://test.connector.de/",
+            "curator": "https://connector.de/agent/",
+            "description": "This is a dummy description from the Interaction Library",
+            "hasDefaultEndpoint": "https://test.connector.de/data/",
+            "inboundModelVersion": "4.0.0",
+            "mainTitle": "dummy",
+            "maintainer": "https://connector.de/agent/",
+            "outboundModelVersion": "4.0.0",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "This is a dummy title from the Interaction Library"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/catalog/fa535e30-8cb0-4ede-b5a9-def664d69556",
+            "offer": "https://w3id.org/idsa/autogen/resource/f559500f-b668-4351-a1b1-50f712a6d368",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326/1870145456"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326/1870145456",
+            "@type": "ids:DataResource",
+            "sameAs": "https://w3id.org/idsa/autogen/dataResource/afaafe22-fb63-4532-a1e1-15230cb99444",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326/1870145456/1691410900"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326/1870145456/1691410900",
+            "@type": "ids:DataRepresentation",
+            "sameAs": "https://w3id.org/idsa/autogen/dataRepresentation/d5b72746-2302-4685-99b8-fc2be06fd23f",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326/1870145456/1691410900/-49833843"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1818765891/-1941089326/1870145456/1691410900/-49833843",
+            "@type": "ids:Artifact",
+            "sameAs": "https://broker.ids.isst.fraunhofer.de/connectors/"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-2038069312",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/e58502da-2a52-4a2c-8dd1-3db64ecb1901",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/-2038069312/1206385145",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "4.3.1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-2038069312/1206385145",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/9fc687e3-c264-43fe-92ca-32189fcba4ed"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-511499617",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://localhost:8080/",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.4",
+                "4.0.0"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.4",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector 06-05-2021",
+            "version": "5.0.0-SNAPSHOT"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/f95f8f49-45c5-4072-a04d-766241294cf4",
+            "curator": "https://www.here.com/",
+            "description": "HERE Technologies IDS Connector",
+            "hasDefaultEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/1099522629",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://www.here.com/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "HERE Dataspace Connector",
+            "version": "1.0.0"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/ee4d457b-d713-49f3-a222-d6f825a59f21",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/ebffa75a-7314-4b2b-ae49-24795bc8eb64",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/-5566564",
+            "created": "2021-03-25T12:20:28.81Z",
+            "description": {
+                "@language": "en",
+                "@value": "Sample connection to here backend"
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-25T12:20:28.81Z",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/446988153",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/1099522629",
+            "title": {
+                "@language": "en",
+                "@value": "HereSampleResource"
+            }
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/-5566564",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/20b316bf-b367-418e-8576-b3c6fa216254",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/-5566564/412799069",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/-5566564/412799069",
+            "@type": "ids:Permission",
+            "sameAs": "https://w3id.org/idsa/autogen/permission/f70508b1-20c4-472a-8636-4afc8e4fe72e",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/1099522629",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "accessURL": "https://localhost:8080/api/ids/data"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/446988153",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/ebffa75a-7314-4b2b-ae49-24795bc8eb65",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/446988153/-79114540",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/d4f0d45e-485f-4937-bd49-4327646989db"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/446988153/-79114540",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/ebffa75a-7314-4b2b-ae49-24795bc8eb65",
+            "ids:byteSize": 10000,
+            "fileName": "Berlin Districts"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/1687522527",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/19550691-e15d-4854-9452-9eac51298fe2",
+            "curator": "https://eccenca.com/",
+            "description": "IDS Connector hosted by eccenca GmbH",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://eccenca.com/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/1687522527/1769073762",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "eccenca Connector",
+            "version": "4.3.1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/1687522527/1769073762",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/658af0d8-e601-457f-95c1-f84bf9582c2e"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/2118218015",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://w3id.org/idsa/autogen/baseConnector/95838fbb-2e43-43df-ae38-d1179296b8a9",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/2118218015/1257486502",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector",
+            "version": "4.3.0"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/2118218015/1257486502",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/db274e06-d19a-4aea-a00b-c3c4fc83f789"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://localhost:8080/2",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.4",
+                "4.0.0"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.4",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "DSC Demo",
+            "version": "5.0.0-SNAPSHOT"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://localhost:8080/api/catalogs/b80f1c22-e07f-4761-9b1a-bd1424a4ad23",
+            "offeredResource": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/-609328405",
+                "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731"
+            ]
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/-609328405",
+            "@type": "ids:Resource",
+            "sameAs": "https://localhost:8080/api/offers/f58078cc-72f8-46ac-95a5-54f8157d8fd4",
+            "created": "2021-05-06T11:25:03.566Z",
+            "description": {
+                "@language": "string",
+                "@value": "string"
+            },
+            "keyword": {
+                "@language": "string",
+                "@value": "string"
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-05-06T11:25:03.567Z",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/-609328405/2110758182",
+            "title": {
+                "@language": "string",
+                "@value": "string"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/-609328405/2110758182",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/3c865422-e749-46f1-a41f-bd72012018f7",
+            "accessURL": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/-609328405"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731",
+            "@type": "ids:Resource",
+            "sameAs": "https://localhost:8080/api/offers/12068865-9d5b-4aaf-aeb8-c0a01ccfa61d",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-586435774",
+            "created": "2021-05-06T11:28:19.523Z",
+            "description": {
+                "@language": "en",
+                "@value": "This is example data."
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "airquality"
+                },
+                {
+                    "@language": "en",
+                    "@value": "sensor"
+                },
+                {
+                    "@language": "en",
+                    "@value": "sample"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-05-06T11:28:19.523Z",
+            "publisher": "https://publisher.com",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-1723704160",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/1607364253",
+            "sovereign": "https://sovereign.com",
+            "standardLicense": "https://license.com",
+            "title": {
+                "@language": "en",
+                "@value": "Sensor Data"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-1723704160",
+            "@type": "ids:Representation",
+            "sameAs": "https://localhost:8080/api/representations/2a9ca81b-a49a-4ecd-8610-ef08e0a1f71b",
+            "created": "2021-05-06T11:28:19.55Z",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-1723704160/-300236600",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/ed6dea4e-e157-4ade-94cc-a058bea2dfd5",
+            "modified": "2021-05-06T11:28:19.551Z"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-1723704160/-300236600",
+            "@type": "ids:Artifact",
+            "sameAs": "https://localhost:8080/api/artifacts/1e9163ce-9fc7-4c0f-a86b-8e3de5354150",
+            "ids:byteSize": 0,
+            "checkSum": "0",
+            "creationDate": "2021-05-06T11:28:19.592Z",
+            "fileName": ""
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-586435774",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://localhost:8080/api/contracts/4cd20fa8-5753-4cd6-bf05-13b82bf4d7a0",
+            "contractDate": "2021-05-06T11:30:26.664Z",
+            "contractEnd": "2021-12-06T11:33:44.995Z",
+            "contractStart": "2021-05-06T11:28:19.645Z",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-586435774/-828947492"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-586435774/-828947492",
+            "@type": "ids:Permission",
+            "sameAs": "https://localhost:8080/api/rules/5b2f6792-4949-40f2-94fd-4cc769e25679",
+            "action": "https://w3id.org/idsa/code/USE",
+            "constraint": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-586435774/-828947492/-76434006",
+            "description": "n-times-usage",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-586435774/-828947492/-76434006",
+            "@type": "ids:Constraint",
+            "sameAs": "https://w3id.org/idsa/autogen/constraint/986f95f9-5f83-4360-8e5e-89b6244966e3",
+            "leftOperand": "https://w3id.org/idsa/code/COUNT",
+            "operator": "https://w3id.org/idsa/code/LTEQ",
+            "ids:rightOperand": 5.0
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/1607364253",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/1d61cf5d-e938-48a8-a28b-b9c10c7406bf",
+            "accessURL": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://ids.dwd-connector.test.mobilitydataspace.io",
+            "curator": "https://www.ivi.fraunhofer.de/",
+            "description": "IDS Connector des Deutschen Wetterdienstes",
+            "hasDefaultEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/1099522629",
+            "inboundModelVersion": "4.0.0",
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.0",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "DWD Connector",
+            "version": "4.0.2"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://w3id.org/idsa/autogen/resourceCatalog/990bac3c-269a-4f26-bc4b-02504b814ae5",
+            "offeredResource": [
+                "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737",
+                "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787",
+                "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137",
+                "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613"
+            ]
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/fc771485-524a-467a-a1b2-9495ca2ba71e",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/-566317369",
+            "created": "2021-03-24T12:03:44.164Z",
+            "description": {
+                "@language": "en",
+                "@value": "Autowarn_Analyse"
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "Wetter"
+                },
+                {
+                    "@language": "en",
+                    "@value": "Warnungen"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-24T12:03:46.297Z",
+            "publisher": "https://dwd.de",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/1099522629",
+            "standardLicense": "https://www.dwd.de/DE/service/copyright/copyright_node.html",
+            "title": {
+                "@language": "en",
+                "@value": "Autowarn_Analyse"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/-566317369",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/a623dc87-98ae-4d52-b2c9-116773487eb3",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/0d74f871-d2ab-4a9c-a3a0-3a3f2bf018b4",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170/-285368523",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/f662d215-799a-4923-b5f9-895bd4878cbc"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170/-285368523",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/0d74f871-d2ab-4a9c-a3a0-3a3f2bf018b4",
+            "ids:byteSize": 1234
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/44795317-0aaa-4fe1-b336-b2e26a00597f",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154",
+            "created": "2021-03-15T09:01:26.352Z",
+            "description": {
+                "@language": "en",
+                "@value": "Der DWD erstellt in vier verschiedenen Stufen sogenannte Basiswarnungen. Die kleinste geografische Einheit sind die Gemeinden und für ausgewählte Städte die Stadtbezirke."
+            },
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-22T16:04:42.178Z",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/859508700",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/1099522629",
+            "title": {
+                "@language": "en",
+                "@value": "DWD-Wetterwarnungen-Gemeinden"
+            }
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/946e4d16-41d0-4e2a-bc17-653dc0864f58",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
+            "@type": "ids:Permission",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "provide-access",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/1099522629",
+            "@type": "ids:ConnectorEndpoint",
+            "accessURL": "https://ids.dwd-connector.test.mobilitydataspace.io/api/ids/data"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/859508700",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/22795317-0aaa-4fe1-b336-b2e26a00597f",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/859508700/333406007",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/09ef02dc-b721-4c2a-a7e5-fa14f3f2b7c6"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/859508700/333406007",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/22795317-0aaa-4fe1-b336-b2e26a00597f",
+            "ids:byteSize": 101,
+            "fileName": "DWD-Wetterwarnungen-Gemeinden Representation"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/4d122d6c-287c-4553-a336-bb9ac95327a8",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-798796847",
+            "created": "2021-03-17T14:44:06.461Z",
+            "description": {
+                "@language": "en",
+                "@value": "Wetterwarnungen auf Gemeindeebene (vereinigt)"
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "Wetter"
+                },
+                {
+                    "@language": "en",
+                    "@value": "Warnungen"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-23T15:15:44.234Z",
+            "publisher": "https://dwd.de",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-1853343201",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/1099522629",
+            "standardLicense": "https://dwd.de/lizenz",
+            "title": {
+                "@language": "en",
+                "@value": "Wetterwarnungen auf Gemeindeebene (vereinigt)"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-1853343201",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/04ff86c4-f5b9-4172-984e-eef9108f1108",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-1853343201/1915521402",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/544697cb-4648-4eea-b5cc-a4e6eda7d2ce"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-1853343201/1915521402",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/04ff86c4-f5b9-4172-984e-eef9108f1108",
+            "ids:byteSize": 1234
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-798796847",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/52c92dcd-db7a-4077-b549-03290c2cfea4",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787",
+            "@type": "ids:Resource",
+            "sameAs": "https://w3id.org/idsa/autogen/resource/4c8f2f56-45d5-4d9e-8aec-6adbb0af4e22",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-1814632307",
+            "created": "2021-03-15T11:11:39.196Z",
+            "description": {
+                "@language": "en",
+                "@value": "Wetterwarnungen gesamt in Deutschland"
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "Warnungen"
+                },
+                {
+                    "@language": "en",
+                    "@value": "Wetter"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-03-22T16:05:16.808Z",
+            "publisher": "https://dwd.de",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-820159396",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/1099522629",
+            "standardLicense": "https://dwd.de/lizenz",
+            "title": {
+                "@language": "en",
+                "@value": "Wetterwarnungen gesamt"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-1814632307",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://w3id.org/idsa/autogen/contractOffer/b87cf4ec-6284-4fd2-b102-82627cce58b4",
+            "prohibition": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-1814632307/1039170606",
+            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-1814632307/1039170606",
+            "@type": "ids:Prohibition",
+            "sameAs": "https://w3id.org/idsa/autogen/prohibition/ff1b43b9-f3b1-44b1-a826-2efccc199a76",
+            "action": "https://w3id.org/idsa/code/USE",
+            "description": "prohibit-access",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-820159396",
+            "@type": "ids:Representation",
+            "sameAs": "https://w3id.org/idsa/autogen/representation/452853c0-1be3-4ce2-b6a6-2655a76d942c",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-820159396/-1346262089",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/4fc2d599-418e-46ff-8ea7-cb970d8bccc4"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-820159396/-1346262089",
+            "@type": "ids:Artifact",
+            "sameAs": "https://w3id.org/idsa/autogen/artifact/452853c0-1be3-4ce2-b6a6-2655a76d942c",
+            "ids:byteSize": 1234
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420",
+            "@type": "ids:BaseConnector",
+            "sameAs": "https://localhost:8080/1",
+            "curator": "https://www.isst.fraunhofer.de/",
+            "description": "IDS Connector with static example resources hosted by the Fraunhofer ISST",
+            "hasDefaultEndpoint": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "inboundModelVersion": [
+                "4.0.4",
+                "4.0.0"
+            ],
+            "maintainer": "https://www.isst.fraunhofer.de/",
+            "outboundModelVersion": "4.0.4",
+            "publicKey": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "resourceCatalog": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529",
+            "securityProfile": "https://w3id.org/idsa/code/BASE_SECURITY_PROFILE",
+            "title": "Dataspace Connector 06-05-2021",
+            "version": "5.0.0-SNAPSHOT"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529",
+            "@type": "ids:ResourceCatalog",
+            "sameAs": "https://localhost:8080/api/catalogs/832bc629-6c41-44de-831a-74a1814abf7c",
+            "offeredResource": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377",
+            "@type": "ids:Resource",
+            "sameAs": "https://localhost:8080/api/offers/261e2c2e-58d5-4487-b1ca-19cfb1c48592",
+            "contractOffer": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-1009311286",
+            "created": "2021-05-06T08:38:29.814Z",
+            "description": {
+                "@language": "en",
+                "@value": "This is example data."
+            },
+            "keyword": [
+                {
+                    "@language": "en",
+                    "@value": "sensor"
+                },
+                {
+                    "@language": "en",
+                    "@value": "sample"
+                },
+                {
+                    "@language": "en",
+                    "@value": "airquality"
+                }
+            ],
+            "language": "https://w3id.org/idsa/code/EN",
+            "modified": "2021-05-06T08:38:29.814Z",
+            "publisher": "https://publisher.com",
+            "representation": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/383187754",
+            "resourceEndpoint": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-312234295",
+            "sovereign": "https://sovereign.com",
+            "standardLicense": "https://license.com",
+            "title": {
+                "@language": "en",
+                "@value": "Sensor Data"
+            },
+            "version": "1"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-1009311286",
+            "@type": "ids:ContractOffer",
+            "sameAs": "https://localhost:8080/api/contracts/b78ef85c-35be-473c-8b34-e920a37aadea",
+            "contractDate": "2021-05-06T08:40:44.197Z",
+            "contractEnd": "2021-12-06T11:33:44.995Z",
+            "contractStart": "2021-05-06T08:38:29.937Z",
+            "permission": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-1009311286/-1921775120"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-1009311286/-1921775120",
+            "@type": "ids:Permission",
+            "sameAs": "https://localhost:8080/api/rules/3c7cda20-2f0e-4857-95bb-f51a7591f814",
+            "action": "https://w3id.org/idsa/code/USE",
+            "constraint": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-1009311286/-1921775120/-76434006",
+            "description": "n-times-usage",
+            "title": "Example Usage Policy"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-1009311286/-1921775120/-76434006",
+            "@type": "ids:Constraint",
+            "sameAs": "https://w3id.org/idsa/autogen/constraint/986f95f9-5f83-4360-8e5e-89b6244966e3",
+            "leftOperand": "https://w3id.org/idsa/code/COUNT",
+            "operator": "https://w3id.org/idsa/code/LTEQ",
+            "ids:rightOperand": 5.0
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-312234295",
+            "@type": "ids:ConnectorEndpoint",
+            "sameAs": "https://w3id.org/idsa/autogen/connectorEndpoint/2cced089-0eda-4a33-bef9-818ddc27b22f",
+            "accessURL": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/383187754",
+            "@type": "ids:Representation",
+            "sameAs": "https://localhost:8080/api/representations/1475c407-7580-4037-b74e-ad7f8c60af53",
+            "created": "2021-05-06T08:38:29.857Z",
+            "instance": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/383187754/-1608746326",
+            "language": "https://w3id.org/idsa/code/EN",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/394fe82a-0899-4f26-936c-ffa9f5e037db",
+            "modified": "2021-05-06T08:38:29.857Z"
+        },
+        {
+            "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/383187754/-1608746326",
+            "@type": "ids:Artifact",
+            "sameAs": "https://localhost:8080/api/artifacts/54de96a2-1e47-4f4f-a93c-24ba11f5dd3b",
+            "ids:byteSize": 0,
+            "checkSum": "0",
+            "creationDate": "2021-05-06T08:38:29.902Z",
+            "fileName": ""
+        },
+        {
+            "@id": "https://test.connector.de/data/",
+            "@type": "ids:ConnectorEndpoint",
+            "accessURL": "https://exmple.org/infrastructure",
+            "endpointDocumentation": "https://app.swaggerhub.com/apis/idsa/IDS-Broker/1.3.1#/Multipart%20Interactions/post_infrastructure",
+            "endpointInformation": {
+                "@language": "en",
+                "@value": "This endpoint provides IDS Connector information and IDS Resources."
+            },
+            "path": "/infrastructure"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/artifact/aa1cf3d9-8aa1-42ef-9f85-08ce0f48005b",
+            "@type": "ids:Artifact",
+            "ids:byteSize": 2678,
+            "creationDate": "2020-06-23T17:27:18.599+02:00",
+            "fileName": "data.pdf"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/connectorEndpoint/085664aa-5365-45e9-a2cf-e3b660b2d410",
+            "@type": "ids:ConnectorEndpoint",
+            "accessURL": "https://example.org/endpoint"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/connectorEndpoint/e5e2ab04-633a-44b9-87d9-a097ae6da3cf",
+            "@type": "ids:ConnectorEndpoint",
+            "accessURL": "https://localhost:8080/api/ids/data"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/endpoint/6d59444e-57be-49c4-a6e1-25ca67ef160b",
+            "@type": "ids:ConnectorEndpoint",
+            "accessURL": "https://localhost:8080/api/ids/data"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/03f8b00e-7bac-4955-babd-9de00f2c7479",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "JSON"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/07e5f54e-4e85-4df7-94d3-a7e8b225f1cb",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "xml"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/09ef02dc-b721-4c2a-a7e5-fa14f3f2b7c6",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "JSON"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/1a6426e0-2d59-45d1-966d-03333e3fd965",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "JSON"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/394fe82a-0899-4f26-936c-ffa9f5e037db",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "json"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/44579869-4783-4df9-b50a-c5f399b7f8ec",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "XML"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/4fc2d599-418e-46ff-8ea7-cb970d8bccc4",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "json"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/544697cb-4648-4eea-b5cc-a4e6eda7d2ce",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "json"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/a55ae1d7-7f0a-4688-a7a3-739cc7ad0c13",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "JSON"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/aa3c0225-578e-45f4-b540-3b3943633612",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "ZIP/RDF"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/ce22d1c0-e546-4066-a0e8-4a4e7620f883",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "pdf"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/d4f0d45e-485f-4937-bd49-4327646989db",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "JSON"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/eb710d80-4a75-48ab-b34a-734ab9009af0",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "xml"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/ed6dea4e-e157-4ade-94cc-a058bea2dfd5",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "json"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/f61fd156-3f85-4623-b820-3c96498e7c6b",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "pdf"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/f62aa28c-483e-450f-b2d2-9b847e9cc86c",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "XML"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/f662d215-799a-4923-b5f9-895bd4878cbc",
+            "@type": "ids:IANAMediaType",
+            "filenameExtension": "json"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/person/8b51a76a-7316-4285-b96a-722bf7a944f8",
+            "@type": "ids:Person",
+            "emailAddress": "info@example.org",
+            "familyName": "Mustermensch",
+            "givenName": "Max",
+            "homepage": "http://example.org",
+            "phoneNumber": "012345678891"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/publicKey/78eb73a3-3a2a-4626-a0ff-631ab50a00f9",
+            "@type": "ids:PublicKey",
+            "keyType": "https://w3id.org/idsa/code/RSA",
+            "keyValue": [
+                "VFVsSlFrbHFRVTVDWjJ0eGFHdHBSemwzTUVKQlVVVkdRVUZQUTBGUk9FRk5TVWxDUTJkTFEwRlJSVUYxZHpadFJuSmtabXhZV2xSS1owWlBRVFZ6YlVSWVF6QTVVMjF3U2xkdlIzQjVSVkphVGtWNU16RndTMlJ6VWtkb1ZHbHdVakkzYWpscGNtMXRjV2xvZGpkblNXZDZRMjU0Tm10SlVrNUhTVEoxTUc5R1VUVkdaM1pQTVhoNFozcGphV2hrY0VZd1EyaGxUMlk1U1U1bmFYTlFhM0UxYUdvNFFXVXZSRmxZYTNacWFGRTJZelpoYXk5YVdXWnFNRTV3Y1hsRlVHTktOVTFNVW0xWlIyVjRUV0ZOV20xVVluRkVTblpLYkRWS1J6TXJZa1V6V1dFeU1XaFVXbGxQZUdsVGFXTndaa1puU2pNd2EyNDFZVlZKUVhSa01EVkpXbmszZWpGelJHbFdUSFJVV0d4TVptVXZXbEZETkhCdWFrWjBjeXQwWXpFeWMxZzVhV2hKYlc1RGEyUXdWM1o2TTBOVVdtOTVRbE56WXpGVVpFSnJZamx0TUVNMWRIWm5NR1pSVURSUlowWXZla2d5VVc5YWJtNXlTVFV5ZFVGYU9FMXZiVmQwV1RKc2RETkVNR3RyY0ZJMk9YQm1Wa1JLTjNremRrNHZaWGRKUkVGUlFVST0="
+            ]
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/resource/f559500f-b668-4351-a1b1-50f712a6d368",
+            "@type": "ids:Resource",
+            "author": "https://w3id.org/idsa/autogen/person/8b51a76a-7316-4285-b96a-722bf7a944f8",
+            "contentStandard": "http://contentstandard.org",
+            "contentType": "https://w3id.org/idsa/code/INTERFACE_DEFINITION",
+            "ids:created": {
+                "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+                "@value": "2003-01-10T00:00Z"
+            },
+            "customLicense": "http://customlicense.org",
+            "dataCreator": "Data creator/Owner",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur\n        unde suscipit, quam beatae rerum inventore consectetur, neque doloribus, cupiditate numquam\n        dignissimos laborum fugiat deleniti? Eum quasi quidem quibusdam.",
+            "domainVocabulary": "https://w3id.org/idsa/autogen/vocabularyData/2d98d466-52ce-48b8-a29e-936f7f4efa9e",
+            "keyword": true,
+            "ids:language": true,
+            "mainTitle": "Energy Conservation with Open Source Ad Blockers",
+            "ids:modified": {
+                "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+                "@value": "2020-01-29T00:00Z"
+            },
+            "ids:rawData": false,
+            "representation": "https://w3id.org/idsa/autogen/textRepresentation/8a23edb5-be86-4722-afd4-fd2276c9bc18",
+            "researchDataType": "https://w3id.org/idsa/code/OBSERVATIONAL_DATA",
+            "standardLicense": "https://w3id.org/idsa/code/OTHERFREEWARELICENSE",
+            "title": "Energy Conservation with Open Source Ad Blockers",
+            "version": "version 3.0.0"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/textRepresentation/8a23edb5-be86-4722-afd4-fd2276c9bc18",
+            "@type": "ids:TextRepresentation",
+            "ids:created": {
+                "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+                "@value": "2013-11-14T00:00Z"
+            },
+            "domainVocabulary": "https://w3id.org/idsa/autogen/vocabularyData/bbe50ee4-5033-4c13-bf43-35c733a7b781",
+            "instance": "https://w3id.org/idsa/autogen/artifact/aa1cf3d9-8aa1-42ef-9f85-08ce0f48005b",
+            "mediaType": "https://w3id.org/idsa/code/APPLICATION_PDF",
+            "ids:modified": {
+                "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
+                "@value": "2020-01-15T00:00Z"
+            },
+            "representationStandard": "http://textRepresentation.org"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/vocabularyData/2d98d466-52ce-48b8-a29e-936f7f4efa9e",
+            "@type": "ids:VocabularyData",
+            "vocabulary": "http://vocabulary.org"
+        },
+        {
+            "@id": "https://w3id.org/idsa/autogen/vocabularyData/bbe50ee4-5033-4c13-bf43-35c733a7b781",
+            "@type": "ids:VocabularyData",
+            "vocabulary": "http://textVovabulary.com"
+        },
+        {
+            "@id": "https://w3id.org/idsa/code/APPLICATION_PDF",
+            "@type": "ids:IANAMediaType"
+        }
+    ],
+    "@context": {
+        "filenameExtension": {
+            "@id": "https://w3id.org/idsa/core/filenameExtension"
+        },
+        "sameAs": {
+            "@id": "http://www.w3.org/2002/07/owl#sameAs",
+            "@type": "@id"
+        },
+        "rightOperand": {
+            "@id": "https://w3id.org/idsa/core/rightOperand",
+            "@type": "http://www.w3.org/2001/XMLSchema#double"
+        },
+        "operator": {
+            "@id": "https://w3id.org/idsa/core/operator",
+            "@type": "@id"
+        },
+        "leftOperand": {
+            "@id": "https://w3id.org/idsa/core/leftOperand",
+            "@type": "@id"
+        },
+        "accessURL": {
+            "@id": "https://w3id.org/idsa/core/accessURL",
+            "@type": "@id"
+        },
+        "permission": {
+            "@id": "https://w3id.org/idsa/core/permission",
+            "@type": "@id"
+        },
+        "hasDefaultEndpoint": {
+            "@id": "https://w3id.org/idsa/core/hasDefaultEndpoint",
+            "@type": "@id"
+        },
+        "title": {
+            "@id": "https://w3id.org/idsa/core/title"
+        },
+        "maintainer": {
+            "@id": "https://w3id.org/idsa/core/maintainer",
+            "@type": "@id"
+        },
+        "resourceCatalog": {
+            "@id": "https://w3id.org/idsa/core/resourceCatalog",
+            "@type": "@id"
+        },
+        "curator": {
+            "@id": "https://w3id.org/idsa/core/curator",
+            "@type": "@id"
+        },
+        "publicKey": {
+            "@id": "https://w3id.org/idsa/core/publicKey",
+            "@type": "@id"
+        },
+        "version": {
+            "@id": "https://w3id.org/idsa/core/version"
+        },
+        "inboundModelVersion": {
+            "@id": "https://w3id.org/idsa/core/inboundModelVersion"
+        },
+        "outboundModelVersion": {
+            "@id": "https://w3id.org/idsa/core/outboundModelVersion"
+        },
+        "securityProfile": {
+            "@id": "https://w3id.org/idsa/core/securityProfile",
+            "@type": "@id"
+        },
+        "description": {
+            "@id": "https://w3id.org/idsa/core/description"
+        },
+        "instance": {
+            "@id": "https://w3id.org/idsa/core/instance",
+            "@type": "@id"
+        },
+        "shapesGraph": {
+            "@id": "https://w3id.org/idsa/core/shapesGraph",
+            "@type": "@id"
+        },
+        "language": {
+            "@id": "https://w3id.org/idsa/core/language",
+            "@type": "@id"
+        },
+        "representationStandard": {
+            "@id": "https://w3id.org/idsa/core/representationStandard",
+            "@type": "@id"
+        },
+        "mediaType": {
+            "@id": "https://w3id.org/idsa/core/mediaType",
+            "@type": "@id"
+        },
+        "modified": {
+            "@id": "https://w3id.org/idsa/core/modified",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "created": {
+            "@id": "https://w3id.org/idsa/core/created",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "resourceEndpoint": {
+            "@id": "https://w3id.org/idsa/core/resourceEndpoint",
+            "@type": "@id"
+        },
+        "sovereign": {
+            "@id": "https://w3id.org/idsa/core/sovereign",
+            "@type": "@id"
+        },
+        "keyword": {
+            "@id": "https://w3id.org/idsa/core/keyword"
+        },
+        "publisher": {
+            "@id": "https://w3id.org/idsa/core/publisher",
+            "@type": "@id"
+        },
+        "standardLicense": {
+            "@id": "https://w3id.org/idsa/core/standardLicense",
+            "@type": "@id"
+        },
+        "representation": {
+            "@id": "https://w3id.org/idsa/core/representation",
+            "@type": "@id"
+        },
+        "contractOffer": {
+            "@id": "https://w3id.org/idsa/core/contractOffer",
+            "@type": "@id"
+        },
+        "fileName": {
+            "@id": "https://w3id.org/idsa/core/fileName"
+        },
+        "byteSize": {
+            "@id": "https://w3id.org/idsa/core/byteSize",
+            "@type": "http://www.w3.org/2001/XMLSchema#integer"
+        },
+        "creationDate": {
+            "@id": "https://w3id.org/idsa/core/creationDate",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "checkSum": {
+            "@id": "https://w3id.org/idsa/core/checkSum"
+        },
+        "duration": {
+            "@id": "https://w3id.org/idsa/core/duration",
+            "@type": "http://www.w3.org/2001/XMLSchema#decimal"
+        },
+        "action": {
+            "@id": "https://w3id.org/idsa/core/action",
+            "@type": "@id"
+        },
+        "constraint": {
+            "@id": "https://w3id.org/idsa/core/constraint",
+            "@type": "@id"
+        },
+        "assigner": {
+            "@id": "https://w3id.org/idsa/core/assigner",
+            "@type": "@id"
+        },
+        "assignee": {
+            "@id": "https://w3id.org/idsa/core/assignee",
+            "@type": "@id"
+        },
+        "preDuty": {
+            "@id": "https://w3id.org/idsa/core/preDuty",
+            "@type": "@id"
+        },
+        "offeredResource": {
+            "@id": "https://w3id.org/idsa/core/offeredResource",
+            "@type": "@id"
+        },
+        "provider": {
+            "@id": "https://w3id.org/idsa/core/provider",
+            "@type": "@id"
+        },
+        "researchDataType": {
+            "@id": "https://w3id.org/idsa/core/researchDataType",
+            "@type": "@id"
+        },
+        "author": {
+            "@id": "https://w3id.org/idsa/core/author",
+            "@type": "@id"
+        },
+        "domainVocabulary": {
+            "@id": "https://w3id.org/idsa/core/domainVocabulary",
+            "@type": "@id"
+        },
+        "customLicense": {
+            "@id": "https://w3id.org/idsa/core/customLicense",
+            "@type": "@id"
+        },
+        "mainTitle": {
+            "@id": "https://w3id.org/idsa/core/mainTitle"
+        },
+        "rawData": {
+            "@id": "https://w3id.org/idsa/core/rawData",
+            "@type": "http://www.w3.org/2001/XMLSchema#boolean"
+        },
+        "contentType": {
+            "@id": "https://w3id.org/idsa/core/contentType",
+            "@type": "@id"
+        },
+        "contentStandard": {
+            "@id": "https://w3id.org/idsa/core/contentStandard",
+            "@type": "@id"
+        },
+        "dataCreator": {
+            "@id": "https://w3id.org/idsa/core/dataCreator"
+        },
+        "path": {
+            "@id": "https://w3id.org/idsa/core/path"
+        },
+        "endpointInformation": {
+            "@id": "https://w3id.org/idsa/core/endpointInformation"
+        },
+        "endpointDocumentation": {
+            "@id": "https://w3id.org/idsa/core/endpointDocumentation",
+            "@type": "@id"
+        },
+        "listedConnector": {
+            "@id": "https://w3id.org/idsa/core/listedConnector",
+            "@type": "@id"
+        },
+        "unit": {
+            "@id": "https://w3id.org/idsa/core/unit",
+            "@type": "@id"
+        },
+        "keyValue": {
+            "@id": "https://w3id.org/idsa/core/keyValue"
+        },
+        "keyType": {
+            "@id": "https://w3id.org/idsa/core/keyType",
+            "@type": "@id"
+        },
+        "contractStart": {
+            "@id": "https://w3id.org/idsa/core/contractStart",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "contractEnd": {
+            "@id": "https://w3id.org/idsa/core/contractEnd",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "contractDate": {
+            "@id": "https://w3id.org/idsa/core/contractDate",
+            "@type": "http://www.w3.org/2001/XMLSchema#dateTime"
+        },
+        "prohibition": {
+            "@id": "https://w3id.org/idsa/core/prohibition",
+            "@type": "@id"
+        },
+        "outboundPath": {
+            "@id": "https://w3id.org/idsa/core/outboundPath"
+        },
+        "inboundPath": {
+            "@id": "https://w3id.org/idsa/core/inboundPath"
+        },
+        "endpointArtifact": {
+            "@id": "https://w3id.org/idsa/core/endpointArtifact",
+            "@type": "@id"
+        },
+        "consumer": {
+            "@id": "https://w3id.org/idsa/core/consumer",
+            "@type": "@id"
+        },
+        "contractDocument": {
+            "@id": "https://w3id.org/idsa/core/contractDocument",
+            "@type": "@id"
+        },
+        "offer": {
+            "@id": "https://w3id.org/idsa/core/offer",
+            "@type": "@id"
+        },
+        "vocabulary": {
+            "@id": "https://w3id.org/idsa/core/vocabulary",
+            "@type": "@id"
+        },
+        "phoneNumber": {
+            "@id": "https://w3id.org/idsa/core/phoneNumber"
+        },
+        "homepage": {
+            "@id": "https://w3id.org/idsa/core/homepage"
+        },
+        "givenName": {
+            "@id": "https://w3id.org/idsa/core/givenName"
+        },
+        "familyName": {
+            "@id": "https://w3id.org/idsa/core/familyName"
+        },
+        "emailAddress": {
+            "@id": "https://w3id.org/idsa/core/emailAddress"
+        },
+        "owl": "http://www.w3.org/2002/07/owl#",
+        "ids": "https://w3id.org/idsa/core/"
+    }
+}

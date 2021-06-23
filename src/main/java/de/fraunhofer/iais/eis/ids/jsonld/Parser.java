@@ -42,6 +42,7 @@ class Parser {
     Logger logger = LoggerFactory.getLogger(Parser.class);
 
     static Map<String, String> knownNamespaces = new HashMap<>();
+    private static boolean multipleOptionsAvailableWarningPrinted = false;
 
     /**
      * Main internal method for creating a java object from a given RDF graph and a URI of the object to handle
@@ -1003,7 +1004,14 @@ class Parser {
                 determineBestCandidateQueryExecution.close();
 
             }
-            logger.warn("The RDF graph contains multiple objects which can be parsed to " + targetClass.getSimpleName() + ". Determined " + bestCandidateId + " as best candidate.");
+            if(!multipleOptionsAvailableWarningPrinted) {
+                multipleOptionsAvailableWarningPrinted = true;
+                logger.warn("The RDF graph contains multiple objects which can be parsed to " + targetClass.getSimpleName() + ". Determined " + bestCandidateId + " as best candidate. This warning is only printed once.");
+            }
+            else
+            {
+                logger.debug("The RDF graph contains multiple objects which can be parsed to " + targetClass.getSimpleName() + ". Determined " + bestCandidateId + " as best candidate.");
+            }
             return (T) handleObject(rdfModel, bestCandidateId, bestCandidateClass);
         }
 

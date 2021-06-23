@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import de.fraunhofer.iais.eis.*;
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
@@ -272,6 +273,13 @@ public class ParserTest {
 
 		/* ASSERT */
 		assertEquals(Action.USE, result.getAction().get(0));
+	}
+
+	@Test
+	public void parseDatabaseBackupTest() throws IOException {
+		String catalogString = SerializerUtil.readResourceToString("IdsLabDatabaseBackup.jsonld");
+		ConnectorCatalog connectorCatalog = new Serializer().deserialize(catalogString, ConnectorCatalog.class);
+		Assert.assertTrue(connectorCatalog.getListedConnector().size() > 8);
 	}
 
 }
