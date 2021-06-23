@@ -282,4 +282,33 @@ public class ParserTest {
 		Assert.assertTrue(connectorCatalog.getListedConnector().size() > 8);
 	}
 
+	@Test
+	public void should_be_equals() throws IOException {
+		final String input = "{\n"
+				+ "  \"@context\" : {\n"
+				+ "    \"ids\" : \"https://w3id.org/idsa/core/\",\n"
+				+ "    \"idsc\" : \"https://w3id.org/idsa/code/\"\n"
+				+ "  },\n"
+				+ "  \"@type\" : \"ids:Constraint\",\n"
+				+ "  \"@id\" : \"https://w3id.org/idsa/autogen/constraint/4ae656d1-2a73"
+				+ "-44e3-a168-b1cbe49d4622\",\n"
+				+ "  \"ids:leftOperand\" : {\n"
+				+ "    \"@id\" : \"https://w3id.org/idsa/code/COUNT\"\n"
+				+ "  },\n"
+				+ "  \"ids:rightOperand\" : {\n"
+				+ "    \"@value\" : \"5\",\n"
+				+ "    \"@type\" : \"http://www.w3.org/2001/XMLSchema#double\"\n"
+				+ "  },\n"
+				+ "  \"ids:operator\" : {\n"
+				+ "    \"@id\" : \"https://w3id.org/idsa/code/LTEQ\"\n"
+				+ "  }\n"
+				+ "}";
+
+		final Serializer deserializer = new Serializer();
+		final Constraint obj1 = deserializer.deserialize(input, Constraint.class);
+		final Constraint obj2 = deserializer.deserialize(input, Constraint.class);
+
+		Assert.assertEquals(obj1, obj2);
+	}
+
 }
