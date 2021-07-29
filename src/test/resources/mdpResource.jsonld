@@ -1,0 +1,162 @@
+{
+    "@context" : {
+    "ids" : "https://w3id.org/idsa/core/",
+    "idsc" : "https://w3id.org/idsa/code/",
+    "mdp" : "https://w3id.org/mdp/schema#",
+    "dcat" : "http://www.w3.org/ns/dcat#",
+    "dct" : "http://purl.org/dc/terms/",
+    "xsd" : "http://www.w3.org/2001/XMLSchema#",
+    "skos" : "http://www.w3.org/2004/02/skos/core#",
+    "adms" : "http://www.w3.org/ns/adms#"
+  },
+      "@type" : "ids:DataResource",
+      "@id" : "https://mcloud.de/web/guest/suche/-/results/detail/4D460D81-8CFE-4162-BFB7-A9A922F3D984",
+      "ids:title" : [ {
+        "@value" : "Achslastmessstellen - Rohdatenbereitstellung",
+        "@type" : "xsd:string"
+      } ],
+      "ids:description" : [ {
+        "@value" : "Daten der Achslastmessstellen (AMS) auf Bundesautobahnen werden der BASt von der Autobahn GmbH des Bundes in einem einheitlichen Binär-Datenformat zur Verfügung gestellt. Bei den der BASt vorliegenden Rohdaten handelt es sich um Einzelfahrzeugdaten, die nicht auf Datenvollständigkeit und Plausibilität überprüft sind. Neben Formatfehlern können in den Dateien unter anderem Messfehler, Datenlücken, Richtungs- und Fahrstreifenvertauschungen, Uhrzeitfehler sowie sonstige fehlerhafte Werte auftreten.                  &lt;br>&lt;br>In monatlichen Zip-Dateien werden die vorliegenden Tagesdateien im Binärformat sowie nähere Zusatzinformationen zu den jeweiligen AMS als CSV-Datei bereitgestellt. Sowohl die Daten als auch die Metadaten geben lediglich den aktuellen Stand zum Zeitpunkt der Bereitstellung wieder. Für Vollständigkeit und Qualität der Rohdaten übernimmt die BASt keine Gewähr. Es erfolgt ein kompletter Haftungsausschluss. Die BASt übernimmt keine Haftung für Schäden, die durch die Nutzung der bereitgestellten Informationen entstehen.                    &lt;br>&lt;br>Die Ergebnisse auf Basis der plausibilisierten und endgültig aufbereiteten Daten ab 2011 werden ebenfalls von der BASt zur Verfügung gestellt:&lt;br>&lt;a href='https://www.mcloud.de/web/guest/suche/-/results/detail/6C47CE80-3A41-43B7-B1BF-40A73992DECE'>Achslasterfassung&lt;/a>&lt;br>&lt;br>Datensatzbeschreibung:&lt;br>&lt;a href='https://www.bast.de/BASt_2017/DE/Publikationen/Daten/Verkehrstechnik/Downloads/AMS-Beschreibung.pdf?__blob=publicationFile'>Kurzbeschreibung der Dateien 'Einzelfahrzeugdaten' (PDF)&lt;/a>",
+        "@type" : "xsd:string"
+      } ],
+      "mdp:dataCategory" : {
+        "@id" : "https://w3id.org/mdp/schema/data_categories#OTHER",
+        "@type" : "mdp:DataCategory"
+      },
+      "mdp:dataCategoryDetail" : {
+         "@id" : "https://w3id.org/mdp/schema/data_categories_detail#CATD_OTHER",
+         "@type" : "mdp:DataCategoryDetail"
+      },
+      "ids:keyword" : [ {
+        "@value" : "mcloud_category_roads",
+        "@type" : "xsd:string"
+      } ],
+      "ids:language" : [ {
+         "@id" : "https://w3id.org/idsa/code/DE"
+      } ],
+      "ids:metaDataLanguage" : [{
+         "@id" : "https://w3id.org/idsa/code/DE"
+      }],
+      "ids:representation" : [ {
+        "@type" : "ids:DataRepresentation",
+        "@id" : "http://w3id.org/mdp/metadata/0cd60d73-942a-433d-b496-78174e368012",
+        "ids:instance" : [ {
+          "@type" : "ids:Artifact",
+          "@id" : "http://w3id.org/mdp/metadata/c9b9f769-9837-48bf-be46-d85a447a7252",
+          "mdp:publicationId" : {
+            "@type" : "xsd:long",
+            "@value" : "1414759468507332608"
+          },
+          "ids:byteSize" : 60500000,
+          "ids:fileName" : "AMS-2021-01.zip",
+          "ids:creationDate" : {
+            "@value" : "2021-01-01T09:25:25.906+02:00",
+            "@type" : "xsd:dateTimeStamp"
+          },
+          "mdp:active" : {
+            "@type" : "xsd:boolean",
+            "@value" : true
+          }
+        } ],
+        "mdp:grammar" : {
+          "@type" : "mdp:Grammar",
+          "@id" : "https://w3id.org/mdp/schema/grammar#OTHER"
+        },
+        "ids:mediaType" : [{
+          "@type" : "mdp:mediaType",
+          "@id" : "https://w3id.org/mdp/schema/media_type#OTHER"
+        }]
+      } ],
+      "ids:resourceEndpoint" : [ {
+        "@type" : "ids:ConnectorEndpoint",
+        "@id" : "http://w3id.org/mdp/metadata/c3c27791-437e-4af7-b08e-de372f181169",
+        "ids:accessURL" : {
+          "@id" : "https://www.bast.de/BASt_2017/DE/Publikationen/Daten/Verkehrstechnik/Downloads/AMS-2021-01.zip?__blob=publicationFile"
+        },
+        "ids:endpointArtifact" : {
+          "@type" : "ids:Artifact",
+            "@id" : "http://w3id.org/mdp/metadata/c9b9f769-9837-48bf-be46-d85a447a7252",
+            "mdp:publicationId" : {
+              "@type" : "xsd:long",
+              "@value" : "1414759468507332608"
+            },
+            "ids:byteSize" : 60500000,
+            "ids:fileName" : "AMS-2021-01.zip",
+            "ids:creationDate" : {
+              "@value" : "2021-01-01T09:25:25.906+02:00",
+              "@type" : "xsd:dateTimeStamp"
+            },
+            "mdp:active" : {
+              "@type" : "xsd:boolean",
+              "@value" : true
+            }
+        },
+        "mdp:providedByMDP" : {
+          "@type" : "xsd:boolean",
+          "@value" : false
+        },
+        "mdp:accessProtocol" : {
+          "@type" : "mdp:AccessProtocol",
+          "@id" : "https://w3id.org/mdp/schema/access_protocol#HTTPS"
+        }
+      } ],
+      "mdp:accrualPeriodicity" : {
+        "@type" : "mdp:mdpFrequency",
+        "@id" : "idsc:MONTHLY"
+      },
+      "ids:publisher" : {
+         "@id"  : "http://www.bast.de/baustelleninfo"
+      },
+      "ids:souvereign" : {
+        "@id" : "http://www.bast.de/baustelleninfo"
+      },
+      "mdp:license" : {
+        "@type" : "mdp:License",
+        "@id" : "https://w3id.org/mdp/schema/license#NOT_RELEVANT"
+      },
+      "ids:theme" : {
+        "@type" : "ids:Concept",
+        "@id" : "http://publications.europa.eu/resource/authority/data-theme/TRAN"
+      },
+      "ids:spatialCoverage" : [{
+        "@type" : "ids:BoundingPolygon",
+        "mdp:wktShape" : "POLYGON ((6.098034 55.054344, 15.578555 55.054344, 15.578555 47.23942, 6.098034 47.23942, 6.098034 55.054344))"
+      }],
+      "ids:created" : {
+        "@value" : "2021-01-01T09:25:25.906+02:00",
+        "@type" : "xsd:dateTimeStamp"
+      },
+      "ids:modified" : {
+         "@value" : "2021-01-01T09:25:25.906+02:00",
+         "@type" : "xsd:dateTimeStamp"
+      },
+      "mdp:contactPoint" : {
+        "@type" : "ids:Agent",
+        "ids:legalName" : "Bundesanstalt für Straßenwesen (BASt)"
+      },
+      "mdp:resourceType" : {
+        "@type" : "mdp:ResourceType",
+        "@id" : "https://w3id.org/mdp/schema/resource_type#DATASET"
+      },
+      "mdp:networkCoverage" : [{
+        "@type" : "mdp:NetworkCoverage",
+        "@id" : "https://w3id.org/mdp/schema/network_coverage#OTHER"
+      }],
+      "mdp:transportMode" : [{
+        "@type" : "mdp:TransportMode",
+        "@id" : "https://w3id.org/mdp/schema/transport_mode#OTHER"
+      }],
+      "mdp:mdpBrokering" : {
+        "@value" : false,
+        "@type" : "xsd:boolean"
+      },
+      "mdp:accessRights" : {
+        "@type" : "mdp:AccessRights",
+        "@id" : "http://publications.europa.eu/resource/authority/access-right/PUBLIC"
+      },
+      "adms:status" : {
+        "@type" : "mdp:Status",
+        "@id" : "https://w3id.org/mdp/schema/status#PUBLISHED"
+ 
+      }
+    }

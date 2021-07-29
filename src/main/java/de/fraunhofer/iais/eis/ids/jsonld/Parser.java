@@ -854,6 +854,16 @@ class Parser {
             return new RdfResource(currentSparqlBinding);
         }
 
+        if(Boolean.class.isAssignableFrom(currentType))
+        {
+            return Boolean.valueOf(currentSparqlBinding);
+        }
+
+        if(Long.class.isAssignableFrom(currentType))
+        {
+            return Long.valueOf(currentSparqlBinding);
+        }
+
         throw new IOException("Unrecognized primitive type: " + currentType.getName());
     }
 
@@ -921,7 +931,9 @@ class Parser {
                 BigDecimal.class.isAssignableFrom(input) ||
                 byte[].class.isAssignableFrom(input) ||
                 Duration.class.isAssignableFrom(input) ||
-                RdfResource.class.isAssignableFrom(input));
+                RdfResource.class.isAssignableFrom(input)) ||
+                Boolean.class.isAssignableFrom(input) ||
+                Long.class.isAssignableFrom(input);
     }
 
     /**
