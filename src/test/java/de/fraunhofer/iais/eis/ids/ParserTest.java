@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 
 import de.fraunhofer.iais.eis.*;
+import org.junit.Assert;
 import org.junit.Test;
 
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
@@ -203,6 +204,111 @@ public class ParserTest {
 		String permissionAsString = SerializerUtil.readResourceToString("Permission.jsonld");
 		Permission p = new Serializer().deserialize(permissionAsString, Permission.class);
 		assertFalse(p.getTitle().isEmpty());
+	}
+
+
+	//https://github.com/International-Data-Spaces-Association/Java-Representation-of-IDS-Information-Model/issues/6
+	@Test
+	public void giveParserMultipleOptionsTest() throws IOException {
+		/* ARRANGE */
+		final Serializer serializer = new Serializer();
+		final String input = "{\n"
+				+ "        \"@context\" : {\n"
+				+ "            \"ids\" : \"https://w3id.org/idsa/core/\",\n"
+				+ "            \"idsc\" : \"https://w3id.org/idsa/code/\"\n"
+				+ "        },\n"
+				+ "      \"@type\": \"ids:Permission\",\n"
+				+ "      \"@id\": \"https://w3id"
+				+ ".org/idsa/autogen/permission/c0bdb9d5-e86a-4bb3-86d2-2b1dc9d226f5\",\n"
+				+ "      \"ids:description\": [\n"
+				+ "        {\n"
+				+ "          \"@value\": \"usage-notification\",\n"
+				+ "          \"@type\": \"http://www.w3.org/2001/XMLSchema#string\"\n"
+				+ "        }\n"
+				+ "      ],\n"
+				+ "      \"ids:title\": [\n"
+				+ "        {\n"
+				+ "          \"@value\": \"Example Usage Policy\",\n"
+				+ "          \"@type\": \"http://www.w3.org/2001/XMLSchema#string\"\n"
+				+ "        }\n"
+				+ "      ],\n"
+				+ "      \"ids:action\": [\n"
+				+ "        {\n"
+				+ "          \"@id\": \"idsc:USE\"\n"
+				+ "        }\n"
+				+ "      ],\n"
+				+ "      \"ids:postDuty\": [\n"
+				+ "        {\n"
+				+ "          \"@type\": \"ids:Duty\",\n"
+				+ "          \"@id\": \"https://w3id"
+				+ ".org/idsa/autogen/duty/863d2fac-1072-476d-b504-9d6347fe4b6f\",\n"
+				+ "          \"ids:action\": [\n"
+				+ "            {\n"
+				+ "              \"@id\": \"idsc:NOTIFY\"\n"
+				+ "            }\n"
+				+ "          ],\n"
+				+ "          \"ids:constraint\": [\n"
+				+ "            {\n"
+				+ "              \"@type\": \"ids:Constraint\",\n"
+				+ "              \"@id\": \"https://w3id"
+				+ ".org/idsa/autogen/constraint/c91e64ce-1fc1-44fd-bec1-6c6778603919\",\n"
+				+ "              \"ids:rightOperand\": {\n"
+				+ "                \"@value\": \"https://localhost:8080/api/ids/data\",\n"
+				+ "                \"@type\": \"xsd:anyURI\"\n"
+				+ "              },\n"
+				+ "              \"ids:leftOperand\": {\n"
+				+ "                \"@id\": \"idsc:ENDPOINT\"\n"
+				+ "              },\n"
+				+ "              \"ids:operator\": {\n"
+				+ "                \"@id\": \"idsc:DEFINES_AS\"\n"
+				+ "              }\n"
+				+ "            }\n"
+				+ "          ]\n"
+				+ "        }\n"
+				+ "      ]\n"
+				+ "    }";
+
+		/* ACT */
+		final Rule result = serializer.deserialize(input, Rule.class);
+
+		/* ASSERT */
+		assertEquals(Action.USE, result.getAction().get(0));
+	}
+
+	@Test
+	public void parseDatabaseBackupTest() throws IOException {
+		String catalogString = SerializerUtil.readResourceToString("IdsLabDatabaseBackup.jsonld");
+		ConnectorCatalog connectorCatalog = new Serializer().deserialize(catalogString, ConnectorCatalog.class);
+		Assert.assertTrue(connectorCatalog.getListedConnector().size() > 8);
+	}
+
+	@Test
+	public void should_be_equals() throws IOException {
+		final String input = "{\n"
+				+ "  \"@context\" : {\n"
+				+ "    \"ids\" : \"https://w3id.org/idsa/core/\",\n"
+				+ "    \"idsc\" : \"https://w3id.org/idsa/code/\"\n"
+				+ "  },\n"
+				+ "  \"@type\" : \"ids:Constraint\",\n"
+				+ "  \"@id\" : \"https://w3id.org/idsa/autogen/constraint/4ae656d1-2a73"
+				+ "-44e3-a168-b1cbe49d4622\",\n"
+				+ "  \"ids:leftOperand\" : {\n"
+				+ "    \"@id\" : \"https://w3id.org/idsa/code/COUNT\"\n"
+				+ "  },\n"
+				+ "  \"ids:rightOperand\" : {\n"
+				+ "    \"@value\" : \"5\",\n"
+				+ "    \"@type\" : \"http://www.w3.org/2001/XMLSchema#double\"\n"
+				+ "  },\n"
+				+ "  \"ids:operator\" : {\n"
+				+ "    \"@id\" : \"https://w3id.org/idsa/code/LTEQ\"\n"
+				+ "  }\n"
+				+ "}";
+
+		final Serializer deserializer = new Serializer();
+		final Constraint obj1 = deserializer.deserialize(input, Constraint.class);
+		final Constraint obj2 = deserializer.deserialize(input, Constraint.class);
+
+		Assert.assertEquals(obj1, obj2);
 	}
 
 }
