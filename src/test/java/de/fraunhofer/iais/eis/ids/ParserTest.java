@@ -311,4 +311,10 @@ public class ParserTest {
 		Assert.assertEquals(obj1, obj2);
 	}
 
+	@Test
+	public void parseMdpResourceTest() throws IOException {
+		String mdpResourceString = SerializerUtil.readResourceToString("mdpResource.jsonld");
+		new Serializer().deserialize(mdpResourceString, DataResource.class);
+	}
+
 }
