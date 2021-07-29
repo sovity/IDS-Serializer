@@ -29,10 +29,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>de.fraunhofer.iais.eis.ids.mdp-infomodel</groupId>
+			<groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
 			<artifactId>java</artifactId>
 			<scope>test</scope>
-			<version>1.0.3</version>
+			<version>${revision}</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>de.fraunhofer.iais.eis.fhg-ids</groupId>
