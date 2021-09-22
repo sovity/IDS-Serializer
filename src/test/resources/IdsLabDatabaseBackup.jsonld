@@ -482,7 +482,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/6d363b51-f495-48c3-b77c-04348df18c68",
             "permission": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/871671069/-790273802",
-            "provider": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/1687522527"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/871671069/-790273802",
@@ -766,7 +766,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/6e7a2440-77bb-4b37-9ad6-095e3d41f4f5",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-2052415326/-1249357615",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/-108230220"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-2052415326/-1249357615",
@@ -1023,7 +1023,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/ad6c71eb-eb4e-4fe7-b5b2-56459f56e4e6",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/786496089/-1189174248",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/-1492765436"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/786496089/-1189174248",
@@ -1077,7 +1077,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/3e94653e-b96e-4997-b88d-c3cf8e76eeaf",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/2103791372/-1427325415",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/-1492765436"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/2103791372/-1427325415",
@@ -1211,7 +1211,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/20b316bf-b367-418e-8576-b3c6fa216254",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/-5566564/412799069",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/-636973515"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/-5566564/412799069",
@@ -1492,7 +1492,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/a623dc87-98ae-4d52-b2c9-116773487eb3",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/346699066"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170",
@@ -1532,7 +1532,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/946e4d16-41d0-4e2a-bc17-653dc0864f58",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/346699066"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
@@ -1612,7 +1612,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/52c92dcd-db7a-4077-b549-03290c2cfea4",
             "permission": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/-2096555154/-185625510",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/346699066"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787",
@@ -1651,7 +1651,7 @@
             "@type": "ids:ContractOffer",
             "sameAs": "https://w3id.org/idsa/autogen/contractOffer/b87cf4ec-6284-4fd2-b102-82627cce58b4",
             "prohibition": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-1814632307/1039170606",
-            "provider": "https://broker.ids.isst.fraunhofer.de/connectors/346699066"
+            "provider": "https://broker.ids.isst.fraunhofer.de/participants/346699066"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-1814632307/1039170606",

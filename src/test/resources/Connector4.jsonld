@@ -158,7 +158,7 @@
           } ]
         } ],
         "ids:provider" : {
-          "@id" : "https://w3id.org/idsa/autogen/baseConnector/7b934432-a85e-41c5-9f65-669219dde4ea"
+          "@id" : "https://w3id.org/idsa/autogen/participant/7b934432-a85e-41c5-9f65-669219dde4ea"
         }
       } ],
       "ids:keyword" : [ ],
