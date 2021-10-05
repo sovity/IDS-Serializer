@@ -227,8 +227,8 @@
           "@id" : "http://textRepresentation.org"
         },
         "ids:mediaType" : {
-          "@type" : "ids:MediaType",
-          "@id" : "https://www.iana.org/assignments/media-types/application/json",
+          "@type" : "ids:IANAMediaType",
+          "@id" : "https://w3id.org/idsa/autogen/iANAMediaType/6d302b9c-6389-44f7-af4d-6a0f747a8e23",
           "ids:filenameExtension" : "pdf"
         }
       } ],
