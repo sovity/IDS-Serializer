@@ -98,7 +98,7 @@
     "@type" : "ids:TextRepresentation",
     "sameAs" : "https://w3id.org/idsa/autogen/textRepresentation/eea93ed9-817f-4dfe-b764-4d199da8bd8d",
     "instance" : "http://localhost:8080/connectors/541260824/202120622/1704488662/-233192848/208695135",
-    "mediaType" : "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+    "mediaType" : "https://w3id.org/idsa/autogen/iANAMediaType/bf91e77f-8019-4716-b873-16f6232fa9b7",
     "representationStandard" : "http://textRepresentation.org"
   }, {
     "@id" : "http://localhost:8080/connectors/541260824/202120622/1704488662/-233192848/208695135",
@@ -153,6 +153,10 @@
     "accessURL" : {
       "@id" : "https://localhost:8080/api/ids/data"
     }
+  }, {
+    "@id" : "https://w3id.org/idsa/autogen/iANAMediaType/bf91e77f-8019-4716-b873-16f6232fa9b7",
+    "@type" : "ids:IANAMediaType",
+    "filenameExtension" : "pdf"
   } ],
   "@context" : {
     "sameAs" : {
