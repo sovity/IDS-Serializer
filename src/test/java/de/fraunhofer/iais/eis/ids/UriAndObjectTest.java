@@ -20,44 +20,39 @@ public class UriAndObjectTest {
 
     @Test
     public void UriOrModelClassCorrectTranslationTest() throws IOException, DatatypeConfigurationException {
-        Rule rule = new PermissionBuilder()
-                ._target_(URI.create("http://SchwachkopfSchwabbelspeckKrimskramsQuiek"))
-                ._targetAsAsset_(new ArtifactBuilder()._checkSum_("4711").build())
-                ._assigner_(new ArrayList<>(Arrays.asList(URI.create("http://Dumbledore"))))
-                ._assignerAsParticipant_(new ParticipantBuilder()
-                        ._version_("FreshDumbledore")
+        BaseConnector baseConnector = new BaseConnectorBuilder()
+                ._curatorAsParticipant_(new ParticipantBuilder()
+                        ._version_("1")
+                        ._legalForm_("Very legal")
+                        .build())
+                ._curator_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/1"))
+                ._hasAgent_(new ArrayList<>(Arrays.asList(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/2"))))
+                ._maintainerAsParticipant_(new ParticipantBuilder()
+                        ._version_("2")
                         ._legalForm_("Almost legal")
                         .build())
-                ._assigneeAsParticipant_(new ParticipantBuilder()
-                        ._version_("SeverusSnape")
-                        ._legalForm_("Not so legal")
-                        .build())
-                ._assignee_(new ArrayList<>(Arrays.asList(URI.create("http://severus.snape.org"))))
-                ._postDuty_(new ArrayList<>(Arrays.asList(new DutyBuilder()
-                        ._title_(new ArrayList<>(Arrays.asList(new TypedLiteral("Clean owls"))))
-                        .build())))
+                ._hasDefaultEndpoint_(new ConnectorEndpointBuilder()
+                        ._accessURL_(URI.create("http://example.com/endpoint/uriormodelclasscorrecttranslation/1"))
+                        .build()
+                
+                )
+                ._inboundModelVersion_("4.4.4")
+                ._outboundModelVersion_("4.4.4")
+                ._securityProfile_(SecurityProfile.BASE_SECURITY_PROFILE)
                 .build();
-        String ruleAsString = new Serializer().serialize(rule);
-        logger.info(ruleAsString);
+        String baseConnectorAsString = new Serializer().serialize(baseConnector);
+        logger.info(baseConnectorAsString);
 
-        Assert.assertFalse(ruleAsString.contains("http://SchwachkopfSchwabbelspeckKrimskramsQuiek"));
-        Assert.assertTrue(ruleAsString.contains("4711"));
+        Assert.assertFalse(baseConnectorAsString.contains("Very legal"));
+        Assert.assertTrue(baseConnectorAsString.contains("http://example.com/participant/uriormodelclasscorrecttranslation/1"));
 
-        Assert.assertFalse(ruleAsString.contains("http://Dumbledore"));
-        Assert.assertTrue(ruleAsString.contains("FreshDumbledore"));
+        BaseConnector recreated = new Serializer().deserialize(baseConnectorAsString, BaseConnector.class);
+        String recreatedBaseConnectorAsString = new Serializer().serialize(recreated);
 
-        Assert.assertFalse(ruleAsString.contains("SeverusSnape"));
-        Assert.assertTrue(ruleAsString.contains("http://severus.snape.org"));
+        //logger.info(recreatedBaseConnectorAsString);
 
-        Rule recreated = new Serializer().deserialize(ruleAsString, Rule.class);
-        String recreatedRuleAsString = new Serializer().serialize(recreated);
-
-        logger.info(recreatedRuleAsString);
-
-        Assert.assertTrue(recreatedRuleAsString.contains("4711"));
-        Assert.assertTrue(recreatedRuleAsString.contains("FreshDumbledore"));
-
-
+        Assert.assertFalse(recreatedBaseConnectorAsString.contains("Very legal"));
+        Assert.assertTrue(recreatedBaseConnectorAsString.contains("http://example.com/participant/uriormodelclasscorrecttranslation/1"));
     }
 
 
