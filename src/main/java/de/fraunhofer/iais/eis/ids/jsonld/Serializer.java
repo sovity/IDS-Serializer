@@ -34,6 +34,7 @@ public class Serializer {
 
     public Serializer() {
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
+        mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
 
         preprocessors = new ArrayList<>();
