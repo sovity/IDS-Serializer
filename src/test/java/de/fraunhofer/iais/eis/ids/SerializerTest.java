@@ -18,6 +18,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.*;
+import org.slf4j.Logger;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -49,6 +51,7 @@ public class SerializerTest {
 
 	private static final String imVersion = "4.0.1";
 
+	Logger logger = LoggerFactory.getLogger(SerializerTest.class);
 
 	private void readToModel(Model targetModel, String rdfInput)
 	{
@@ -79,7 +82,7 @@ public class SerializerTest {
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
-				._offeredResource_(resources)
+				._offeredResourceAsResource_(resources)
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
@@ -895,6 +898,7 @@ public class SerializerTest {
 		catch (IOException e)
 		{
 			//Make sure that the exception indicates that the mediaType is the violating constraint
+			logger.info(e.getMessage());
 			Assert.assertTrue(e.getMessage().contains("has multiple values for mediaType"));
 			return;
 		}
@@ -977,8 +981,9 @@ public class SerializerTest {
 
 	@Test
 	public void decimalSerializationTest() throws IOException, DatatypeConfigurationException {
+
 		Representation representation = new AudioRepresentationBuilder()
-				._mediaType_(new IANAMediaTypeBuilder()._filenameExtension_("pdf").build())
+				._mediaType_(MediaType.OTHER_MEDIATYPE)
 				._instance_(Util.asList(new ArtifactBuilder()._fileName_("data.pdf")._byteSize_(BigInteger.valueOf(2678))._creationDate_(DatatypeFactory.newInstance().newXMLGregorianCalendarDate(2015, 10, 15, 0)).build()))
 				._representationStandard_(URI.create("http://textRepresentation.org"))
 				._modified_(now)

@@ -565,7 +565,7 @@ class Parser {
                                                 list.add(handleObject(inputModel, s, Class.forName(typeName)));
                                             } catch (IOException exception) {
                                                 if (!exception.getMessage().equals(("Could not extract class of child object. ID: " + s))){
-                                                    throw new IOException("Could not extract class of child object. ID: " + s);
+                                                    throw new IOException(exception.getMessage());
                                                 }
                                             }
                                         } else {
@@ -609,7 +609,7 @@ class Parser {
                                         entry.getValue().invoke(returnObject, handleObject(inputModel, currentSparqlBinding, entry.getValue().getParameterTypes()[0]));
                                     } catch (IOException exception) {
                                         if (!exception.getMessage().equals(("Could not extract class of child object. ID: " + currentSparqlBinding))){
-                                            throw new IOException("Could not extract class of child object. ID: " + currentSparqlBinding);
+                                            throw new IOException(exception.getMessage());
                                         }
                                     }
                                 } else {
