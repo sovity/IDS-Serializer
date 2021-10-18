@@ -977,9 +977,8 @@ public class SerializerTest {
 
 	@Test
 	public void decimalSerializationTest() throws IOException, DatatypeConfigurationException {
-
 		Representation representation = new AudioRepresentationBuilder()
-				._mediaType_(MediaType.OTHER_MEDIATYPE)
+				._mediaType_(new IANAMediaTypeBuilder()._filenameExtension_("pdf").build())
 				._instance_(Util.asList(new ArtifactBuilder()._fileName_("data.pdf")._byteSize_(BigInteger.valueOf(2678))._creationDate_(DatatypeFactory.newInstance().newXMLGregorianCalendarDate(2015, 10, 15, 0)).build()))
 				._representationStandard_(URI.create("http://textRepresentation.org"))
 				._modified_(now)
