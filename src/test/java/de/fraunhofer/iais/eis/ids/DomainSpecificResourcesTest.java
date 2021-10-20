@@ -27,7 +27,7 @@ public class DomainSpecificResourcesTest {
 	@Test
 	public void test() throws IOException {
 		
-		byte[] encoded = Files.readAllBytes(Paths.get("src/test/resources/Life-Expectancy.jsonld"));
+		byte[] encoded = Files.readAllBytes(Paths.get("src/test/resources/Life-Expectancy_with old -Sept2021- MediaTypes.jsonld"));
 		
 		String resource =  new String(encoded);
 		
@@ -56,7 +56,7 @@ public class DomainSpecificResourcesTest {
 	 */
 	@Test
 	public void testSerializationChain() throws IOException {
-		byte[] encoded = Files.readAllBytes(Paths.get("src/test/resources/Life-Expectancy.jsonld"));
+		byte[] encoded = Files.readAllBytes(Paths.get("src/test/resources/Life-Expectancy_with old -Sept2021- MediaTypes.jsonld"));
 		String source =  new String(encoded);
 
 		Serializer serializer = new Serializer();

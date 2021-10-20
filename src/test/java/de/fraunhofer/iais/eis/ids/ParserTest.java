@@ -56,7 +56,7 @@ public class ParserTest {
 
 	@Test
 	public void testConnectorWithComplexCatalog() throws IOException {
-		String catalogAsString = SerializerUtil.readResourceToString("Catalog2.jsonld");
+		String catalogAsString = SerializerUtil.readResourceToString("Catalog2_with old -Sept2021- MediaTypes.jsonld");
 		Serializer serializer = new Serializer();
 		//serializer.addPreprocessor(new TypeNamePreprocessor());
 		ResourceCatalog catalog = serializer.deserialize(catalogAsString, ResourceCatalog.class);
@@ -148,7 +148,7 @@ public class ParserTest {
 
 	@Test
 	public void avoidDuplicates() throws IOException {
-		String infrastructureComponentString = SerializerUtil.readResourceToString("Connector2.jsonld");
+		String infrastructureComponentString = SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld");
 		Connector connector = new Serializer().deserialize(infrastructureComponentString, Connector.class);
 		assertNotNull(connector.getResourceCatalog());
 		assertEquals(1, connector.getResourceCatalog().size());
@@ -186,7 +186,7 @@ public class ParserTest {
 
 	@Test
 	public void parseResourceTest() throws IOException {
-		String resourceString = SerializerUtil.readResourceToString("Resource1.jsonld");
+		String resourceString = SerializerUtil.readResourceToString("Resource1_with old -Sept2021- MediaTypes.jsonld");
 		new Serializer().deserialize(resourceString, Resource.class);
 	}
 
@@ -277,7 +277,7 @@ public class ParserTest {
 
 	@Test
 	public void parseDatabaseBackupTest() throws IOException {
-		String catalogString = SerializerUtil.readResourceToString("IdsLabDatabaseBackup.jsonld");
+		String catalogString = SerializerUtil.readResourceToString("IdsLabDatabaseBackup_with old -Sept2021- MediaTypes.jsonld");
 		ConnectorCatalog connectorCatalog = new Serializer().deserialize(catalogString, ConnectorCatalog.class);
 		Assert.assertTrue(connectorCatalog.getListedConnector().size() > 8);
 	}
