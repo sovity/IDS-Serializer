@@ -82,11 +82,11 @@ public class SerializerTest {
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
-				._offeredResourceAsResource_(resources)
+				._offeredResource_(resources)
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
-				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
+				._maintainerAsUri_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
 				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				.build();
@@ -103,7 +103,7 @@ public class SerializerTest {
 				.build();
 
 		securityProfileInstance = new BaseConnectorBuilder()
-				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
+				._maintainerAsUri_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
 				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
@@ -910,8 +910,8 @@ public class SerializerTest {
 		Connector c = new BaseConnectorBuilder(URI.create("http://übung.de"))
 				._description_(Util.asList(new TypedLiteral("Dies ist ein Übungsconnector mit Umlauten. ÄäÖöÜüß\"", "en")))
 				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
-				._maintainer_(URI.create("http://exampe.org/maintainer"))
-				._curator_(URI.create("http://exampe.org/curator"))
+				._maintainerAsUri_(URI.create("http://exampe.org/maintainer"))
+				._curatorAsUri_(URI.create("http://exampe.org/curator"))
 				._securityProfile_(SecurityProfile.TRUST_SECURITY_PROFILE)
 				._outboundModelVersion_("1.2.3")
 				._inboundModelVersion_(Util.asList("1.2.3", "1.5.9"))

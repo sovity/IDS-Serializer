@@ -21,20 +21,16 @@ public class UriAndObjectTest {
     @Test
     public void UriOrModelClassCorrectTranslationTest() throws IOException, DatatypeConfigurationException {
         BaseConnector baseConnector = new BaseConnectorBuilder()
-                ._curatorAsParticipant_(new ParticipantBuilder()
+                ._curatorAsUri_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/1"))
+                ._curator_(new ParticipantBuilder()
                         ._version_("1")
                         ._legalForm_("Very legal")
                         .build())
-                ._curator_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/1"))
                 ._hasAgent_(new ArrayList<>(Arrays.asList(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/2"))))
-                ._maintainerAsParticipant_(new ParticipantBuilder()
-                        ._version_("2")
-                        ._legalForm_("Almost legal")
-                        .build())
+                ._maintainerAsUri_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/2"))
                 ._hasDefaultEndpoint_(new ConnectorEndpointBuilder()
                         ._accessURL_(URI.create("http://example.com/endpoint/uriormodelclasscorrecttranslation/1"))
                         .build()
-                
                 )
                 ._inboundModelVersion_("4.4.4")
                 ._outboundModelVersion_("4.4.4")
@@ -43,16 +39,16 @@ public class UriAndObjectTest {
         String baseConnectorAsString = new Serializer().serialize(baseConnector);
         logger.info(baseConnectorAsString);
 
-        Assert.assertFalse(baseConnectorAsString.contains("Very legal"));
-        Assert.assertTrue(baseConnectorAsString.contains("http://example.com/participant/uriormodelclasscorrecttranslation/1"));
+        Assert.assertTrue(baseConnectorAsString.contains("Very legal"));
+        Assert.assertFalse(baseConnectorAsString.contains("http://example.com/participant/uriormodelclasscorrecttranslation/1"));
 
         BaseConnector recreated = new Serializer().deserialize(baseConnectorAsString, BaseConnector.class);
         String recreatedBaseConnectorAsString = new Serializer().serialize(recreated);
 
         //logger.info(recreatedBaseConnectorAsString);
 
-        Assert.assertFalse(recreatedBaseConnectorAsString.contains("Very legal"));
-        Assert.assertTrue(recreatedBaseConnectorAsString.contains("http://example.com/participant/uriormodelclasscorrecttranslation/1"));
+        Assert.assertTrue(recreatedBaseConnectorAsString.contains("Very legal"));
+        Assert.assertFalse(recreatedBaseConnectorAsString.contains("http://example.com/participant/uriormodelclasscorrecttranslation/1"));
     }
 
 
