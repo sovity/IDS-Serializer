@@ -127,7 +127,7 @@ class Parser {
 
             //Store methods in map. Key is the name of the RDF property without ids prefix
             //Use a TreeMap to have the properties sorted alphabetically
-            Map<String, Method> methodMap = new TreeMap<>(Comparator.reverseOrder());
+            Map<String, Method> methodMap = new TreeMap<>();//(Comparator.reverseOrder());
 
 
             //Get all relevant methods (setters, but not for label, comment or external properties)
@@ -549,7 +549,16 @@ class Parser {
                                         list.add(handlePrimitive(Class.forName(typeName), literal, s));
                                     }
                                 }
-                                entry.getValue().invoke(returnObject, list);
+                                if (sparqlParameterName.endsWith("AsUris")) {
+                                    String regularSparqlParameter = sparqlParameterName.substring(0,1).toUpperCase()
+                                            + sparqlParameterName.substring(1,sparqlParameterName.length() - 6);
+                                    Method regularGetter = returnObject.getClass().getDeclaredMethod("get" + regularSparqlParameter);
+                                    if(((List<?>) regularGetter.invoke(returnObject)).isEmpty()) {
+                                        entry.getValue().invoke(returnObject, list);
+                                    }
+                                } else {
+                                    entry.getValue().invoke(returnObject, list);
+                                }
                             } else {
                                 //List of complex sub-objects, such as a list of Resources in a ResourceCatalog
                                 ArrayList<Object> list = new ArrayList<>();
@@ -558,7 +567,7 @@ class Parser {
                                     if (Class.forName(typeName).isEnum()) {
                                         list.add(handleEnum(Class.forName(typeName), s));
                                     } else {
-                                        if (!sparqlParameterName.endsWith("AsUri")){
+                                        if (!sparqlParameterName.endsWith("AsUris")){
                                             //Special case: For parameters like "assignee" there is the possibility that only a URI for "assigneeAsUri"
                                             //is given. In this case there is no @type, but we can ignore that because we only need to parse the URI.
                                             try {
@@ -574,7 +583,7 @@ class Parser {
                                         }
                                     }
                                 }
-                                if (!sparqlParameterName.endsWith("AsUri")) {
+                                if (!sparqlParameterName.endsWith("AsUris")) {
                                     //Special case: For parameters like "assignee" don't invoke the setter if the list is empty
                                     //because this will set the additional property, e.g. "assigneeAsUri", to the empty list.
                                     //As the "...AsUri" property

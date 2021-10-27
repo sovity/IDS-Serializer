@@ -905,14 +905,13 @@ public class SerializerTest {
 		Assert.fail();
 	}
 
-	@Ignore
 	@Test
 	public void serializeAndParseConnectorWithUmlautDescription() throws IOException {
 		Connector c = new BaseConnectorBuilder(URI.create("http://übung.de"))
 				._description_(Util.asList(new TypedLiteral("Dies ist ein Übungsconnector mit Umlauten. ÄäÖöÜüß\"", "en")))
 				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
-				//._maintainerAsUri_(URI.create("http://exampe.org/maintainer"))
-				//._curatorAsUri_(URI.create("http://exampe.org/curator"))
+				._maintainer_(URI.create("http://exampe.org/maintainer"))
+				._curator_(URI.create("http://exampe.org/curator"))
 				._securityProfile_(SecurityProfile.TRUST_SECURITY_PROFILE)
 				._outboundModelVersion_("1.2.3")
 				._inboundModelVersion_(Util.asList("1.2.3", "1.5.9"))
