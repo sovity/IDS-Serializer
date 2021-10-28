@@ -113,7 +113,7 @@
                 "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/-2123430355/-2131499315/-1777670320"
             ],
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/ce22d1c0-e546-4066-a0e8-4a4e7620f883",
             "modified": "2016-10-03T15:10:40Z",
             "representationStandard": "https://example.com",
             "shapesGraph": "https://example.com"
@@ -205,7 +205,7 @@
                 "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/459187123/497897281/-2139789786"
             ],
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/eb710d80-4a75-48ab-b34a-734ab9009af0",
             "modified": "2017-10-03T15:10:40Z",
             "representationStandard": "https://example.com",
             "shapesGraph": "https://example.com"
@@ -262,7 +262,7 @@
             "created": "2016-10-03T15:10:40Z",
             "instance": "https://broker.ids.isst.fraunhofer.de/catalog/-1475001399/-1455552974/834329163/-709338590/157191830",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/07e5f54e-4e85-4df7-94d3-a7e8b225f1cb",
             "modified": "2016-10-03T15:10:40Z",
             "representationStandard": "https://example.com",
             "shapesGraph": "https://example.com"
@@ -463,7 +463,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/b610eb1b-9df3-4386-bd3a-5038d52f1b9c",
             "instance": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/-1308944904/-1835047597",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/aa3c0225-578e-45f4-b540-3b3943633612"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/catalog/1687522527/76405923/537327451/-1308944904/-1835047597",
@@ -666,7 +666,7 @@
             "@type": "ids:TextRepresentation",
             "sameAs": "https://w3id.org/idsa/autogen/textRepresentation/577ff12b-ee07-48a5-a6d1-0bfda1a27819",
             "instance": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/1866380074/1876470005",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/f61fd156-3f85-4623-b820-3c96498e7c6b",
             "representationStandard": "http://textRepresentation.org"
         },
         {
@@ -782,7 +782,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/329b12fc-6976-4aec-b202-e79bddd454d9",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-325787778/-851890471",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/f62aa28c-483e-450f-b2d2-9b847e9cc86c"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/-325787778/-851890471",
@@ -803,7 +803,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/c923aba2-9211-4918-ab68-62937155b774",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1945690941/1419588248",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/a55ae1d7-7f0a-4688-a7a3-739cc7ad0c13"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-108230220/-969729392/-1953984595/1945690941/1419588248",
@@ -916,7 +916,7 @@
                 "https://broker.ids.isst.fraunhofer.de/connectors/-1475001399/-1817330710/459187123/497897281/126985808"
             ],
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/eb710d80-4a75-48ab-b34a-734ab9009af0",
             "modified": "2017-10-03T15:10:40Z",
             "representationStandard": "https://example.com",
             "shapesGraph": "https://example.com"
@@ -994,7 +994,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/9961a358-ea2b-4a24-93ba-f875ac1da7ca",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/-700641483/-1226744176",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/03f8b00e-7bac-4955-babd-9de00f2c7479"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/-700641483/-1226744176",
@@ -1009,7 +1009,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/0dc02533-f445-47ac-90c2-0b75c03b710f",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/403755570/-122347123",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/1a6426e0-2d59-45d1-966d-03333e3fd965"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-178092277/403755570/-122347123",
@@ -1058,7 +1058,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/94f24809-ca92-46f7-9612-a491eb3f2178",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/-1748773969/2020090634",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/44579869-4783-4df9-b50a-c5f399b7f8ec"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-1492765436/1269345277/-90584561/-1748773969/2020090634",
@@ -1233,7 +1233,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/ebffa75a-7314-4b2b-ae49-24795bc8eb65",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/446988153/-79114540",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/d4f0d45e-485f-4937-bd49-4327646989db"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/-636973515/-61769443/-874736873/446988153/-79114540",
@@ -1384,7 +1384,7 @@
             "created": "2021-05-06T11:28:19.55Z",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/-1723704160/-300236600",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/ed6dea4e-e157-4ade-94cc-a058bea2dfd5",
             "modified": "2021-05-06T11:28:19.551Z"
         },
         {
@@ -1500,7 +1500,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/0d74f871-d2ab-4a9c-a3a0-3a3f2bf018b4",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170/-285368523",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/f662d215-799a-4923-b5f9-895bd4878cbc"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-1149233137/240734170/-285368523",
@@ -1552,7 +1552,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/22795317-0aaa-4fe1-b336-b2e26a00597f",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/859508700/333406007",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/09ef02dc-b721-4c2a-a7e5-fa14f3f2b7c6"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/-921484613/859508700/333406007",
@@ -1599,7 +1599,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/04ff86c4-f5b9-4172-984e-eef9108f1108",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-1853343201/1915521402",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/544697cb-4648-4eea-b5cc-a4e6eda7d2ce"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/1603920737/-1853343201/1915521402",
@@ -1667,7 +1667,7 @@
             "sameAs": "https://w3id.org/idsa/autogen/representation/452853c0-1be3-4ce2-b6a6-2655a76d942c",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-820159396/-1346262089",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/4fc2d599-418e-46ff-8ea7-cb970d8bccc4"
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/346699066/-1392808978/49150787/-820159396/-1346262089",
@@ -1776,7 +1776,7 @@
             "created": "2021-05-06T08:38:29.857Z",
             "instance": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/383187754/-1608746326",
             "language": "https://w3id.org/idsa/code/EN",
-            "mediaType": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+            "mediaType": "https://w3id.org/idsa/autogen/iANAMediaType/394fe82a-0899-4f26-936c-ffa9f5e037db",
             "modified": "2021-05-06T08:38:29.857Z"
         },
         {
@@ -1822,88 +1822,88 @@
             "accessURL": "https://localhost:8080/api/ids/data"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/03f8b00e-7bac-4955-babd-9de00f2c7479",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "JSON"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/07e5f54e-4e85-4df7-94d3-a7e8b225f1cb",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "xml"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/09ef02dc-b721-4c2a-a7e5-fa14f3f2b7c6",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "JSON"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/1a6426e0-2d59-45d1-966d-03333e3fd965",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "JSON"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/394fe82a-0899-4f26-936c-ffa9f5e037db",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "json"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/44579869-4783-4df9-b50a-c5f399b7f8ec",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "XML"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/4fc2d599-418e-46ff-8ea7-cb970d8bccc4",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "json"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/544697cb-4648-4eea-b5cc-a4e6eda7d2ce",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "json"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/a55ae1d7-7f0a-4688-a7a3-739cc7ad0c13",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "JSON"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/aa3c0225-578e-45f4-b540-3b3943633612",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "ZIP/RDF"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/ce22d1c0-e546-4066-a0e8-4a4e7620f883",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "pdf"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/d4f0d45e-485f-4937-bd49-4327646989db",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "JSON"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/eb710d80-4a75-48ab-b34a-734ab9009af0",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "xml"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/ed6dea4e-e157-4ade-94cc-a058bea2dfd5",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "json"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/f61fd156-3f85-4623-b820-3c96498e7c6b",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "pdf"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/f62aa28c-483e-450f-b2d2-9b847e9cc86c",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "XML"
         },
         {
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
-            "@type": "ids:MediaType",
+            "@id": "https://w3id.org/idsa/autogen/iANAMediaType/f662d215-799a-4923-b5f9-895bd4878cbc",
+            "@type": "ids:IANAMediaType",
             "filenameExtension": "json"
         },
         {
@@ -1979,7 +1979,7 @@
         },
         {
             "@id": "https://w3id.org/idsa/code/APPLICATION_PDF",
-            "@type": "ids:MediaType"
+            "@type": "ids:IANAMediaType"
         }
     ],
     "@context": {

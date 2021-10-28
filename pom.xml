@@ -10,7 +10,8 @@
 
 	<properties>
 		<!--<java.version>11</java.version>-->
-		<infomodel.version>${revision}</infomodel.version>
+		<!--<infomodel.version>${revision}</infomodel.version>-->
+		<infomodel.version>4.2.3-SNAPSHOT</infomodel.version>
 		<jackson.version>2.11.2</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>

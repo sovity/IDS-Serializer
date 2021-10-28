@@ -26,8 +26,8 @@
       "@id" : "idsc:EN"
     },
     "ids:mediaType" : {
-      "@type" : "ids:MediaType",
-      "@id" : "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+      "@type" : "ids:IANAMediaType",
+      "@id" : "https://w3id.org/idsa/autogen/iANAMediaType/caa4f36d-433c-42a5-8c1d-9b14d905e491",
       "ids:filenameExtension" : "XML"
     }
   } ],

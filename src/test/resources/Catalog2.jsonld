@@ -216,8 +216,8 @@
         }
       } ],
       "ids:mediaType" : {
-        "@type" : "ids:MediaType",
-        "@id" : "https://w3id.org/idsa/code/OTHER_MEDIATYPE",
+        "@type" : "ids:IANAMediaType",
+        "@id" : "https://w3id.org/idsa/autogen/iANAMediaType/34904564-9122-4e6c-97b0-ac71775f285d",
         "ids:filenameExtension" : "pdf"
       },
       "ids:representationStandard" : {

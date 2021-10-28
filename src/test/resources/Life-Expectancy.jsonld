@@ -210,8 +210,8 @@
             "@id": "https://statswales.gov.wales/Catalogue/Health-and-Social-Care/Life-Expectancy/CsvFile"
           },
         "https://w3id.org/idsa/core/mediaType": {
-            "@type": "https://w3id.org/idsa/core/MediaType",
-            "@id": "https://w3id.org/idsa/code/OTHER_MEDIATYPE"
+            "@type": "https://w3id.org/idsa/core/IANAMediaType",
+            "@id": "https://w3id.org/idsa/code/TEXT_CSV"
         },
         "https://w3id.org/idsa/core/sovereign": "http://www.ids.org/participants/42",
 

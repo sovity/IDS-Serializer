@@ -82,11 +82,11 @@ public class SerializerTest {
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
-				._offeredResourceAsResource_(resources)
+				._offeredResource_(resources)
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
-				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
+				//._maintainerAsUri_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
 				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				.build();
@@ -103,7 +103,7 @@ public class SerializerTest {
 				.build();
 
 		securityProfileInstance = new BaseConnectorBuilder()
-				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
+				//._maintainerAsUri_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
 				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
@@ -243,7 +243,7 @@ public class SerializerTest {
 		try {
 			serializer.addPreprocessor(new TypeNamePreprocessor());
 			connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.jsonld"), Connector.class);
-			connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2.jsonld"), Connector.class);
+			connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld"), Connector.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -257,7 +257,7 @@ public class SerializerTest {
 		Assert.assertNotNull(model);
 
 		model = ModelFactory.createDefaultModel();
-		readToModel(model, SerializerUtil.readResourceToString("Connector2.jsonld"));
+		readToModel(model, SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld"));
 		Assert.assertNotNull(model);
 	}
 
@@ -981,9 +981,8 @@ public class SerializerTest {
 
 	@Test
 	public void decimalSerializationTest() throws IOException, DatatypeConfigurationException {
-
 		Representation representation = new AudioRepresentationBuilder()
-				._mediaType_(MediaType.OTHER_MEDIATYPE)
+				._mediaType_(new IANAMediaTypeBuilder()._filenameExtension_("pdf").build())
 				._instance_(Util.asList(new ArtifactBuilder()._fileName_("data.pdf")._byteSize_(BigInteger.valueOf(2678))._creationDate_(DatatypeFactory.newInstance().newXMLGregorianCalendarDate(2015, 10, 15, 0)).build()))
 				._representationStandard_(URI.create("http://textRepresentation.org"))
 				._modified_(now)
