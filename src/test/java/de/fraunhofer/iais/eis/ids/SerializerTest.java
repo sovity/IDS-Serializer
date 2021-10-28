@@ -243,7 +243,7 @@ public class SerializerTest {
 		try {
 			serializer.addPreprocessor(new TypeNamePreprocessor());
 			connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.jsonld"), Connector.class);
-			connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld"), Connector.class);
+			connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2.jsonld"), Connector.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -257,7 +257,7 @@ public class SerializerTest {
 		Assert.assertNotNull(model);
 
 		model = ModelFactory.createDefaultModel();
-		readToModel(model, SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld"));
+		readToModel(model, SerializerUtil.readResourceToString("Connector2.jsonld"));
 		Assert.assertNotNull(model);
 	}
 
@@ -912,6 +912,9 @@ public class SerializerTest {
 				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
 				._maintainer_(URI.create("http://exampe.org/maintainer"))
 				._curator_(URI.create("http://exampe.org/curator"))
+				._curatorAsParticipant_(new ParticipantBuilder(URI.create("http://exampe.org/curator"))
+						._legalForm_("GmbH")
+						.build())
 				._securityProfile_(SecurityProfile.TRUST_SECURITY_PROFILE)
 				._outboundModelVersion_("1.2.3")
 				._inboundModelVersion_(Util.asList("1.2.3", "1.5.9"))
