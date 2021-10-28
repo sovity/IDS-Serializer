@@ -43,7 +43,7 @@ public class PrettyPrinterTest {
 
         Runnable serFunction = () -> {
             try {
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 50; i++) {
                     String idsJson = serializer.serialize(infoModelObject);
                     Assert.assertTrue(idsJson.contains("@context")); // "If failed, Context is missing!"
                 }
@@ -53,7 +53,7 @@ public class PrettyPrinterTest {
         };
 
         Runnable mapperFunction = () -> {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 50; i++) {
                 logger.info("Test {}", infoModelObject);
             }
 
