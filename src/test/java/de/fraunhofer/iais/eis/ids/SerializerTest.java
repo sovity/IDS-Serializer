@@ -18,6 +18,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 import javax.validation.ConstraintViolationException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -28,6 +29,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.*;
+import org.slf4j.Logger;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -49,6 +51,7 @@ public class SerializerTest {
 
 	private static final String imVersion = "4.0.1";
 
+	Logger logger = LoggerFactory.getLogger(SerializerTest.class);
 
 	private void readToModel(Model targetModel, String rdfInput)
 	{
@@ -83,7 +86,7 @@ public class SerializerTest {
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
-				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
+				//._maintainerAsUri_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
 				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				.build();
@@ -100,7 +103,7 @@ public class SerializerTest {
 				.build();
 
 		securityProfileInstance = new BaseConnectorBuilder()
-				._maintainer_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
+				//._maintainerAsUri_(new URL("http://iais.fraunhofer.de/connectorMaintainer").toURI())
 				._version_(imVersion)
 				._resourceCatalog_(Util.asList(catalog))
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
@@ -240,7 +243,7 @@ public class SerializerTest {
 		try {
 			serializer.addPreprocessor(new TypeNamePreprocessor());
 			connector = serializer.deserialize(SerializerUtil.readResourceToString("Connector1.jsonld"), Connector.class);
-			connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2.jsonld"), Connector.class);
+			connector2 = serializer.deserialize(SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld"), Connector.class);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -254,7 +257,7 @@ public class SerializerTest {
 		Assert.assertNotNull(model);
 
 		model = ModelFactory.createDefaultModel();
-		readToModel(model, SerializerUtil.readResourceToString("Connector2.jsonld"));
+		readToModel(model, SerializerUtil.readResourceToString("Connector2_with old -Sept2021- MediaType declaration.jsonld"));
 		Assert.assertNotNull(model);
 	}
 
@@ -895,6 +898,7 @@ public class SerializerTest {
 		catch (IOException e)
 		{
 			//Make sure that the exception indicates that the mediaType is the violating constraint
+			logger.info(e.getMessage());
 			Assert.assertTrue(e.getMessage().contains("has multiple values for mediaType"));
 			return;
 		}

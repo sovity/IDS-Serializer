@@ -126,7 +126,9 @@ class Parser {
             Method[] methods = returnObject.getClass().getDeclaredMethods();
 
             //Store methods in map. Key is the name of the RDF property without ids prefix
-            Map<String, Method> methodMap = new HashMap<>();
+            //Use a TreeMap to have the properties sorted alphabetically
+            Map<String, Method> methodMap = new TreeMap<>();//(Comparator.reverseOrder());
+
 
             //Get all relevant methods (setters, but not for label, comment or external properties)
             Arrays.stream(methods).filter(method -> {
@@ -547,7 +549,16 @@ class Parser {
                                         list.add(handlePrimitive(Class.forName(typeName), literal, s));
                                     }
                                 }
-                                entry.getValue().invoke(returnObject, list);
+                                if (sparqlParameterName.endsWith("AsUris")) {
+                                    String regularSparqlParameter = sparqlParameterName.substring(0,1).toUpperCase()
+                                            + sparqlParameterName.substring(1,sparqlParameterName.length() - 6);
+                                    Method regularGetter = returnObject.getClass().getDeclaredMethod("get" + regularSparqlParameter);
+                                    if(((List<?>) regularGetter.invoke(returnObject)).isEmpty()) {
+                                        entry.getValue().invoke(returnObject, list);
+                                    }
+                                } else {
+                                    entry.getValue().invoke(returnObject, list);
+                                }
                             } else {
                                 //List of complex sub-objects, such as a list of Resources in a ResourceCatalog
                                 ArrayList<Object> list = new ArrayList<>();
@@ -556,10 +567,33 @@ class Parser {
                                     if (Class.forName(typeName).isEnum()) {
                                         list.add(handleEnum(Class.forName(typeName), s));
                                     } else {
-                                        list.add(handleObject(inputModel, s, Class.forName(typeName)));
+                                        if (!sparqlParameterName.endsWith("AsUris")){
+                                            //Special case: For parameters like "assignee" there is the possibility that only a URI for "assigneeAsUri"
+                                            //is given. In this case there is no @type, but we can ignore that because we only need to parse the URI.
+                                            try {
+                                                list.add(handleObject(inputModel, s, Class.forName(typeName)));
+                                            } catch (IOException exception) {
+                                                if (!exception.getMessage().equals(("Could not extract class of child object. ID: " + s))){
+                                                    throw new IOException(exception.getMessage());
+                                                }
+                                            }
+                                        } else {
+                                            //Standard case
+                                            list.add(handleObject(inputModel, s, Class.forName(typeName)));
+                                        }
                                     }
                                 }
-                                entry.getValue().invoke(returnObject, list);
+                                if (!sparqlParameterName.endsWith("AsUris")) {
+                                    //Special case: For parameters like "assignee" don't invoke the setter if the list is empty
+                                    //because this will set the additional property, e.g. "assigneeAsUri", to the empty list.
+                                    //As the "...AsUri" property
+                                    //is processed before the "regular" version, this could lead to information loss.
+                                    if (!list.isEmpty()) {
+                                        entry.getValue().invoke(returnObject, list);
+                                    }
+                                } else {
+                                    entry.getValue().invoke(returnObject, list);
+                                }
                             }
                         }
 
@@ -578,7 +612,20 @@ class Parser {
 
                             } else {
                                 //Not a primitive object, but a complex sub-object. Recursively call this function to handle it
-                                entry.getValue().invoke(returnObject, handleObject(inputModel, currentSparqlBinding, entry.getValue().getParameterTypes()[0]));
+                                if (!sparqlParameterName.endsWith("AsUri")){
+                                    //Special case: For parameters like "assignee" there is the possibility that only a URI for "assigneeAsUri"
+                                    //is given. In this case there is no @type, but we can ignore that because we only need to parse the URI.
+                                    try {
+                                        entry.getValue().invoke(returnObject, handleObject(inputModel, currentSparqlBinding, entry.getValue().getParameterTypes()[0]));
+                                    } catch (IOException exception) {
+                                        if (!exception.getMessage().equals(("Could not extract class of child object. ID: " + currentSparqlBinding))){
+                                            throw new IOException(exception.getMessage());
+                                        }
+                                    }
+                                } else {
+                                    //Standard case
+                                    entry.getValue().invoke(returnObject, handleObject(inputModel, currentSparqlBinding, entry.getValue().getParameterTypes()[0]));
+                                }
                             }
                         }
                     }
