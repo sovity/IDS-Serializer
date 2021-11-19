@@ -25,8 +25,14 @@ import java.util.stream.Stream;
 public class JsonLDSerializer extends BeanSerializer {
 
 	private final Logger logger = LoggerFactory.getLogger(JsonLDSerializer.class);
-	
-    private static int currentRecursionDepth = 0;
+
+    /**
+     * The counter must be static and cannot be given with the serializeWithType method as the BeanSerializer cannot be
+     * adjusted. However, the ThreadLocal construct should make sure that the static nature is not shared between
+     * multiple threads and thereby protect them from interfering with each other. See also:
+     * https://www.baeldung.com/java-threadlocal
+     */
+    private static ThreadLocal<Integer> currentRecursionDepth = ThreadLocal.withInitial(() -> 0);
 
     static final Map<String, String> contextItems;
 
@@ -50,10 +56,11 @@ public class JsonLDSerializer extends BeanSerializer {
     public void serializeWithType(Object bean, JsonGenerator gen, SerializerProvider provider, TypeSerializer typeSer) throws IOException {
         gen.setCurrentValue(bean);
 
-        currentRecursionDepth++;
+        // currentRecursionDepth++;
+        currentRecursionDepth.set(currentRecursionDepth.get() + 1);
         gen.writeStartObject();
 
-        if (currentRecursionDepth == 1) {
+        if (currentRecursionDepth.get() == 1) {
             Map<String, String> filteredContext = new HashMap<>();
             filterContextWrtBean(bean, filteredContext);
             addJwtFieldsToContext(bean, filteredContext);
@@ -72,7 +79,9 @@ public class JsonLDSerializer extends BeanSerializer {
             serializeFields(bean, gen, provider);
         }
         gen.writeEndObject();
-        currentRecursionDepth--;
+
+        //currentRecursionDepth--;
+        currentRecursionDepth.set(currentRecursionDepth.get() - 1);
     }
 
     /**
