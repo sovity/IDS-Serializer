@@ -617,7 +617,14 @@
             "leftOperand": "https://w3id.org/idsa/code/QUANTITY",
             "operator": "https://w3id.org/idsa/code/EQUALS",
             "ids:rightOperand": "5",
-            "unit": "http://example.org/unit"
+            "unit": "http://example.org/unit",
+            "pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
+            }
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/-1222034163/162118528",
@@ -626,7 +633,14 @@
             "leftOperand": "https://w3id.org/idsa/code/PAY_AMOUNT",
             "operator": "https://w3id.org/idsa/code/EQUALS",
             "ids:rightOperand": "200",
-            "unit": "http://example.org/unit"
+            "unit": "http://example.org/unit",
+            "pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                    "@id": "http://example.com/pipEndpoint"
+                }
+           }
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/-948111822/1396357971",
@@ -659,7 +673,14 @@
             "leftOperand": "https://w3id.org/idsa/code/POLICY_EVALUATION_TIME",
             "operator": "https://w3id.org/idsa/code/DEFINES_AS",
             "ids:rightOperand": "24 months",
-            "unit": "http://example.org/unit"
+            "unit": "http://example.org/unit",
+            "pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
+            }
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/catalog/2145279871/-430010600/-1037544683/1866380074",
@@ -1420,7 +1441,14 @@
             "sameAs": "https://w3id.org/idsa/autogen/constraint/986f95f9-5f83-4360-8e5e-89b6244966e3",
             "leftOperand": "https://w3id.org/idsa/code/COUNT",
             "operator": "https://w3id.org/idsa/code/LTEQ",
-            "ids:rightOperand": 5.0
+            "ids:rightOperand": 5.0,
+            "pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
+            }
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/341591915/-920054058/979320731/1607364253",
@@ -1761,7 +1789,14 @@
             "sameAs": "https://w3id.org/idsa/autogen/constraint/986f95f9-5f83-4360-8e5e-89b6244966e3",
             "leftOperand": "https://w3id.org/idsa/code/COUNT",
             "operator": "https://w3id.org/idsa/code/LTEQ",
-            "ids:rightOperand": 5.0
+            "ids:rightOperand": 5.0,
+            "pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
+            }
         },
         {
             "@id": "https://broker.ids.isst.fraunhofer.de/connectors/538105420/436459529/-30853377/-312234295",
@@ -2249,6 +2284,10 @@
         },
         "vocabulary": {
             "@id": "https://w3id.org/idsa/core/vocabulary",
+            "@type": "@id"
+        },
+        "pipEndpoint": {
+            "@id": "https://w3id.org/idsa/core/pipEndpoint",
             "@type": "@id"
         },
         "phoneNumber": {

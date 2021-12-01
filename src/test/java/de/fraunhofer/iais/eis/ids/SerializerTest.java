@@ -467,7 +467,14 @@ public class SerializerTest {
 				"    \"@value\" : \"5\",\r\n" +
 				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#string\"\r\n" +
 				//"    \"@language\" : \"en\"\r\n" +
-				"  }\r\n" +
+				"  },\r\n" +
+				"  \"ids:pipEndpoint\": {\n" +
+				"    \"@type\": \"ids:PIP\",\n" +
+				"    \"@id\": \"https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe\",\n" +
+				"    \"ids:interfaceDescription\": {\n" +
+				"      \"@id\": \"http://example.com/pipEndpoint\"\n" +
+				"    }\n" +
+				"  }" +
 				"}";
 		serializer.deserialize(constraintString, Constraint.class);
 
@@ -940,6 +947,7 @@ public class SerializerTest {
 								._leftOperand_(LeftOperand.ELAPSED_TIME)
 								._operator_(BinaryOperator.SHORTER_EQ)
 								._rightOperand_(new RdfResource("P20M", URI.create("xsd:duration")))
+								._pipEndpoint_(new PIPBuilder()._interfaceDescription_(URI.create("http://example.org/pip")).build()							)
 								.build()))
 						.build()))
 				.build();

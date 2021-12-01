@@ -607,9 +607,18 @@ class Parser {
                                     literal = querySolution.getLiteral(sparqlParameterName);
                                 } catch (Exception ignored) {
                                 }
-
-                                entry.getValue().invoke(returnObject, handlePrimitive(currentType, literal, currentSparqlBinding));
-
+                                if (sparqlParameterName.endsWith("AsUri")) {
+                                    try {
+                                        Class<?> clazz = methodMap.get(sparqlParameterName.substring(0, sparqlParameterName.length() - 5)).getParameterTypes()[0];
+                                        Object o = handleObject(inputModel, currentSparqlBinding, clazz);
+                                    } catch (IOException exception) {
+                                        if (exception.getMessage().equals(("Could not extract class of child object. ID: " + currentSparqlBinding))){
+                                            entry.getValue().invoke(returnObject, handlePrimitive(currentType, literal, currentSparqlBinding));
+                                        }
+                                    }
+                                } else {
+                                    entry.getValue().invoke(returnObject, handlePrimitive(currentType, literal, currentSparqlBinding));
+                                }
                             } else {
                                 //Not a primitive object, but a complex sub-object. Recursively call this function to handle it
                                 if (!sparqlParameterName.endsWith("AsUri")){

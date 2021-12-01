@@ -128,4 +128,34 @@ public class UriAndObjectTest {
         Assert.assertTrue(recreatedResourceCatalogAsString.contains("http://example.com/resource/uriormodelclasscorrecttranslation/4"));
     }
 
+    @Test
+    public void SingleValueModelClassTest() throws IOException {
+        Serializer serializer = new Serializer();
+        DataResource dataResource = new DataResourceBuilder()
+                ._variant_(
+                        new ResourceBuilder()
+                                ._version_("1").build()
+                ).build();
+        String drString = serializer.serialize(dataResource);
+        logger.info(drString);
+        DataResource recreated = serializer.deserialize(drString, DataResource.class);
+        String recreatedString = serializer.serialize(recreated);
+        logger.info(recreatedString);
+        Assert.assertEquals(dataResource, recreated);
+    }
+
+    @Test
+    public void SingleValueUriTest() throws IOException {
+        Serializer serializer = new Serializer();
+        DataResource dataResource = new DataResourceBuilder()
+                ._variantAsUri_(URI.create("http://example.org/variant")
+                ).build();
+        String drString = serializer.serialize(dataResource);
+        logger.info(drString);
+        DataResource recreated = serializer.deserialize(drString, DataResource.class);
+        String recreatedString = serializer.serialize(recreated);
+        logger.info(recreatedString);
+        Assert.assertEquals(dataResource, recreated);
+    }
+
 }

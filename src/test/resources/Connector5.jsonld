@@ -60,7 +60,14 @@
     "leftOperand" : "https://w3id.org/idsa/code/QUANTITY",
     "operator" : "https://w3id.org/idsa/code/EQUALS",
     "rightOperand" : "5",
-    "unit" : "http://example.org/unit"
+    "unit" : "http://example.org/unit",
+    "pipEndpoint": {
+      "@type": "ids:PIP",
+      "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+      "ids:interfaceDescription": {
+        "@id": "http://example.com/pipEndpoint"
+      }
+    }
   }, {
     "@id" : "http://localhost:8080/connectors/541260824/202120622/1704488662/-212772810/-1298928871/56174339",
     "@type" : "ids:Constraint",
@@ -68,7 +75,14 @@
     "leftOperand" : "https://w3id.org/idsa/code/PAY_AMOUNT",
     "operator" : "https://w3id.org/idsa/code/EQUALS",
     "rightOperand" : "200",
-    "unit" : "http://example.org/unit"
+    "unit" : "http://example.org/unit",
+    "pipEndpoint": {
+      "@type": "ids:PIP",
+      "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+      "ids:interfaceDescription": {
+        "@id": "http://example.com/pipEndpoint"
+      }
+    }
   }, {
     "@id" : "http://localhost:8080/connectors/541260824/202120622/1704488662/-212772810/-1660846153",
     "@type" : "ids:TextResource",
@@ -92,7 +106,14 @@
     "leftOperand" : "https://w3id.org/idsa/code/POLICY_EVALUATION_TIME",
     "operator" : "https://w3id.org/idsa/code/DEFINES_AS",
     "rightOperand" : "24 months",
-    "unit" : "http://example.org/unit"
+    "unit" : "http://example.org/unit",
+    "pipEndpoint": {
+      "@type": "ids:PIP",
+      "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+      "ids:interfaceDescription": {
+      "@id": "http://example.com/pipEndpoint"
+     }
+    }
   }, {
     "@id" : "http://localhost:8080/connectors/541260824/202120622/1704488662/-233192848",
     "@type" : "ids:TextRepresentation",
@@ -267,6 +288,10 @@
       "@id" : "https://w3id.org/idsa/core/representation",
       "@type" : "@id"
     },
+    "pipEndpoint" : {
+          "@id" : "https://w3id.org/idsa/core/pipEndpoint",
+          "@type" : "@id"
+        },
     "version" : {
       "@id" : "https://w3id.org/idsa/core/version"
     },
