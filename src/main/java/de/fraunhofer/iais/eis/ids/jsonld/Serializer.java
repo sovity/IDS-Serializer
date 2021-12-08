@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.fraunhofer.iais.eis.ids.jsonld.custom.TestDataResourceMixin;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.util.MixinHelper;
@@ -39,6 +40,7 @@ public class Serializer {
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         addIDSMixins();
+        mapper.addMixIn(TestDataResource.class, TestDataResourceMixin.class);
 
         preprocessors = new ArrayList<>();
         this.addPreprocessor(new TypeNamePreprocessor());
