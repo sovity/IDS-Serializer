@@ -236,7 +236,7 @@ class Parser {
                         //Find the annotation value containing a colon and interpret this as "prefix:predicate"
                 boolean foundAnnotation = false;
                 if(field.getAnnotation(JsonAlias.class) != null) {
-                    Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).map(this::wrapIfUri).map(this::ignoreSuffix).filter(annotation -> annotation.contains(":")).findFirst();
+                    Optional<String> currentAnnotation = Arrays.stream(field.getAnnotation(JsonAlias.class).value()).map(this::ignoreSuffix).map(this::wrapIfUri).filter(annotation -> annotation.contains(":")).findFirst();
                     currentAnnotation.ifPresent(queryStringBuilder::append);
                     foundAnnotation = true;
                 }
@@ -549,16 +549,9 @@ class Parser {
                                         list.add(handlePrimitive(Class.forName(typeName), literal, s));
                                     }
                                 }
-                                if (sparqlParameterName.endsWith("AsUris")) {
-                                    String regularSparqlParameter = sparqlParameterName.substring(0,1).toUpperCase()
-                                            + sparqlParameterName.substring(1,sparqlParameterName.length() - 6);
-                                    Method regularGetter = returnObject.getClass().getDeclaredMethod("get" + regularSparqlParameter);
-                                    if(((List<?>) regularGetter.invoke(returnObject)).isEmpty()) {
-                                        entry.getValue().invoke(returnObject, list);
-                                    }
-                                } else {
-                                    entry.getValue().invoke(returnObject, list);
-                                }
+
+                                entry.getValue().invoke(returnObject, list);
+
                             } else {
                                 //List of complex sub-objects, such as a list of Resources in a ResourceCatalog
                                 ArrayList<Object> list = new ArrayList<>();
@@ -609,8 +602,10 @@ class Parser {
                                 }
                                 if (sparqlParameterName.endsWith("AsUri")) {
                                     try {
-                                        Class<?> clazz = methodMap.get(sparqlParameterName.substring(0, sparqlParameterName.length() - 5)).getParameterTypes()[0];
-                                        Object o = handleObject(inputModel, currentSparqlBinding, clazz);
+                                        Class<?> clazz = methodMap.get(sparqlParameterName.substring(0, sparqlParameterName.length() - 5) + "AsObject").getParameterTypes()[0];
+                                        if (!clazz.isEnum()) {
+                                            Object o = handleObject(inputModel, currentSparqlBinding, clazz);
+                                        }
                                     } catch (IOException exception) {
                                         if (exception.getMessage().equals(("Could not extract class of child object. ID: " + currentSparqlBinding))){
                                             entry.getValue().invoke(returnObject, handlePrimitive(currentType, literal, currentSparqlBinding));

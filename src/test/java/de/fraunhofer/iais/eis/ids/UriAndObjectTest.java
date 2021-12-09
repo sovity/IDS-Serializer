@@ -2,20 +2,16 @@ package de.fraunhofer.iais.eis.ids;
 
 import de.fraunhofer.iais.eis.*;
 import de.fraunhofer.iais.eis.ids.jsonld.Serializer;
-import de.fraunhofer.iais.eis.util.TypedLiteral;
-import de.fraunhofer.iais.eis.util.UriOrModelClass;
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class UriAndObjectTest {
 
@@ -130,34 +126,26 @@ public class UriAndObjectTest {
         Assert.assertTrue(recreatedResourceCatalogAsString.contains("http://example.com/resource/uriormodelclasscorrecttranslation/4"));
     }
 
+    // Only works when the mdp additions are included in the java classes!
     @Test
-    public void SingleValueModelClassTest() throws IOException {
+    public void CombinedListTest() throws IOException {
         Serializer serializer = new Serializer();
         DataResource dataResource = new DataResourceBuilder()
-                ._variant_(
-                        new ResourceBuilder()
-                                ._version_("1").build()
-                ).build();
+//                ._contactPointAsObject_(new ParticipantBuilder()
+//                        ._version_("2")
+//                        ._legalForm_("illegal")
+//                        .build()
+//                )
+//                ._contactPointAsUri_(URI.create("http://example.org/participant"))
+//                ._accrualPeriodicityAsObject_(Frequency.ANNUAL)
+//                ._accrualPeriodicityAsUri_(URI.create("http://example.org//frequency"))
+                .build();
         String drString = serializer.serialize(dataResource);
         logger.info(drString);
         DataResource recreated = serializer.deserialize(drString, DataResource.class);
         String recreatedString = serializer.serialize(recreated);
         logger.info(recreatedString);
-        Assert.assertEquals(dataResource, recreated);
-    }
-
-    @Test
-    public void SingleValueUriTest() throws IOException {
-        Serializer serializer = new Serializer();
-        DataResource dataResource = new DataResourceBuilder()
-                ._variantAsUri_(URI.create("http://example.org/variant")
-                ).build();
-        String drString = serializer.serialize(dataResource);
-        logger.info(drString);
-        DataResource recreated = serializer.deserialize(drString, DataResource.class);
-        String recreatedString = serializer.serialize(recreated);
-        logger.info(recreatedString);
-        Assert.assertEquals(dataResource, recreated);
+        Assert.assertEquals(drString, recreatedString);
     }
 
 }
