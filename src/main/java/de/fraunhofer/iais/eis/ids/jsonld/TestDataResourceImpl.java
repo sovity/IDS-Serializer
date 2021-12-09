@@ -7,6 +7,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.fasterxml.jackson.annotation.*;
 import de.fraunhofer.iais.eis.*;
@@ -36,9 +38,6 @@ public class TestDataResourceImpl implements TestDataResource {
     protected List<MdpLicense>    _rights       = new ArrayList();
     @JsonAlias({"http://www.w3.org/ns/adms#status", "status"})
     protected List<Status> _status = new ArrayList();
-    @JsonIgnore
-    @JsonAlias({"http://www.w3.org/ns/dcat#contactPoint", "contactPoint"})
-    protected UriOrModelClass _contactPoint;
     @JsonAlias({"http://www.w3.org/ns/dcat#contactPointAsObject", "contactPointAsObject"})
     protected List<Agent> _contactPointAsObject = new ArrayList();
     @JsonAlias({"http://www.w3.org/ns/dcat#contactPointAsUri", "contactPointAsUri"})
@@ -367,11 +366,11 @@ public class TestDataResourceImpl implements TestDataResource {
     }
 
     public UriOrModelClass getContactPoint() {
-        if (!this._contactPointAsUri.isEmpty()) {
-            return new UriOrModelClass(this._contactPointAsUri);
-        } else {
-            return !this._contactPointAsObject.isEmpty() ? new UriOrModelClass(this._contactPointAsObject) : null;
-        }
+        return new UriOrModelClass(
+                Stream.concat(_contactPointAsUri.stream(), _contactPointAsObject.stream())
+                      .collect(Collectors.toList()));
+
+
     }
 
     public List<String> getOriginalSource() {
