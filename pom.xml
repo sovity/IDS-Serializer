@@ -21,8 +21,8 @@
 
 	<dependencies>
 
-		<!-- <dependency> <groupId>de.fraunhofer.iais.eis.fhgdigital</groupId> 
-			<artifactId>java</artifactId> <version>0.1.0-SNAPSHOT</version> <scope>test</scope> 
+		<!-- <dependency> <groupId>de.fraunhofer.iais.eis.fhgdigital</groupId>
+			<artifactId>java</artifactId> <version>0.1.0-SNAPSHOT</version> <scope>test</scope>
 			</dependency> -->
 		<dependency>
 			<groupId>de.fraunhofer.iais.eis.infomodel</groupId>
