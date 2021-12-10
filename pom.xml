@@ -16,7 +16,7 @@
 		<jackson.version>2.11.2</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
-		<revision>4.2.8-SNAPSHOT</revision>
+		<revision>4.2.9-SNAPSHOT</revision>
 	</properties>
 
 	<dependencies>
@@ -30,11 +30,16 @@
 			<version>4.2.7-SNAPSHOT</version>
 		</dependency>
 
-		<dependency>
+		<!--<dependency>
 			<groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
-			<artifactId>java</artifactId>
+			<artifactId>java</artifactId>-->
 <!--			<scope>test</scope>-->
-			<version>${infomodel.version}</version>
+		<!--	<version>${infomodel.version}</version>
+		</dependency>-->
+		<dependency>
+			<groupId>de.fraunhofer.iais.eis.ids.mdp-infomodel</groupId>
+			<artifactId>java</artifactId>
+			<version>4.6.0-SNAPSHOT</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>de.fraunhofer.iais.eis.fhg-ids</groupId>
