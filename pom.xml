@@ -37,9 +37,9 @@
 		<!--	<version>${infomodel.version}</version>
 		</dependency>-->
 		<dependency>
-			<groupId>de.fraunhofer.iais.eis.ids.mdp-infomodel</groupId>
+			<groupId>de.fraunhofer.iais.eis.ids.infomodel</groupId>
 			<artifactId>java</artifactId>
-			<version>4.6.0-SNAPSHOT</version>
+			<version>4.2.8-SNAPSHOT</version>
 		</dependency>
 		<!--<dependency>
 			<groupId>de.fraunhofer.iais.eis.fhg-ids</groupId>

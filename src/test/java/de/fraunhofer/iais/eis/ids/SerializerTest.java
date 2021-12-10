@@ -917,8 +917,8 @@ public class SerializerTest {
 		Connector c = new BaseConnectorBuilder(URI.create("http://übung.de"))
 				._description_(Util.asList(new TypedLiteral("Dies ist ein Übungsconnector mit Umlauten. ÄäÖöÜüß\"", "en")))
 				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
-				._maintainerAsUri_(URI.create("http://exampe.org/maintainer"))
-				._curatorAsUri_(URI.create("http://exampe.org/curator"))
+				._maintainer_(URI.create("http://exampe.org/maintainer"))
+				._curator_(URI.create("http://exampe.org/curator"))
 //				._curatorAsParticipant_(new ParticipantBuilder(URI.create("http://exampe.org/curator"))
 //						._legalForm_("GmbH")
 //						.build())
@@ -947,7 +947,7 @@ public class SerializerTest {
 								._leftOperand_(LeftOperand.ELAPSED_TIME)
 								._operator_(BinaryOperator.SHORTER_EQ)
 								._rightOperand_(new RdfResource("P20M", URI.create("xsd:duration")))
-								//._pipEndpoint_(new PIPBuilder()._interfaceDescription_(URI.create("http://example.org/pip")).build()							)
+								._pipEndpoint_(new PIPBuilder()._interfaceDescription_(URI.create("http://example.org/pip")).build()							)
 								.build()))
 						.build()))
 				.build();
@@ -993,7 +993,7 @@ public class SerializerTest {
 	@Test
 	public void decimalSerializationTest() throws IOException, DatatypeConfigurationException {
 		Representation representation = new AudioRepresentationBuilder()
-				._mediaType_(MediaType.PDF)
+				._mediaType_(new IANAMediaTypeBuilder()._filenameExtension_("pdf").build())
 				._instance_(Util.asList(new ArtifactBuilder()._fileName_("data.pdf")._byteSize_(BigInteger.valueOf(2678))._creationDate_(DatatypeFactory.newInstance().newXMLGregorianCalendarDate(2015, 10, 15, 0)).build()))
 				._representationStandard_(URI.create("http://textRepresentation.org"))
 				._modified_(now)
