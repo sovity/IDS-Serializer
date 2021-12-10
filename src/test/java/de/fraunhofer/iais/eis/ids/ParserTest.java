@@ -152,7 +152,7 @@ public class ParserTest {
 		Connector connector = new Serializer().deserialize(infrastructureComponentString, Connector.class);
 		assertNotNull(connector.getResourceCatalog());
 		assertEquals(1, connector.getResourceCatalog().size());
-		assertTrue(connector.getResourceCatalog().get(0).getOfferedResource().get(0).getKeyword().size() < 3);
+		assertTrue(connector.getResourceCatalog().get(0).getOfferedResourceAsUri().size() < 3);
 
 	}
 
