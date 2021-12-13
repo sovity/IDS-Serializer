@@ -83,7 +83,14 @@
           },
           "ids:operator" : {
             "@id" : "idsc:EQUALS"
-          }
+          },
+            "ids:pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
+            }
         } ],
         "ids:preDuty" : [ {
           "@type" : "ids:Duty",
@@ -119,6 +126,13 @@
             },
             "ids:operator" : {
               "@id" : "idsc:EQUALS"
+            },
+            "ids:pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
             }
           } ]
         } ]
@@ -188,6 +202,13 @@
           },
           "ids:operator" : {
             "@id" : "idsc:DEFINES_AS"
+          },
+          "ids:pipEndpoint": {
+              "@type": "ids:PIP",
+              "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+              "ids:interfaceDescription": {
+              "@id": "http://example.com/pipEndpoint"
+             }
           }
         } ]
       } ],

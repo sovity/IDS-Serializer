@@ -152,7 +152,7 @@ public class ParserTest {
 		Connector connector = new Serializer().deserialize(infrastructureComponentString, Connector.class);
 		assertNotNull(connector.getResourceCatalog());
 		assertEquals(1, connector.getResourceCatalog().size());
-		assertTrue(connector.getResourceCatalog().get(0).getOfferedResource().get(0).getKeyword().size() < 3);
+		assertTrue(connector.getResourceCatalog().get(0).getOfferedResourceAsUri().size() < 3);
 
 	}
 
@@ -261,7 +261,14 @@ public class ParserTest {
 				+ "              },\n"
 				+ "              \"ids:operator\": {\n"
 				+ "                \"@id\": \"idsc:DEFINES_AS\"\n"
-				+ "              }\n"
+				+ "              },\n"
+				+ "              \"ids:pipEndpoint\": {\n"
+				+ "                 \"@type\": \"ids:PIP\",\n"
+				+ "                 \"@id\": \"https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe\",\n"
+				+ "                 \"ids:interfaceDescription\": {\n"
+				+ "                   \"@id\": \"http://example.com/pipEndpoint\"\n"
+				+ "                 }\n"
+				+ "              }"
 				+ "            }\n"
 				+ "          ]\n"
 				+ "        }\n"
@@ -301,7 +308,14 @@ public class ParserTest {
 				+ "  },\n"
 				+ "  \"ids:operator\" : {\n"
 				+ "    \"@id\" : \"https://w3id.org/idsa/code/LTEQ\"\n"
-				+ "  }\n"
+				+ "  },\n"
+				+ "  \"ids:pipEndpoint\": {\n"
+				+ "    \"@type\": \"ids:PIP\",\n"
+				+ "    \"@id\": \"https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe\",\n"
+				+ "    \"ids:interfaceDescription\": {\n"
+				+ "      \"@id\": \"http://example.com/pipEndpoint\"\n"
+				+ "    }\n"
+				+ "  }"
 				+ "}";
 
 		final Serializer deserializer = new Serializer();
@@ -310,5 +324,6 @@ public class ParserTest {
 
 		Assert.assertEquals(obj1, obj2);
 	}
+
 
 }
