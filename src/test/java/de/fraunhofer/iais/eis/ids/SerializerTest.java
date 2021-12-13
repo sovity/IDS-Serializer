@@ -40,7 +40,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class SerializerTest { 
+public class SerializerTest {
 
 	private static ConnectorUpdateMessage basicInstance;
 	private static Connector nestedInstance;
@@ -82,7 +82,7 @@ public class SerializerTest {
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
-				._offeredResource_(resources)
+				._offeredResourceAsObject_(resources)
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
@@ -108,7 +108,7 @@ public class SerializerTest {
 				._resourceCatalog_(Util.asList(catalog))
 				//                ._securityProfile_(SecurityProfile.BASE_CONNECTOR_SECURITY_PROFILE)
 				.build();
-		
+
 	}
 
 	@Test
@@ -450,24 +450,31 @@ public class SerializerTest {
 		serializer.serialize(constraint);
 
 
-		String constraintString = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" + 
-				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:Constraint\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/constraint/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
-				"  \"ids:leftOperand\" : {\r\n" + 
-				"    \"@id\" : \"idsc:PAY_AMOUNT\"\r\n" + 
-				"  },\r\n" + 
-				"  \"ids:operator\" : {\r\n" + 
-				"    \"@id\" : \"idsc:EQ\"\r\n" + 
-				"  },\r\n" + 
-				"  \"ids:rightOperand\" : {\r\n" + 
-				"    \"@value\" : \"5\",\r\n" + 
+		String constraintString = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
+				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:Constraint\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/constraint/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" +
+				"  \"ids:leftOperand\" : {\r\n" +
+				"    \"@id\" : \"idsc:PAY_AMOUNT\"\r\n" +
+				"  },\r\n" +
+				"  \"ids:operator\" : {\r\n" +
+				"    \"@id\" : \"idsc:EQ\"\r\n" +
+				"  },\r\n" +
+				"  \"ids:rightOperand\" : {\r\n" +
+				"    \"@value\" : \"5\",\r\n" +
 				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#string\"\r\n" +
 				//"    \"@language\" : \"en\"\r\n" +
-				"  }\r\n" + 
+				"  },\r\n" +
+				"  \"ids:pipEndpoint\": {\n" +
+				"    \"@type\": \"ids:PIP\",\n" +
+				"    \"@id\": \"https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe\",\n" +
+				"    \"ids:interfaceDescription\": {\n" +
+				"      \"@id\": \"http://example.com/pipEndpoint\"\n" +
+				"    }\n" +
+				"  }" +
 				"}";
 		serializer.deserialize(constraintString, Constraint.class);
 
@@ -508,77 +515,77 @@ public class SerializerTest {
 		Serializer localSerializer = new Serializer();
 
 		// Prepare the test data
-		String jsonLd1 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" + 
-				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:Resource\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
-				"  \"ids:description\" : \"a description 1\",\r\n" + // plain 
-				"  \"ids:keyword\" : \"keyword1\"\r\n" + // plain 
+		String jsonLd1 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
+				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:Resource\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" +
+				"  \"ids:description\" : \"a description 1\",\r\n" + // plain
+				"  \"ids:keyword\" : \"keyword1\"\r\n" + // plain
 				"}";
-		String jsonLd2 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" + 
-				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:Resource\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
-				"  \"ids:description\" : {\r\n" + 
+		String jsonLd2 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
+				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:Resource\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" +
+				"  \"ids:description\" : {\r\n" +
 				"    \"@value\" : \"a description 2\"\r\n" + // with no tag
-				"  },\r\n" + 
-				"  \"ids:keyword\" : {\r\n" + 
+				"  },\r\n" +
+				"  \"ids:keyword\" : {\r\n" +
 				"    \"@value\" : \"keyword2\"\r\n"  + // with no tag
-				"  }\r\n" + 
+				"  }\r\n" +
 				"}";
-		String jsonLd3 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" + 
-				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:Resource\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
-				"  \"ids:description\" : {\r\n" + 
-				"    \"@value\" : \"a description 3\",\r\n" + 
+		String jsonLd3 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
+				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:Resource\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" +
+				"  \"ids:description\" : {\r\n" +
+				"    \"@value\" : \"a description 3\",\r\n" +
 				"    \"@language\" : \"en\"\r\n" + // with language tag
-				"  },\r\n" + 
-				"  \"ids:keyword\" : {\r\n" + 
-				"    \"@value\" : \"keyword3\",\r\n" + 
+				"  },\r\n" +
+				"  \"ids:keyword\" : {\r\n" +
+				"    \"@value\" : \"keyword3\",\r\n" +
 				"    \"@language\" : \"en\"\r\n" + // with language tag
-				"  }\r\n" + 
+				"  }\r\n" +
 				"}";
-		String jsonLd4 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" + 
-				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:Resource\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
-				"  \"ids:description\" : {\r\n" + 
-				"    \"@value\" : \"a description 4\",\r\n" + 
+		String jsonLd4 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
+				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:Resource\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" +
+				"  \"ids:description\" : {\r\n" +
+				"    \"@value\" : \"a description 4\",\r\n" +
 				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#string\"\r\n" + // with string type
-				"  },\r\n" + 
-				"  \"ids:keyword\" : {\r\n" + 
-				"    \"@value\" : \"keyword4\",\r\n" + 
+				"  },\r\n" +
+				"  \"ids:keyword\" : {\r\n" +
+				"    \"@value\" : \"keyword4\",\r\n" +
 				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#string\"\r\n" + // with string type
-				"  }\r\n" + 
+				"  }\r\n" +
 				"}";
-		String jsonLd5 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" + 
-				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:Resource\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" + 
-				"  \"ids:description\" : {\r\n" + 
-				"    \"@value\" : \"a description 5\",\r\n" + 
+		String jsonLd5 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
+				"    \"idsc\" : \"https://w3id.org/idsa/code/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:Resource\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/resource/69755e0f-bf2f-4f62-b14d-6837a1cf1f6a\",\r\n" +
+				"  \"ids:description\" : {\r\n" +
+				"    \"@value\" : \"a description 5\",\r\n" +
 				"    \"@type\" : \"xsd:string\"\r\n" + // with string type and xsd: prefix. Note that this is an unknown namespace and therefore invalid! The serializer will throw a warning
-				"  },\r\n" + 
-				"  \"ids:keyword\" : {\r\n" + 
-				"    \"@value\" : \"keyword5\",\r\n" + 
+				"  },\r\n" +
+				"  \"ids:keyword\" : {\r\n" +
+				"    \"@value\" : \"keyword5\",\r\n" +
 				"    \"@type\" : \"xsd:string\"\r\n" + // with string type and xsd: prefix Note that this is an unknown namespace and therefore invalid! The serializer will throw a warning
-				"  }\r\n" + 
+				"  }\r\n" +
 				"}";
 
 
@@ -653,10 +660,10 @@ public class SerializerTest {
 				._description_(Util.asList(new TypedLiteral("\"a description 8\"^^xsd:string")))
 				._keyword_(Util.asList(new TypedLiteral("\"keyword8\"^^xsd:string")))
 				.build();
-		
+
 		Resource[] resources = new Resource[] { resource1, resource2, resource3, resource4, resource5, resource6, resource7, resource8};
 		Serializer localSerializer = new Serializer();
-		
+
 		for (Resource resource : resources ) {
 			String resourceAsJsonLD = localSerializer.serialize(resource);
 			try {
@@ -689,7 +696,7 @@ public class SerializerTest {
 
 	}
 	 */
-	
+
 	/**
 	 * This test is based on a ticket and bugfix received on 15.05.2020
 	 * see Erik van den Akker's email (Infomodel Serializer: NullpointerException)
@@ -697,10 +704,10 @@ public class SerializerTest {
 	 * @throws IOException if serialization fails
 	 * @throws ConstraintViolationException in case of mandatory fields missing (should not happen here, as all fields are hard coded)
 	 */
-	@Test 
+	@Test
 	public void testArraysWithUris() throws IOException, de.fraunhofer.iais.eis.util.ConstraintViolationException {
 		Serializer serializer = new Serializer();
-		
+
 	    DynamicAttributeToken token = new DynamicAttributeTokenBuilder()
 	            ._tokenFormat_(TokenFormat.JWT)
 	            ._tokenValue_("sampleToken")
@@ -778,34 +785,34 @@ public class SerializerTest {
 				"  \"ids:senderAgent\" : {\"@id\" : \"https://www.iais.fraunhofer.de\" },\n" +
 				"  \"ids:affectedConnector\" : {\"@id\" : \"https://broker.ids.isst.fraunhofer.de/\" }\n" +
 				"}";
-		/*	String jsonld3 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
-				"    \"ids\" : \"https://w3id.org/idsa/core/\"\r\n" + 
-				"  },\r\n" + 
-				"  \"@type\" : \"ids:ConnectorAvailableMessage\",\r\n" + 
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/connectorAvailableMessage/777e9303-a8f1-4f00-b1d0-2910c01b2d53\",\r\n" + 
-				"  \"ids:issuerConnector\" : {\r\n" + 
-				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\r\n" + 
-				"  },\r\n" + 
-				"  \"ids:modelVersion\" : \"2.0.0\",\r\n" + 
-				"  \"ids:issued\" : {\r\n" + 
-				"    \"@value\" : \"2020-03-31T03:03:03.003+03:00\"\r\n" + 
+		/*	String jsonld3 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
+				"    \"ids\" : \"https://w3id.org/idsa/core/\"\r\n" +
+				"  },\r\n" +
+				"  \"@type\" : \"ids:ConnectorAvailableMessage\",\r\n" +
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/connectorAvailableMessage/777e9303-a8f1-4f00-b1d0-2910c01b2d53\",\r\n" +
+				"  \"ids:issuerConnector\" : {\r\n" +
+				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\r\n" +
+				"  },\r\n" +
+				"  \"ids:modelVersion\" : \"2.0.0\",\r\n" +
+				"  \"ids:issued\" : {\r\n" +
+				"    \"@value\" : \"2020-03-31T03:03:03.003+03:00\"\r\n" +
 				"  }" +
 				"}"; */ // TODO ... "ids:issued" : {"@value" : "2020-03-31T03:03:03.003+03:00"} does not work
-		String jsonld4 = "{\r\n" + 
-				"  \"@context\" : {\r\n" + 
+		String jsonld4 = "{\r\n" +
+				"  \"@context\" : {\r\n" +
 				"    \"ids\" : \"https://w3id.org/idsa/core/\",\r\n" +
 				"    \"idsc\" : \"https://w3id.org/idsa/code/\"" +
-				"  },\r\n" + 
+				"  },\r\n" +
 				"  \"@type\" : \"ids:ConnectorUpdateMessage\",\r\n" +
-				"  \"@id\" : \"https://w3id.org/idsa/autogen/connectorAvailableMessage/777e9303-a8f1-4f00-b1d0-2910c01b2d53\",\r\n" + 
-				"  \"ids:issuerConnector\" : {\r\n" + 
-				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\r\n" + 
-				"  },\r\n" + 
+				"  \"@id\" : \"https://w3id.org/idsa/autogen/connectorAvailableMessage/777e9303-a8f1-4f00-b1d0-2910c01b2d53\",\r\n" +
+				"  \"ids:issuerConnector\" : {\r\n" +
+				"    \"@id\" : \"http://iais.fraunhofer.de/connectorIssuer\"\r\n" +
+				"  },\r\n" +
 				"  \"ids:modelVersion\" : \"" + imVersion + "\",\r\n" +
-				"  \"ids:issued\" : {\r\n" + 
-				"    \"@value\" : \"2020-03-31T04:04:04.004+04:00\",\r\n" + 
-				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#dateTimeStamp\"\r\n" + 
+				"  \"ids:issued\" : {\r\n" +
+				"    \"@value\" : \"2020-03-31T04:04:04.004+04:00\",\r\n" +
+				"    \"@type\" : \"http://www.w3.org/2001/XMLSchema#dateTimeStamp\"\r\n" +
 				"  }," +
 				"  \"ids:securityToken\" : {\n" +
 				"    \"@type\" : \"ids:DynamicAttributeToken\",\n" +
@@ -910,11 +917,11 @@ public class SerializerTest {
 		Connector c = new BaseConnectorBuilder(URI.create("http://übung.de"))
 				._description_(Util.asList(new TypedLiteral("Dies ist ein Übungsconnector mit Umlauten. ÄäÖöÜüß\"", "en")))
 				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
-				._maintainer_(URI.create("http://exampe.org/maintainer"))
-				._curator_(URI.create("http://exampe.org/curator"))
-				._curatorAsParticipant_(new ParticipantBuilder(URI.create("http://exampe.org/curator"))
-						._legalForm_("GmbH")
-						.build())
+				._maintainerAsUri_(URI.create("http://exampe.org/maintainer"))
+				._curatorAsUri_(URI.create("http://exampe.org/curator"))
+//				._curatorAsParticipant_(new ParticipantBuilder(URI.create("http://exampe.org/curator"))
+//						._legalForm_("GmbH")
+//						.build())
 				._securityProfile_(SecurityProfile.TRUST_SECURITY_PROFILE)
 				._outboundModelVersion_("1.2.3")
 				._inboundModelVersion_(Util.asList("1.2.3", "1.5.9"))
@@ -940,6 +947,7 @@ public class SerializerTest {
 								._leftOperand_(LeftOperand.ELAPSED_TIME)
 								._operator_(BinaryOperator.SHORTER_EQ)
 								._rightOperand_(new RdfResource("P20M", URI.create("xsd:duration")))
+								._pipEndpoint_(new PIPBuilder()._interfaceDescription_(URI.create("http://example.org/pip")).build()							)
 								.build()))
 						.build()))
 				.build();

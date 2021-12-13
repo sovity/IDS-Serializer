@@ -75,6 +75,13 @@
             },
             "ids:unit" : {
               "@id" : "http://example.org/unit"
+            },
+            "ids:pipEndpoint": {
+                "@type": "ids:PIP",
+                "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+                "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
             }
           } ],
           "ids:action" : [ {
@@ -111,6 +118,13 @@
               },
               "ids:unit" : {
                 "@id" : "http://example.org/unit"
+              },
+              "ids:pipEndpoint": {
+               "@type": "ids:PIP",
+               "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+               "ids:interfaceDescription": {
+                 "@id": "http://example.com/pipEndpoint"
+               }
               }
             } ],
             "ids:action" : [ {
@@ -158,7 +172,14 @@
             },
             "ids:unit" : {
               "@id" : "http://example.org/unit"
-            }
+            },
+            "ids:pipEndpoint": {
+               "@type": "ids:PIP",
+               "@id": "https://w3id.org/idsa/autogen/pipEndpoint/aa34f25c-cf3d-4666-9840-123123123qweqwe",
+               "ids:interfaceDescription": {
+                "@id": "http://example.com/pipEndpoint"
+               }
+              }
           } ],
           "ids:action" : [ {
             "@id" : "idsc:DISTRIBUTE"

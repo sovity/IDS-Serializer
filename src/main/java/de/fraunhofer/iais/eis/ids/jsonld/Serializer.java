@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.JsonPreprocessor;
 import de.fraunhofer.iais.eis.ids.jsonld.preprocessing.TypeNamePreprocessor;
+import de.fraunhofer.iais.eis.ids.jsonld.util.MixinHelper;
 import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.riot.Lang;
@@ -20,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class Serializer {
 
@@ -36,6 +38,7 @@ public class Serializer {
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_EMPTY);
         mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        addIDSMixins();
 
         preprocessors = new ArrayList<>();
         this.addPreprocessor(new TypeNamePreprocessor());
@@ -174,5 +177,10 @@ public class Serializer {
      */
     public void removePreprocessor(JsonPreprocessor preprocessor) {
         preprocessors.remove(preprocessor);
+    }
+
+    private void addIDSMixins() {
+        Map<Class<?>, Class<?>> targetToMixinMap = MixinHelper.scanMixins();
+        targetToMixinMap.forEach(mapper::addMixIn);
     }
 }
