@@ -1966,7 +1966,7 @@
             "contentType": "https://w3id.org/idsa/code/INTERFACE_DEFINITION",
             "ids:created": {
                 "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-                "@value": "2003-01-10T00:00Z"
+                "@value": "2003-01-10T00:00:00Z"
             },
             "customLicense": "http://customlicense.org",
             "dataCreator": "Data creator/Owner",
@@ -1977,7 +1977,7 @@
             "mainTitle": "Energy Conservation with Open Source Ad Blockers",
             "ids:modified": {
                 "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-                "@value": "2020-01-29T00:00Z"
+                "@value": "2020-01-29T00:00:00Z"
             },
             "ids:rawData": false,
             "representation": "https://w3id.org/idsa/autogen/textRepresentation/8a23edb5-be86-4722-afd4-fd2276c9bc18",
@@ -1991,14 +1991,14 @@
             "@type": "ids:TextRepresentation",
             "ids:created": {
                 "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-                "@value": "2013-11-14T00:00Z"
+                "@value": "2013-11-14T00:00:00Z"
             },
             "domainVocabulary": "https://w3id.org/idsa/autogen/vocabularyData/bbe50ee4-5033-4c13-bf43-35c733a7b781",
             "instance": "https://w3id.org/idsa/autogen/artifact/aa1cf3d9-8aa1-42ef-9f85-08ce0f48005b",
             "mediaType": "https://w3id.org/idsa/code/APPLICATION_PDF",
             "ids:modified": {
                 "@type": "http://www.w3.org/2001/XMLSchema#dateTimeStamp",
-                "@value": "2020-01-15T00:00Z"
+                "@value": "2020-01-15T00:00:00Z"
             },
             "representationStandard": "http://textRepresentation.org"
         },

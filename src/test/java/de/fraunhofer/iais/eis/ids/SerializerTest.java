@@ -82,7 +82,7 @@ public class SerializerTest {
 
 		// connector -> object with nested types
 		ResourceCatalog catalog = new ResourceCatalogBuilder()
-				._offeredResource_(resources)
+				._offeredResourceAsObject_(resources)
 				.build();
 
 		nestedInstance = new BaseConnectorBuilder()
@@ -917,8 +917,8 @@ public class SerializerTest {
 		Connector c = new BaseConnectorBuilder(URI.create("http://übung.de"))
 				._description_(Util.asList(new TypedLiteral("Dies ist ein Übungsconnector mit Umlauten. ÄäÖöÜüß\"", "en")))
 				._title_(Util.asList(new TypedLiteral("Testing. ÄäÖöÜüß+-*/%#123")))
-				._maintainer_(URI.create("http://exampe.org/maintainer"))
-				._curator_(URI.create("http://exampe.org/curator"))
+				._maintainerAsUri_(URI.create("http://exampe.org/maintainer"))
+				._curatorAsUri_(URI.create("http://exampe.org/curator"))
 //				._curatorAsParticipant_(new ParticipantBuilder(URI.create("http://exampe.org/curator"))
 //						._legalForm_("GmbH")
 //						.build())

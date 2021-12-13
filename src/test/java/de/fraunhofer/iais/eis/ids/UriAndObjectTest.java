@@ -21,7 +21,7 @@ public class UriAndObjectTest {
     @Test
     public void UriOrModelClassBaseConnectorCorrectTranslationTest() throws IOException {
         BaseConnector baseConnector = new BaseConnectorBuilder()
-                ._curator_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/1"))
+                ._curatorAsUri_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/1"))
 //                ._curatorAsParticipant_(new ParticipantBuilder()
 //                        ._version_("1")
 //                        ._legalForm_("Very legal")
@@ -31,7 +31,7 @@ public class UriAndObjectTest {
 //                        ._version_("2")
 //                        ._legalForm_("illegal")
 //                        .build())
-                ._maintainer_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/2"))
+                ._maintainerAsUri_(URI.create("http://example.com/participant/uriormodelclasscorrecttranslation/2"))
                 ._hasDefaultEndpoint_(new ConnectorEndpointBuilder()
                         ._accessURL_(URI.create("http://example.com/endpoint/uriormodelclasscorrecttranslation/1"))
                         .build()
@@ -63,13 +63,13 @@ public class UriAndObjectTest {
         ResourceCatalog resourceCatalog = new ResourceCatalogBuilder()
 //                ._offeredResourceAsUri_(new ArrayList<>(Arrays.asList(URI.create("http://example.com/resource/uriormodelclasscorrecttranslation/1"))))
 //                ._offeredResourceAsUri_(new ArrayList<>(Arrays.asList(URI.create("http://example.com/resource/uriormodelclasscorrecttranslation/2"))))
-                ._offeredResource_(new ArrayList<>(Arrays.asList(new ResourceBuilder()
+                ._offeredResourceAsObject_(new ArrayList<>(Arrays.asList(new ResourceBuilder()
                         ._version_("Resource V1")
                         .build()
                 )))
 //                ._requestedResourceAsUri_(URI.create("http://example.com/resource/uriormodelclasscorrecttranslation/1"))
 //                ._requestedResourceAsUri_(URI.create("http://example.com/resource/uriormodelclasscorrecttranslation/2"))
-                ._requestedResource_(new ResourceBuilder()
+                ._requestedResourceAsObject_(new ResourceBuilder()
                         ._version_("Resource V2")
                         .build()
                 )
@@ -93,7 +93,7 @@ public class UriAndObjectTest {
     @Test
     public void UriOrModelClassResourceCaralogTranslationTestViceVersa() throws IOException {
         ResourceCatalog resourceCatalog = new ResourceCatalogBuilder()
-                ._offeredResource_(new ArrayList<>(Arrays.asList(new ResourceBuilder()
+                ._offeredResourceAsObject_(new ArrayList<>(Arrays.asList(new ResourceBuilder()
                         ._version_("Resource V1")
                         .build()
                 )))
@@ -101,7 +101,7 @@ public class UriAndObjectTest {
 //                        URI.create("http://example.com/resource/uriormodelclasscorrecttranslation/1"),
 //                        URI.create("http://example.com/resource/uriormodelclasscorrecttranslation/2")))
 //                )
-                ._requestedResource_(new ResourceBuilder()
+                ._requestedResourceAsObject_(new ResourceBuilder()
                         ._version_("Resource V2")
                         .build()
                 )
