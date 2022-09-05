@@ -29,7 +29,7 @@
 		<!--<infomodel.version>${revision}</infomodel.version>-->
 		<classgraph.version>4.8.109</classgraph.version>
 		<infomodel.version>5.0.0-SNAPSHOT</infomodel.version>
-		<jackson.version>2.11.2</jackson.version>
+		<jackson.version>2.13.4</jackson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<rdfj4.version>3.1.2</rdfj4.version>
 		<revision>5.0.0-SNAPSHOT</revision>
